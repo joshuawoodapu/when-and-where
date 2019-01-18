@@ -1,6 +1,12 @@
 import React from 'react';
 import firebase from 'firebase';
+import { createAppContainer, createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import { StyleSheet, Text, View } from 'react-native';
+import OnBoardingScreens from './screens/OnBoardingScreens';
+import LoginScreen from './screens/LoginScreen';
+import RegistrationScreen from './screens/RegistrationScreen';
+import HomeScreen from './screens/HomeScreen';
+
 
 export default class App extends React.Component {
   componentWillMount() {
@@ -15,10 +21,15 @@ export default class App extends React.Component {
   }
 
   render() {
+    const MainNavigator = createStackNavigator({
+      OnBoarding: OnBoardingScreens,
+      Login: LoginScreen,
+      Registration: RegistrationScreen,
+      Home: HomeScreen
+    })
+    const AppContainer = createAppContainer(MainNavigator);
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
+      <AppContainer/>
     );
   }
 }
