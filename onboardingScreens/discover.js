@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 
-class discover extends Component {
+class Discover extends Component {
   render() {
     return (
       <View>
         <Text>Discover</Text>
         <Text>new places with friends!</Text>
+      </View>
     );
   }
 }
 
-export default discover;
+export default Discover;
