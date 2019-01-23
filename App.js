@@ -1,11 +1,21 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { AppRegistry, StyleSheet, Text, View } from 'react-native';
+import Header from './src/components/header';
 
+export default class App extends Component {
+  render() {
+    return (
+      <Header />
+    );
+  }
+}
+
+/*
 export default class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
+        <Text>This is supposed to be a registration screen</Text>
       </View>
     );
   }
@@ -19,3 +29,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+*/
