@@ -8,15 +8,6 @@ import RegistrationScreen from './screens/RegistrationScreen';
 import HomeScreen from './screens/HomeScreen';
 
 
-export default class App extends Component {
-  render() {
-    return (
-      <Header />
-    );
-  }
-}
-
-
 export default class App extends React.Component {
   componentWillMount() {
     firebase.initializeApp({
