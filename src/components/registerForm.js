@@ -9,23 +9,29 @@ export default class RegisterForm extends Component {
                     placeholder="Full Name"
                     returnKeyType="next"
                     style={styles.input}
+                    onSubmitEditing={() => this.emailInput.focus()}
                 />
                 <TextInput 
                     placeholder="Email"
                     returnKeyType="next"
                     style={styles.input}
+                    ref={(input) => this.emailInput = input}
+                    onSubmitEditing={() => this.passwordInput.focus()}
                 />
                 <TextInput 
                     placeholder="Password"
                     secureTextEntry
                     returnKeyType="next"
                     style={styles.input}
+                    ref={(input) => this.passwordInput = input}
+                    onSubmitEditing={() => this.confirmInput.focus()}
                 />
                 <TextInput 
                     placeholder="Confirm Password"
                     secureTextEntry
                     returnKeyType="go"
                     style={styles.input}
+                    ref={(input) => this.confirmInput = input}
                 />
             </View>
         );
