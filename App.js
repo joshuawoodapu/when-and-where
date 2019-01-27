@@ -4,7 +4,7 @@ import Swiper from 'react-native-swiper';
 import Connect from './src/onboardingScreens/Connect';
 import Create from './src/onboardingScreens/Create';
 import Discover from './src/onboardingScreens/Discover';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import 'react-native';
 
 export default class App extends React.Component {
   componentWillMount() {
@@ -28,12 +28,3 @@ export default class App extends React.Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

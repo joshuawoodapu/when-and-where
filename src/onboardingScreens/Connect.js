@@ -5,17 +5,22 @@ import StartButton from '../components/StartButton';
 class Connect extends Component {
   render() {
     return (
-      <View style={styles.onboardingScreen}>
-        <View style={styles.textView}>
+      <View flex={1} flexDirection={'column'}>
+        <View style={styles.onboardingBG1} />
+        <View style={styles.onboardingBG2} />
+
+        <View style={styles.onboardingFG1}>
           <Text style={styles.wordText}>Connect</Text>
           <Text style={styles.lineText}>and collaborate with</Text>
           <Text style={styles.lineText}>other people!</Text>
         </View>
-        <Image
-          style={styles.imageStyle}
-          source={require('../onboardingArt/KarenSample.png')}
-        />
-        <View paddingBottom={50}>
+        <View style={styles.onboardingFG2}>
+          <Image
+            style={styles.imageStyle}
+            source={require('../onboardingArt/3_labradors.png')}
+          />
+        </View>
+        <View style={styles.onboardingStartBtn}>
           <StartButton />
         </View>
       </View>
@@ -24,28 +29,30 @@ class Connect extends Component {
 }
 
 const styles = StyleSheet.create({
-  onboardingScreen: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'stretch',
-  },
-  textView: {
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+  onboardingBG1: {
+    zIndex: 0,
     backgroundColor: '#F0F3F7',
-    paddingTop: 70,
-    paddingBottom: 70,
-    paddingLeft: 20,
-    paddingRight: 20,
-  },
-  imageStyle: {
-    height: null,
     flex: 1,
-    width: null,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
+    position: 'absolute',
+    width: '100%',
+    height: '33%'
+  },
+  onboardingBG2: {
+    zIndex: 0,
+    flex: 2,
+    position: 'absolute',
+    width: '100%',
+    height: '66%'
+  },
+  onboardingFG1: {
+    zIndex: 1,
+    flex: 1,
+    position: 'absolute',
+    width: '100%',
+    height: '30%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
   },
   wordText: {
     color: '#ED7248',
@@ -57,6 +64,35 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '600',
   },
+  onboardingFG2: {
+    zIndex: 1,
+    flex: 1,
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingTop: 80,
+    backgroundColor: 'transparent',
+  },
+  imageStyle: {
+    width: '100%',
+    height: '45%',
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.8,
+    // shadowRadius: 2,
+  },
+  onboardingStartBtn: {
+    zIndex: 1,
+    flex: 1,
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: 50
+  }
 });
 
 export default Connect;

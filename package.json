@@ -1,5 +1,8 @@
 {
   "main": "node_modules/expo/AppEntry.js",
+  "splash": {
+    "resizeMode": "contain"
+  },
   "scripts": {
     "start": "expo start",
     "android": "expo start --android",
@@ -7,12 +10,16 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "circular-std": "^1.0.0",
     "expo": "^32.0.0",
     "firebase": "^5.7.3",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-swiper": "^1.5.14"
+  },
+  "rnpm": {
+    "assets": [
+        "./assets/fonts/"
+      ]
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0"
