@@ -20,7 +20,8 @@ const styles = StyleSheet.create({
     formStyle: {
        padding: 35,
        flex: 1,
-       flexDirection: 'row'
+       flexDirection: 'row',
+       alignSelf: 'center'
     },
     text: {
         height: 50,

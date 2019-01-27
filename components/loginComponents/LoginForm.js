@@ -8,13 +8,13 @@ export default class LoginForm extends Component {
                 <TextInput 
                     placeholder="Email"
                     returnKeyType="next"
-                    style={styles.input}
+                    style={styles.input1}
                 />
                 <TextInput 
                     placeholder="Password"
                     secureTextEntry
                     returnKeyType="next"
-                    style={styles.input}
+                    style={styles.input2}
                 />
             </View>
         );
@@ -23,9 +23,21 @@ export default class LoginForm extends Component {
 
 const styles = StyleSheet.create({
     formStyle: {
-       padding: 35,
+      // padding: 35,
+       justifyContent: 'space-between',
     },
-    input: {
+
+    input2: {
+        height: 50,
+        backgroundColor: '#ffffff',
+        //marginBottom: 25,
+        borderWidth: 2,
+        borderColor: '#B8BeC1',
+        borderRadius: 15,
+        color: '#B8BeC1',
+        paddingHorizontal: 10,
+    },
+    input1: {
         height: 50,
         backgroundColor: '#ffffff',
         marginBottom: 25,
