@@ -5,9 +5,9 @@ export default class StartButton extends Component {
     render() {
         return (
             <View style={styles.viewStyle}>
-            <TouchableOpacity style={styles.buttonContainer}>
-                <Text style={styles.buttonText}>LET'S START!</Text>
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonContainer} onPress={this.props.onPress}>
+                    <Text style={styles.buttonText}>LET'S START!</Text>
+                </TouchableOpacity>
             </View>
         );
     }

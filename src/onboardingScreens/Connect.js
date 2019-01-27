@@ -2,7 +2,11 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, Image } from 'react-native';
 import StartButton from '../components/StartButton';
 
-class Connect extends Component {
+class Connect extends React.Component {
+  onStartButtonPress() {
+    this.props.navigation.navigate('Login');
+  }
+
   render() {
     return (
       <View flex={1} flexDirection={'column'}>
@@ -21,7 +25,9 @@ class Connect extends Component {
           />
         </View>
         <View style={styles.onboardingStartBtn}>
-          <StartButton />
+          <StartButton 
+            onPress={this.onStartButtonPress.bind(this)}
+          />
         </View>
       </View>
     );

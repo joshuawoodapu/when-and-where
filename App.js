@@ -1,16 +1,10 @@
 import React from 'react';
 import firebase from 'firebase';
-import Swiper from 'react-native-swiper';
-import Connect from './src/onboardingScreens/Connect';
-import Create from './src/onboardingScreens/Create';
-import Discover from './src/onboardingScreens/Discover';
-import 'react-native';
 import { createAppContainer, createBottomTabNavigator, createStackNavigator } from 'react-navigation';
-import { StyleSheet, Text, View } from 'react-native';
-import OnBoardingScreens from './screens/OnBoardingScreens';
-import LoginScreen from './screens/LoginScreen';
-import RegistrationScreen from './screens/RegistrationScreen';
-import HomeScreen from './screens/HomeScreen';
+import OnBoardingScreens from './src/screens/OnBoardingScreens';
+import LoginScreen from './src/screens/LoginScreen';
+import RegistrationScreen from './src/screens/RegistrationScreen';
+import HomeScreen from './src/screens/HomeScreen';
 
 
 export default class App extends React.Component {
@@ -26,19 +20,22 @@ export default class App extends React.Component {
   }
 
   render() {
-    const MainNavigator = createStackNavigator({
-      OnBoarding: OnBoardingScreens,
-      Login: LoginScreen,
-      Registration: RegistrationScreen,
-      Home: HomeScreen
-    })
+    const MainNavigator = createStackNavigator(
+      {
+        OnBoarding: OnBoardingScreens,
+        Login: LoginScreen,
+        Registration: RegistrationScreen,
+        Home: HomeScreen
+      },
+      {
+        headerMode: 'none',
+        navigationOptions: {
+            headerVisible: false,
+        }
+      }
+    );
     const AppContainer = createAppContainer(MainNavigator);
     return (
-      <Swiper loop={false} dotColor={'#B0CAED'} activeDotColor={'#2661B2'}>
-        <Discover />
-        <Create />
-        <Connect />
-      </Swiper>
       <AppContainer/>
     );
   }
