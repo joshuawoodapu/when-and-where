@@ -41,8 +41,7 @@ const styles = StyleSheet.create({
            // flexDirection: 'column',
             justifyContent: 'space-between',
             padding: 20,
-            borderColor: '#0ac45555',
-            borderWidth: 2 
+           
     },
     logo: {
         width: null,
