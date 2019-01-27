@@ -1,5 +1,10 @@
 import React from 'react';
 import firebase from 'firebase';
+import Swiper from 'react-native-swiper';
+import Connect from './src/onboardingScreens/Connect';
+import Create from './src/onboardingScreens/Create';
+import Discover from './src/onboardingScreens/Discover';
+import 'react-native';
 import { createAppContainer, createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import { StyleSheet, Text, View } from 'react-native';
 import OnBoardingScreens from './screens/OnBoardingScreens';
@@ -29,16 +34,12 @@ export default class App extends React.Component {
     })
     const AppContainer = createAppContainer(MainNavigator);
     return (
+      <Swiper loop={false} dotColor={'#B0CAED'} activeDotColor={'#2661B2'}>
+        <Discover />
+        <Create />
+        <Connect />
+      </Swiper>
       <AppContainer/>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
