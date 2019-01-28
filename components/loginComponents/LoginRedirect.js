@@ -9,7 +9,9 @@ export default class LoginForm extends Component {
                 Don't have an account?
                 </Text>
                 <TouchableOpacity >
-                <Text style={styles.redirect}>Sign up here!</Text>
+                    <Text style={styles.redirect} onPress={/*this.props.navigation.navigate('Registration')*/} >
+                        Sign up here!
+                    </Text>
                 </TouchableOpacity>
             </View>
         );

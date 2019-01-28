@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, Image, Text, TextInput, Button, Icon, Container, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import firebase from 'firebase';
 import LoginButton from '../components/loginComponents/LoginButton';
-// import LoginForm from '../components/loginComponents/LoginForm';
 import Spinner from "../components/common/Spinner"
 import LoginRedirect from '../components/loginComponents/LoginRedirect';
 
@@ -16,9 +15,7 @@ class LoginScreen extends Component {
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then(this.onLoginSuccess.bind(this))
             .catch(() => {
-                firebase.auth().createUserWithEmailAndPassword(email, password)
-                    .then(this.onLoginSuccess.bind(this))
-                    .catch(this.onLoginFail.bind(this));
+                this.setState({ error: "We can't find an account with that email address", loading: false });
             });
     }
 
@@ -33,6 +30,9 @@ class LoginScreen extends Component {
             loading: false,
             error: ''
         });
+        
+        // TODO: redirect to home screen... dont know if this is right...
+        // this.props.navigation.navigate('Home');
     }
 
     renderButton() {
@@ -97,41 +97,27 @@ const DismissKeyboard = ({children}) => (
 
 const styles = StyleSheet.create({
     toplevel: {
-        height: '100%'
-    },
+        height: '100%' },
     mainContainer: {
-            flexGrow: 1,
-            height: '100%',
-       // width: null,
-      //  height: null,
-           // flexDirection: 'column',
-            justifyContent: 'space-between',
-            padding: 20,
-           
-    },
+        flexGrow: 1,
+        height: '100%',
+        justifyContent: 'space-between',
+        padding: 20 },
     logo: {
         width: null,
         resizeMode: 'contain',
         height: '33%',
-        marginTop: '25%'
-
-    },
-    form: {
-    },
+        marginTop: '25%' },
     button: {
-        alignSelf: 'flex-end'
-    },
+        alignSelf: 'flex-end' },
     redirect: {
-        alignSelf:'flex-end'
-    },
+        alignSelf:'flex-end' },
     testBorder: {
         borderColor: '#0ac45555',
-        borderWidth: 2 
-    },
+        borderWidth: 2 },
     formStyle: {
         // padding: 35,
-        justifyContent: 'space-between',
-    },
+        justifyContent: 'space-between', },
     input2: {
         height: 50,
         backgroundColor: '#ffffff',
@@ -140,8 +126,7 @@ const styles = StyleSheet.create({
         borderColor: '#B8BeC1',
         borderRadius: 15,
         color: '#B8BeC1',
-        paddingHorizontal: 10,
-    },
+        paddingHorizontal: 10, },
     input1: {
         height: 50,
         backgroundColor: '#ffffff',
@@ -150,13 +135,12 @@ const styles = StyleSheet.create({
         borderColor: '#B8BeC1',
         borderRadius: 15,
         color: '#B8BeC1',
-        paddingHorizontal: 10,
-    },
+        paddingHorizontal: 10, },
     errorTextStyle: {
-        fontSize: 20,
+        fontSize: 12,
         alignSelf: 'center',
-        color: 'red'
-    }
+        color: '#E23737',
+        marginTop: 10 }
 });
 
 export default LoginScreen;
