@@ -29,7 +29,7 @@ export default class App extends React.Component {
     })
     const AppContainer = createAppContainer(MainNavigator);
     return (
-      <AppContainer/>
+      <RegistrationScreen/>
     );
   }
 }

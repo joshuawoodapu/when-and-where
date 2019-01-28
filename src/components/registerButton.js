@@ -4,21 +4,21 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 export default class RegisterButton extends Component {
     render() {
         return (
-            <View style={styles.viewStyle}>
-            <TouchableOpacity style={styles.buttonContainer}>
-                <Text style={styles.buttonText}>CONTINUE</Text>
+            <View style={button.viewStyle}>
+            <TouchableOpacity style={button.buttonContainer}>
+                <Text style={button.buttonText}>CONTINUE</Text>
             </TouchableOpacity>
             </View>
         );
     }
 }
 
-const styles = StyleSheet.create({
+const button = StyleSheet.create({
     buttonContainer: {
        backgroundColor: '#ED7248',
        paddingVertical: 20,
        paddingHorizontal: 20,
-       borderRadius: 15,
+       borderRadius: 30,
        width: 330,
     },
     buttonText: {

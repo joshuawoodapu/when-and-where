@@ -4,17 +4,17 @@ import { StyleSheet, Text, View, TextInput } from 'react-native';
 export default class RegisterForm extends Component {
     render() {
         return (
-            <View style={styles.formStyle}>
+            <View style={form.formStyle}>
                 <TextInput 
                     placeholder="Full Name"
                     returnKeyType="next"
-                    style={styles.input}
+                    style={form.input}
                     onSubmitEditing={() => this.emailInput.focus()}
                 />
                 <TextInput 
                     placeholder="Email"
                     returnKeyType="next"
-                    style={styles.input}
+                    style={form.input}
                     ref={(input) => this.emailInput = input}
                     onSubmitEditing={() => this.passwordInput.focus()}
                 />
@@ -22,7 +22,7 @@ export default class RegisterForm extends Component {
                     placeholder="Password"
                     secureTextEntry
                     returnKeyType="next"
-                    style={styles.input}
+                    style={form.input}
                     ref={(input) => this.passwordInput = input}
                     onSubmitEditing={() => this.confirmInput.focus()}
                 />
@@ -30,7 +30,7 @@ export default class RegisterForm extends Component {
                     placeholder="Confirm Password"
                     secureTextEntry
                     returnKeyType="go"
-                    style={styles.input}
+                    style={form.input}
                     ref={(input) => this.confirmInput = input}
                 />
             </View>
@@ -38,7 +38,7 @@ export default class RegisterForm extends Component {
     }
 }
 
-const styles = StyleSheet.create({
+const form = StyleSheet.create({
     formStyle: {
        padding: 35,
     },
