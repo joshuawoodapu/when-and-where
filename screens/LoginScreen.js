@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { View, Image, Text, TextInput, Button, Icon, Container, StyleSheet, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Image, Text, TextInput, Button, Icon, Container, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, Keyboard } from 'react-native';
 import firebase from 'firebase';
-import LoginButton from '../components/loginComponents/LoginButton';
 import Spinner from "../components/common/Spinner"
 import LoginRedirect from '../components/loginComponents/LoginRedirect';
 
@@ -30,20 +29,21 @@ class LoginScreen extends Component {
             loading: false,
             error: ''
         });
-        
+
         // TODO: redirect to home screen... dont know if this is right...
         // this.props.navigation.navigate('Home');
     }
 
     renderButton() {
         if (this.state.loading) {
-            return <Spinner size="small" />;
-        }
+            return <Spinner size="small" />; }
+
         return (
-            <Button 
-                onPress={this.onButtonPress.bind(this)}
-                title="Log in" 
-            />
+            <View style={button.viewStyle}>
+                <TouchableOpacity style={button.buttonContainer} onPress={this.onButtonPress.bind(this)}>
+                    <Text style={button.buttonText}>LOG IN</Text>
+                </TouchableOpacity>
+            </View>
         );
     }
 
@@ -141,6 +141,26 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         color: '#E23737',
         marginTop: 10 }
+});
+
+const button = StyleSheet.create({
+    buttonContainer: {
+       backgroundColor: '#ED7248',
+       paddingVertical: 20,
+       paddingHorizontal: 20,
+       borderRadius: 30,
+       width: 330,
+    },
+    buttonText: {
+        textAlign: 'center',
+        color: '#ffffff',
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    viewStyle: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    }
 });
 
 export default LoginScreen;
