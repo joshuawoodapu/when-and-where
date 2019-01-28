@@ -28,10 +28,7 @@ export default class App extends React.Component {
         Home: HomeScreen
       },
       {
-        headerMode: 'none',
-        navigationOptions: {
-            headerVisible: false,
-        }
+        headerMode: 'screen'
       }
     );
     const AppContainer = createAppContainer(MainNavigator);

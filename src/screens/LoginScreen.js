@@ -5,6 +5,10 @@ import Spinner from "../components/common/Spinner"
 import LoginRedirect from '../components/loginComponents/LoginRedirect';
 
 class LoginScreen extends Component {
+    static navigationOptions = {
+        header: null,
+    };
+    
     state = { email: '', password: '', error: '', loading: false };
 
     onButtonPress() {
@@ -30,8 +34,7 @@ class LoginScreen extends Component {
             error: ''
         });
 
-        // TODO: redirect to home screen... dont know if this is right...
-        // this.props.navigation.navigate('Home');
+        this.props.navigation.navigate('Home');
     }
 
     renderButton() {
@@ -77,7 +80,7 @@ class LoginScreen extends Component {
                     <Text style={styles.errorTextStyle}>
                         {this.state.error}
                     </Text>
-                    <LoginRedirect style={styles.redirect}/>
+                    <LoginRedirect navigation={this.props.navigation} style={styles.redirect}/>
 
 
                     {this.renderButton()}
