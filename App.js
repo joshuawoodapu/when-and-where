@@ -4,7 +4,11 @@ import { createAppContainer, createBottomTabNavigator, createStackNavigator } fr
 import OnBoardingScreens from './src/screens/OnBoardingScreens';
 import LoginScreen from './src/screens/LoginScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
-import HomeScreen from './src/screens/HomeScreen';
+import DiscoveryScreen from './src/screens/DiscoveryScreen';
+import NewPlanScreen from './src/screens/NewPlanScreen';
+import NotificationsScreen from './src/screens/NotificationsScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
+
 
 
 export default class App extends React.Component {
@@ -20,12 +24,40 @@ export default class App extends React.Component {
   }
 
   render() {
+    const SearchStackNav = createStackNavigator(
+      {
+        Discovery: DiscoveryScreen
+      }
+    );
+    const NewPlanStackNav = createStackNavigator(
+      {
+        NewPlan: NewPlanScreen
+      }
+    );
+    const NotificationsStackNav = createStackNavigator(
+      {
+        Notifications: NotificationsScreen
+      }
+    );
+    const ProfileStackNav = createStackNavigator(
+      {
+        Profile: ProfileScreen
+      }
+    );
+    const AppNavigatorNav = createBottomTabNavigator(
+      {
+        SearchStack: SearchStackNav,
+        NewPlanStack: NewPlanStackNav,
+        NotificationsStack: NotificationsStackNav,
+        ProfileStack: ProfileStackNav
+      }
+    );
     const MainNavigator = createStackNavigator(
       {
         OnBoarding: OnBoardingScreens,
         Login: LoginScreen,
         Registration: RegistrationScreen,
-        Home: HomeScreen
+        AppNav: AppNavigatorNav
       },
       {
         headerMode: 'screen'

@@ -34,7 +34,7 @@ class LoginScreen extends Component {
             error: ''
         });
 
-        this.props.navigation.navigate('Home');
+        this.props.navigation.navigate('AppNav');
     }
 
     renderButton() {
