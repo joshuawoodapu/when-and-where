@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Text, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, Text, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet, TouchableOpacity, AsyncStorage } from 'react-native';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import Spinner from "../components/common/Spinner";
@@ -31,7 +31,7 @@ class RegistrationScreen extends Component {
         this.setState({ error: 'Registration Failed.', loading: false });
     }
 
-    onRegisterSuccess() {
+    onRegisterSuccess = async (user) => {
         this.setState({ 
             name: '',
             email: '',
@@ -40,8 +40,11 @@ class RegistrationScreen extends Component {
             loading: false,
             error: ''
         });
+        user = firebase.auth().currentUser; 
+        console.log(user);
+        await AsyncStorage.setItem('userToken', user.uid);
 
-        this.props.navigation.navigate('AppNav');
+        this.props.navigation.navigate('App');
     }
     
     renderButton(){

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Text, TextInput, Button, Icon, Container, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, Keyboard } from 'react-native';
+import { View, Image, Text, TextInput, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, Keyboard, AsyncStorage } from 'react-native';
 import firebase from 'firebase';
 import Spinner from "../components/common/Spinner"
 import LoginRedirect from '../components/loginComponents/LoginRedirect';
@@ -26,15 +26,18 @@ class LoginScreen extends Component {
         this.setState({ error: 'Authentication Failed.', loading: false });
     }
 
-    onLoginSuccess() {
+    onLoginSuccess = async (user) => {
         this.setState({ 
             email: '',
             password: '',
             loading: false,
             error: ''
         });
+        user = firebase.auth().currentUser; 
+        console.log(user);
+        await AsyncStorage.setItem('userToken', user.uid);
 
-        this.props.navigation.navigate('AppNav');
+        this.props.navigation.navigate('App');
     }
 
     renderButton() {
