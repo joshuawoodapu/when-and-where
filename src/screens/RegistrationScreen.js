@@ -31,7 +31,7 @@ class RegistrationScreen extends Component {
         this.setState({ error: 'Registration Failed.', loading: false });
     }
 
-    onRegisterSuccess = async (user) => {
+    onRegisterSuccess = async () => {
         this.setState({ 
             name: '',
             email: '',
@@ -40,9 +40,12 @@ class RegistrationScreen extends Component {
             loading: false,
             error: ''
         });
-        user = firebase.auth().currentUser; 
+        const user = await firebase.auth().currentUser; 
         console.log(user);
-        await AsyncStorage.setItem('userToken', user.uid);
+        //await AsyncStorage.setItem('accessToken', user.accessToken);
+        //await AsyncStorage.setItem('refreshToken', user.refreshToken);
+        await AsyncStorage.setItem('logged', 'true');
+
 
         this.props.navigation.navigate('App');
     }

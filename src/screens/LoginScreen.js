@@ -26,16 +26,18 @@ class LoginScreen extends Component {
         this.setState({ error: 'Authentication Failed.', loading: false });
     }
 
-    onLoginSuccess = async (user) => {
+    onLoginSuccess = async () => {
         this.setState({ 
             email: '',
             password: '',
             loading: false,
             error: ''
         });
-        user = firebase.auth().currentUser; 
+        const user = await firebase.auth().currentUser; 
         console.log(user);
-        await AsyncStorage.setItem('userToken', user.uid);
+        //await AsyncStorage.setItem('accessToken', user.accessToken);
+        //await AsyncStorage.setItem('refreshToken', user.refreshToken);
+        await AsyncStorage.setItem('logged', 'true');
 
         this.props.navigation.navigate('App');
     }

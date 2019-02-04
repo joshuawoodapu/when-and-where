@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import {View, AsyncStorage, Image} from 'react-native';
+import firebase from 'firebase';
 
 class AppLoading extends Component {
     componentWillMount = async () => {
-        const userToken = await AsyncStorage.getItem('userToken');
-
-        this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+        const accessToken = await AsyncStorage.getItem('accessToken');
+        const refreshToken = await AsyncStorage.getItem('refreshToken');
+        const logged = await AsyncStorage.getItem('logged');
+        //console.log(user);
+        this.props.navigation.navigate(logged ? 'App' : 'Auth');
 
     }
     render() {
