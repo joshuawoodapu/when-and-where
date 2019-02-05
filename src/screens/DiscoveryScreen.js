@@ -19,7 +19,7 @@ class DiscoveryScreen extends Component {
 
     render() {
         return (
-            <View>
+            <View style={{flex:1}}>
                 <TextInput
                     placeholder="Search"
                     style={styles.searchInput}

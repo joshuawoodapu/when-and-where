@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableWithoutFeedback, ScrollView, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TouchableWithoutFeedback, ScrollView, Dimensions, FlatList } from 'react-native';
+import ActivityCard from './ActivityCard';
+import { Card } from 'react-native-elements'; 
+
 
 export default class Tabs extends Component {
     state = {
@@ -10,8 +13,9 @@ export default class Tabs extends Component {
         if (this.state.activeTab === 'activities') {
             return (
                 <View style={styles.tabsView}>
-                    <View style={[styles.activitiesTab, styles.activeTab]}>
+                    <View style={[styles.tabStyle, styles.activeTab]}>
                         <TouchableWithoutFeedback
+                            style={styles.touchableStyle}
                             onPress={this.onActivitiesTabPress.bind(this)}
                         >
                             <Text style={styles.activeTabText}>
@@ -19,8 +23,9 @@ export default class Tabs extends Component {
                             </Text>
                         </TouchableWithoutFeedback>
                     </View>
-                    <View style={[styles.plansTab, styles.inactiveTab]}>
+                    <View style={[styles.tabStyle, styles.inactiveTab]}>
                         <TouchableWithoutFeedback
+                            style={styles.touchableStyle}
                             onPress={this.onPlansTabPress.bind(this)}
                         >
                             <Text style={styles.inactiveTabText}>
@@ -34,8 +39,9 @@ export default class Tabs extends Component {
         else if (this.state.activeTab === 'plans') {
             return (
                 <View style={styles.tabsView}>
-                    <View style={[styles.activitiesTab, styles.inactiveTab]}>
+                    <View style={[styles.tabStyle, styles.inactiveTab]}>
                         <TouchableWithoutFeedback
+                            style={styles.touchableStyle}
                             onPress={this.onActivitiesTabPress.bind(this)}
                         >
                             <Text style={styles.inactiveTabText}>
@@ -43,8 +49,9 @@ export default class Tabs extends Component {
                             </Text>
                         </TouchableWithoutFeedback>
                     </View>
-                    <View style={[styles.plansTab, styles.activeTab]}>
+                    <View style={[styles.tabStyle, styles.activeTab]}>
                         <TouchableWithoutFeedback
+                            style={styles.touchableStyle}
                             onPress={this.onPlansTabPress.bind(this)}
                         >
                             <Text style={styles.activeTabText}>
@@ -60,14 +67,29 @@ export default class Tabs extends Component {
     renderContent() {
         if (this.state.activeTab === 'activities') {
             return (
-                <ScrollView style={styles.contentView}>
-                    <Text>Activities!</Text>
-                </ScrollView>
+                <View style={styles.contentContainer}>
+                    <FlatList
+                        data={[
+                            {key: 'Aloha Sushi'},
+                            {key: 'Amoeba Records'},
+                            {key: 'Hanger 18'}
+                        ]}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({item}) => 
+                                <ActivityCard text={item.key}/>
+                        }
+                    />
+                </View>
             );
         }
         else if (this.state.activeTab === 'plans') {
             return (
-                <ScrollView style={styles.contentView}>
+                <ScrollView 
+                    contentContainerStyle={{
+                        flexGrow: 1,
+                    }}
+                    style={styles.contentStyle}
+                >
                     <Text>Plans!</Text>
                 </ScrollView>
             );   
@@ -76,12 +98,12 @@ export default class Tabs extends Component {
     };
 
     onActivitiesTabPress() {
-        if (this.state.activeTab === 'plans')
+        if (this.state.activeTab !== 'activities')
             this.setState({activeTab: 'activities'})
     };
 
     onPlansTabPress() {
-        if (this.state.activeTab === 'activities')
+        if (this.state.activeTab !== 'plans')
             this.setState({activeTab: 'plans'})
     };
 
@@ -97,8 +119,12 @@ export default class Tabs extends Component {
 
 styles = StyleSheet.create({
     parentView: {
-        flex: 1,
-        flexDirection: 'column'
+        flex: 1
+    },
+    flatView: {
+        justifyContent: 'center',
+        width: Dimensions.get('window').width,
+        height: 100
     },
     tabsView: {
         height: 47,
@@ -106,11 +132,14 @@ styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
     },
-    activitiesTab: {
-        flex: 1,
+    tabStyle: {
+        width: Dimensions.get('window').width/2,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1
     },
-    plansTab: {
-        flex: 2,
+    touchableStyle: {
+        alignSelf: 'stretch'
     },
     activeTab: {
         backgroundColor: '#F0F3F7'
@@ -129,6 +158,14 @@ styles = StyleSheet.create({
         fontWeight: 'bold'
     },
     contentView: {
+        flexGrow: 1,
+        justifyContent: 'space-between'
+    },
+    contentStyle: {
         backgroundColor: '#F0F3F7',
+    },
+    contentContainer: {
+        backgroundColor: '#F0F3F7',
+        flex: 1
     }
 })
