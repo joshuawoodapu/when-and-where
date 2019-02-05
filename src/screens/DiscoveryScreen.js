@@ -12,19 +12,24 @@ class DiscoveryScreen extends Component {
         }        
     };
 
+    state = {
+        search: '',
+        location: ''
+    };
+
     render() {
         return (
             <View>
-                <TextInput 
+                <TextInput
                     placeholder="Search"
                     style={styles.searchInput}
                 />
-                <TextInput 
+                <TextInput
                     placeholder="Current Location"
                     style={styles.locationInput}
                 />
 
-                <Tabs />
+                <Tabs/>
             </View>
         )
     }
