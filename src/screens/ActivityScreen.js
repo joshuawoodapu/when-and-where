@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import {View, TextInput, StyleSheet} from 'react-native';
-import Tabs from '../components/Tabs';
+import {View, Text, StyleSheet} from 'react-native';
+import { MapView } from 'expo';
 
-class DiscoveryScreen extends Component {
+class ActivityScreen extends Component {
     static navigationOptions = {
-        title: 'EXPLORE',
+        title: 'AMOEBA RECORDS',
         headerTitleStyle: {
             color: '#2661B2',
             fontSize: 14,
@@ -12,24 +12,19 @@ class DiscoveryScreen extends Component {
         }        
     };
 
-    state = {
-        search: '',
-        location: ''
-    };
 
     render() {
         return (
             <View style={{flex:1}}>
-                <TextInput
-                    placeholder="Search"
-                    style={styles.searchInput}
+                <MapView 
+                    style={{flex:1}}
+                    initialRegion={{
+                        latitude: 34.097205,
+                        longitude: -118.329103,
+                        latitudeDelta: 0.0922,
+                        longitudeDelta: 0.0421,
+                    }}
                 />
-                <TextInput
-                    placeholder="Current Location"
-                    style={styles.locationInput}
-                />
-
-                <Tabs navigation={this.props.navigation}/>
             </View>
         )
     }
@@ -65,4 +60,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default DiscoveryScreen;
+export default ActivityScreen;

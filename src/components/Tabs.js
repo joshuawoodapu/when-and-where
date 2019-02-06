@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback, ScrollView, Dimensions, FlatList } from 'react-native';
 import ActivityCard from './ActivityCard';
-import { Card } from 'react-native-elements'; 
+import PlanCard from './PlanCard';
 
 
 export default class Tabs extends Component {
@@ -76,7 +76,7 @@ export default class Tabs extends Component {
                         ]}
                         showsVerticalScrollIndicator={false}
                         renderItem={({item}) => 
-                                <ActivityCard text={item.key}/>
+                                <ActivityCard onCardPress={this.onActivityCardPress.bind(this)} text={item.key}/>
                         }
                     />
                 </View>
@@ -84,14 +84,19 @@ export default class Tabs extends Component {
         }
         else if (this.state.activeTab === 'plans') {
             return (
-                <ScrollView 
-                    contentContainerStyle={{
-                        flexGrow: 1,
-                    }}
-                    style={styles.contentStyle}
-                >
-                    <Text>Plans!</Text>
-                </ScrollView>
+                <View style={styles.contentContainer}>
+                    <FlatList
+                        data={[
+                            {key: 'Janet\'s Birthday'},
+                            {key: 'Halloween Party'},
+                            {key: 'Galentine\'s Day'}
+                        ]}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({item}) => 
+                                <PlanCard text={item.key}/>
+                        }
+                    />
+                </View>
             );   
         }
 
@@ -100,6 +105,10 @@ export default class Tabs extends Component {
     onActivitiesTabPress() {
         if (this.state.activeTab !== 'activities')
             this.setState({activeTab: 'activities'})
+    };
+
+    onActivityCardPress() {
+        this.props.navigation.navigate('Activity');
     };
 
     onPlansTabPress() {

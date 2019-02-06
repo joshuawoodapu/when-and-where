@@ -9,6 +9,7 @@ import NewPlanScreen from './src/screens/NewPlanScreen';
 import NotificationsScreen from './src/screens/NotificationsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import AppLoading from './src/screens/AppLoading';
+import ActivityScreen from './src/screens/ActivityScreen';
 
 
 
@@ -27,7 +28,8 @@ export default class App extends React.Component {
   render() {
     const SearchStackNav = createStackNavigator(
       {
-        Discovery: DiscoveryScreen
+        Discovery: DiscoveryScreen,
+        Activity: ActivityScreen
       }
     );
     const NewPlanStackNav = createStackNavigator(

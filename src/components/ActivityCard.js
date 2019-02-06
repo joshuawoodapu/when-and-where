@@ -1,69 +1,71 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
-import { Card, Icon } from 'react-native-elements'; 
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import { Card, Icon } from 'react-native-elements';
 
 export default class ActivityCard extends Component {
     render() {
         return (
             <Card>
-                <View style={styles.parentView}>
-                    <View style={styles.topRow}>
-                        <View style={styles.topLeft}>
-                            <Text style={styles.titleText}>
-                                {this.props.text}
+                <TouchableOpacity onPress={this.props.onCardPress}>
+                    <View style={styles.parentView}>
+                        <View style={styles.topRow}>
+                            <View style={styles.topLeft}>
+                                <Text style={styles.titleText}>
+                                    {this.props.text}
+                                </Text>
+                            </View>
+                            <View style={styles.topRight}>
+                                <Icon 
+                                    name='add'
+                                    color='#2661B2'
+                                    size={24}
+                                />
+                            </View>
+                        </View>
+                        <View style={styles.middleRow}>
+                            <Text style={styles.addressText}>
+                                425 E. Foothill Blvd, Azusa, CA
                             </Text>
-                        </View>
-                        <View style={styles.topRight}>
-                            <Icon 
-                                name='add'
-                                color='#2661B2'
-                                size={24}
-                            />
-                        </View>
-                    </View>
-                    <View style={styles.middleRow}>
-                        <Text style={styles.addressText}>
-                            425 E. Foothill Blvd, Azusa, CA
-                        </Text>
 
-                    </View>
-                    <View style={styles.bottomRow}>
-                        <View style={styles.bottomLeft}>
-                            <Icon 
-                                name='star'
-                                color='#FDAF17'
-                                size={12}
-                            />
-                            <Icon 
-                                name='star'
-                                color='#FDAF17'
-                                size={12}
-                            />
-                            <Icon 
-                                name='star'
-                                color='#FDAF17'
-                                size={12}
-                            />
-                            <Icon 
-                                name='star'
-                                color='#FDAF17'
-                                size={12}
-                            />
-                            <Icon 
-                                name='star'
-                                color='#B8BEC1'
-                                size={12}
-                            />
                         </View>
-                        <View style={styles.bottomRight}>
-                            <Icon
-                                name='favorite'
-                                color='#F387B8'
-                                size={16}
-                            />
+                        <View style={styles.bottomRow}>
+                            <View style={styles.bottomLeft}>
+                                <Icon 
+                                    name='star'
+                                    color='#FDAF17'
+                                    size={12}
+                                />
+                                <Icon 
+                                    name='star'
+                                    color='#FDAF17'
+                                    size={12}
+                                />
+                                <Icon 
+                                    name='star'
+                                    color='#FDAF17'
+                                    size={12}
+                                />
+                                <Icon 
+                                    name='star'
+                                    color='#FDAF17'
+                                    size={12}
+                                />
+                                <Icon 
+                                    name='star'
+                                    color='#B8BEC1'
+                                    size={12}
+                                />
+                            </View>
+                            <View style={styles.bottomRight}>
+                                <Icon
+                                    name='favorite'
+                                    color='#F387B8'
+                                    size={16}
+                                />
+                            </View>
                         </View>
                     </View>
-                </View>
+                </TouchableOpacity>
             </Card>
         );
     }
