@@ -5,9 +5,8 @@ import { Card, Icon } from 'react-native-elements';
 export default class ActivityCard extends Component {
     render() {
         return (
-            <Card>
+            <Card wrapperStyle={styles.parentView}>
                 <TouchableOpacity onPress={this.props.onCardPress}>
-                    <View style={styles.parentView}>
                         <View style={styles.topRow}>
                             <View style={styles.topLeft}>
                                 <Text style={styles.titleText}>
@@ -64,7 +63,6 @@ export default class ActivityCard extends Component {
                                 />
                             </View>
                         </View>
-                    </View>
                 </TouchableOpacity>
             </Card>
         );
@@ -127,24 +125,9 @@ styles = StyleSheet.create({
     bottomRight: { 
 
     },
-
-
     cardStyle: {
-        marginTop: 15,
-        marginLeft: 20,
-        marginRight: 20,
-        width: (Dimensions.get('window').width * .75),
-        height: 1000,
-        borderWidth: 1,
-        borderRadius: 2,
-        borderColor: '#ddd',
-        borderBottomWidth: 0,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
-        elevation: 1,
-        backgroundColor: '#FFFFFF'
+        backgroundColor: '#FFFFFF',
+        flex: 1
     },
     sectionStyle: {
         borderBottomWidth: 1,
