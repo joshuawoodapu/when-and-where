@@ -8,9 +8,15 @@ class AppLoading extends Component {
 
     async componentDidMount() {
         await Font.loadAsync({
-            'circular-std': require('../../assets/fonts/CircularStd-Book.otf'),
+            'circular-std-black': require('../../assets/fonts/CircularStd-Black.otf'),
+            'circular-std-black-italic': require('../../assets/fonts/CircularStd-BlackItalic.otf'),
+            'circular-std-book': require('../../assets/fonts/CircularStd-Book.otf'),
+            'circular-std-book-italic': require('../../assets/fonts/CircularStd-BookItalic.otf'),
             'circular-std-bold': require('../../assets/fonts/CircularStd-Bold.otf'),
-            'circular-std-italic': require('../../assets/fonts/CircularStd-BookItalic.otf'),
+            'circular-std-bold-italic': require('../../assets/fonts/CircularStd-BoldItalic.otf'),
+            'circular-std-medium': require('../../assets/fonts/CircularStd-Medium.otf'),
+            'circular-std-medium-italic': require('../../assets/fonts/CircularStd-MediumItalic.otf'),
+
           });
         this.setState({ fontLoaded:true })
         //const accessToken = await AsyncStorage.getItem('accessToken');
