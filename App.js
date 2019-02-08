@@ -10,7 +10,6 @@ import NotificationsScreen from './src/screens/NotificationsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 
 
-
 export default class App extends React.Component {
   componentWillMount() {
     firebase.initializeApp({
