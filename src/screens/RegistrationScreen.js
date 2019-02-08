@@ -17,22 +17,22 @@ class RegistrationScreen extends Component {
     onButtonPress() {
         const { name, email, password_confirm, password } = this.state;
         this.setState({ error: '', loading: true });
-        
+
         if( password === password_confirm ){
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then(this.onRegisterSuccess.bind(this))
                 .catch(this.onRegisterFail.bind(this));
         } else {
             this.setState({ error: "Passwords do not match", loading: false });
-        }        
-    } 
-    
+        }
+    }
+
     onRegisterFail() {
         this.setState({ error: 'Registration Failed.', loading: false });
     }
 
     onRegisterSuccess = async () => {
-        this.setState({ 
+        this.setState({
             name: '',
             email: '',
             password: '',
@@ -40,7 +40,7 @@ class RegistrationScreen extends Component {
             loading: false,
             error: ''
         });
-        const user = await firebase.auth().currentUser; 
+        const user = await firebase.auth().currentUser;
         console.log(user);
         //await AsyncStorage.setItem('accessToken', user.accessToken);
         //await AsyncStorage.setItem('refreshToken', user.refreshToken);
@@ -49,7 +49,7 @@ class RegistrationScreen extends Component {
 
         this.props.navigation.navigate('App');
     }
-    
+
     renderButton(){
         if (this.state.loading) {
             return <Spinner size="small" />; }
@@ -69,7 +69,7 @@ class RegistrationScreen extends Component {
             <View>
                 <Header />
                 <View style={form.formStyle}>
-                    <TextInput 
+                    <TextInput
                         placeholder="Full Name"
                         label="name"
                         value={this.state.name}
@@ -78,7 +78,7 @@ class RegistrationScreen extends Component {
                         style={form.input}
                         onSubmitEditing={() => this.emailInput.focus()}
                     />
-                    <TextInput 
+                    <TextInput
                         placeholder="Email"
                         label="email"
                         value={this.state.email}
@@ -88,7 +88,7 @@ class RegistrationScreen extends Component {
                         ref={(input) => this.emailInput = input}
                         onSubmitEditing={() => this.passwordInput.focus()}
                     />
-                    <TextInput 
+                    <TextInput
                         placeholder="Password"
                         secureTextEntry
                         label="password"
@@ -99,7 +99,7 @@ class RegistrationScreen extends Component {
                         ref={(input) => this.passwordInput = input}
                         onSubmitEditing={() => this.confirmInput.focus()}
                     />
-                    <TextInput 
+                    <TextInput
                         placeholder="Confirm Password"
                         secureTextEntry
                         label="password_confirm"
@@ -110,11 +110,11 @@ class RegistrationScreen extends Component {
                         ref={(input) => this.confirmInput = input}
                     />
                 </View>
-                
+
                 <Text style={form.errorTextStyle}>
                     {this.state.error}
                 </Text>
-                
+
                 <Footer />
 
                 {this.renderButton()}
