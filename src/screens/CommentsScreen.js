@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, ScrollView, StyleSheet, TextInput, KeyboardAvoidingView } from 'react-native';
 import Comment from '../components/commentComponents/Comment';
+import { Button, Icon } from 'react-native-elements';
 
 class CommentsScreen extends Component {
     static navigationOptions = {
@@ -28,14 +29,20 @@ class CommentsScreen extends Component {
                     )}
                 </ScrollView>
 
-                <KeyboardAvoidingView keyboardVerticalOffset={128} behavior={"position"} styles={styles.footer}>
-                    <TextInput
-                        placeholder="Say something..."
-                        label="comment_input"
-                        // value={this.state.email}
-                        // onChangeText={email => this.setState({ email })}
-                        style={styles.input}
-                    />
+                <KeyboardAvoidingView keyboardVerticalOffset={125} behavior={"position"} styles={styles.footer}>
+                    <View style={styles.postCommentContainer}>
+                        <TextInput
+                            placeholder="Say something..."
+                            label="comment_input"
+                            // value={this.state.new_comment}
+                            // onChangeText={new_comment => this.setState({ new_comment })}
+                            style={styles.input}
+                        />
+                        <Button
+                            icon={<Icon name='arrow-forward' color='#2661B2' />}
+                            buttonStyle={styles.button}
+                        />
+                    </View>
                 </KeyboardAvoidingView>
             </View>
         )
@@ -50,16 +57,28 @@ const styles = StyleSheet.create({
         flex: 1
     },
     footer: {
-        height: 100
+        height: 100,
+    },
+    postCommentContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        backgroundColor: '#ffffff',
+        paddingVertical: 7
     },
     input: {
-        backgroundColor: '#ffffff',
         borderWidth: 1,
         borderColor: '#B8BEC1',
         borderRadius: 30,
         color: '#B8BEC1',
         paddingHorizontal: 10,
         paddingVertical: 15,
+        flex: 0.9
+    },
+    button: {
+        width: 50,
+        height: 50,
+        borderRadius: 50 / 2,
+        backgroundColor: '#B0CAED',
     },
 });
 
