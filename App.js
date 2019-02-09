@@ -28,12 +28,6 @@ export default class App extends React.Component {
   }
 
   render() {
-    const Testing = createStackNavigator(
-      {
-        Create: CreateActivityScreen
-      }
-    );
-
     const SearchStackNav = createStackNavigator(
       {
         Discovery: DiscoveryScreen,
@@ -42,7 +36,8 @@ export default class App extends React.Component {
     );
     const NewPlanStackNav = createStackNavigator(
       {
-        NewPlan: NewPlanScreen
+        AddActivity: AddActivityScreen,
+        CreateActivity: CreateActivityScreen
       }
     );
     const NotificationsStackNav = createStackNavigator(
