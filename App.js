@@ -10,6 +10,8 @@ import NotificationsScreen from './src/screens/NotificationsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import AppLoading from './src/screens/AppLoading';
 import ActivityScreen from './src/screens/ActivityScreen';
+import CreateActivityScreen from './src/screens/CreateActivityScreen';
+import AddActivityScreen from './src/screens/AddActivityScreen';
 
 
 
@@ -26,6 +28,12 @@ export default class App extends React.Component {
   }
 
   render() {
+    const Testing = createStackNavigator(
+      {
+        Create: CreateActivityScreen
+      }
+    );
+
     const SearchStackNav = createStackNavigator(
       {
         Discovery: DiscoveryScreen,

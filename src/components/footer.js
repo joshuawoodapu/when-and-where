@@ -6,24 +6,21 @@ export default class Footer extends Component {
         return (
            <View style={styles.footerStyle}>
                 <Text style={styles.footerTextStyle}>By creating an account you agree to our terms of service and privacy policy.</Text>
-            </View> 
+            </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
     footerStyle: {
-        backgroundColor: '#ffffff',
         alignItems: 'center',
-        justifyContent: 'center',
-        height: 60,
-        paddingTop: 0,
+        justifyContent: 'flex-start',
+        paddingBottom: 5,
+        flex: 1,
     },
     footerTextStyle: {
-        flex: 1,
         fontSize: 12,
         color: '#B8BeC1',
-        fontWeight: 'bold',
         width: 250,
         textAlign: 'center',
     }

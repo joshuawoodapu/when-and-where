@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import {View, Text, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet, TouchableOpacity, AsyncStorage } from 'react-native';
-import Header from '../components/header';
-import Footer from '../components/footer';
+import {View, Text, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet, TouchableOpacity} from 'react-native';
+import {Input} from 'react-native-elements';
+import RHeader from '../components/common/RHeader';
+import RButton from '../components/common/RButton';
+
+import Okay2 from '../components/common/Okay2';
+
+import Footer from '../components/Footer';
 import Spinner from "../components/common/Spinner";
 import firebase from 'firebase';
-// import RegisterForm from '../src/components/registerForm';
-// import RegisterButton from '../src/components/registerButton';
 
 class RegistrationScreen extends Component {
     static navigationOptions = {
@@ -55,67 +58,54 @@ class RegistrationScreen extends Component {
             return <Spinner size="small" />; }
 
         return (
-            <View style={button.viewStyle}>
-                <TouchableOpacity style={button.buttonContainer} onPress={this.onButtonPress.bind(this)}>
-                    <Text style={button.buttonText}>REGISTER</Text>
-                </TouchableOpacity>
-            </View>
+            <RButton flex={1} onPress={this.onButtonPress.bind(this)}>
+                CONTINUE
+            </RButton>
         );
     }
 
     render() {
         return (
             <DismissKeyboard>
-            <View>
-                <Header />
-                <View style={form.formStyle}>
-                    <TextInput
-                        placeholder="Full Name"
-                        label="name"
-                        value={this.state.name}
-                        onChangeText={name => this.setState({ name })}
-                        returnKeyType="next"
-                        style={form.input}
-                        onSubmitEditing={() => this.emailInput.focus()}
-                    />
-                    <TextInput
-                        placeholder="Email"
-                        label="email"
-                        value={this.state.email}
-                        onChangeText={email => this.setState({ email })}
-                        returnKeyType="next"
-                        style={form.input}
-                        ref={(input) => this.emailInput = input}
-                        onSubmitEditing={() => this.passwordInput.focus()}
-                    />
-                    <TextInput
-                        placeholder="Password"
-                        secureTextEntry
-                        label="password"
-                        value={this.state.password}
-                        onChangeText={password => this.setState({ password })}
-                        returnKeyType="next"
-                        style={form.input}
-                        ref={(input) => this.passwordInput = input}
-                        onSubmitEditing={() => this.confirmInput.focus()}
-                    />
-                    <TextInput
-                        placeholder="Confirm Password"
-                        secureTextEntry
-                        label="password_confirm"
-                        value={this.state.password_confirm}
-                        onChangeText={password_confirm => this.setState({ password_confirm })}
-                        returnKeyType="go"
-                        style={form.input}
-                        ref={(input) => this.confirmInput = input}
-                    />
+            <View flex={1}>
+              <View flex={2} paddingLeft={48}>
+                <RHeader>Create Account</RHeader>
+              </View>
+              <View style={form.formStyle}>
+                  <Okay2 placeholderList={[
+                      {placeholder: 'Full Name',
+                        inputContainerStyle: 'regScreenInput',
+                        autoCorrect: false,
+                        autoCapitalize: "words",
+                        stateLabel: "name"},
+                      {placeholder: 'Email',
+                        inputContainerStyle: 'regScreenInput',
+                        autoCorrect: false,
+                        autoCapitalize: "none",
+                        stateLabel: "email",
+                        spellcheck: false},
+                      {placeholder: 'Password',
+                        inputContainerStyle: 'regScreenInput',
+                        secureTextEntry: true,
+                        autoCorrect: false,
+                        stateLabel: "password"},
+                      {placeholder: 'Confirm Password',
+                        inputContainerStyle: 'regScreenInput',
+                        secureTextEntry: true,
+                        returnKeyType: 'done',
+                        autoCorrect: false,
+                        stateLabel: "password_confirm"},
+                      ]}
+                  />
                 </View>
 
                 <Text style={form.errorTextStyle}>
                     {this.state.error}
                 </Text>
 
-                <Footer />
+                <View flex={2}>
+                  <Footer/>
+                </View>
 
                 {this.renderButton()}
 
@@ -127,40 +117,15 @@ class RegistrationScreen extends Component {
 
 const form = StyleSheet.create({
     formStyle: {
-       padding: 35, },
-    input: {
-        height: 50,
-        backgroundColor: '#ffffff',
-        marginBottom: 25,
-        borderWidth: 2,
-        borderColor: '#B8BeC1',
-        borderRadius: 15,
-        color: '#B8BeC1',
-        paddingHorizontal: 10, },
+      flex: 4,
+      paddingHorizontal: 40,
+      justifyContent: 'space-between'
+    },
     errorTextStyle: {
         fontSize: 12,
         alignSelf: 'center',
         color: '#E23737',
-        marginTop: 10 }
-});
-
-const button = StyleSheet.create({
-    buttonContainer: {
-       backgroundColor: '#ED7248',
-       paddingVertical: 20,
-       paddingHorizontal: 20,
-       borderRadius: 30,
-       width: 330,
-    },
-    buttonText: {
-        textAlign: 'center',
-        color: '#ffffff',
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    viewStyle: {
-        alignItems: 'center',
-        justifyContent: 'center',
+        marginTop: 10
     }
 });
 
