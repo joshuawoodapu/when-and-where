@@ -8,7 +8,7 @@ class DiscoveryScreen extends Component {
         headerTitleStyle: {
             color: '#2661B2',
             fontSize: 14,
-            fontWeight: 'bold'
+            fontFamily: 'circular-std-bold'
         }        
     };
 
