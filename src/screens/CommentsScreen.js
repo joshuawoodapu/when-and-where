@@ -4,6 +4,14 @@ import Comment from '../components/commentComponents/Comment';
 import { Button, Icon } from 'react-native-elements';
 
 class CommentsScreen extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { 
+            new_comment: '',
+            loading: false
+        };
+    }
+
     static navigationOptions = {
         title: 'COMMENTS',
         headerTitleStyle: {
@@ -12,6 +20,13 @@ class CommentsScreen extends Component {
             fontWeight: 'bold'
         }
     };
+
+    postComment(){
+        // TODO actually make this post to comment thread
+        // its currently being called everytime the text input changes
+        // instead of only being called when the button is pressed
+        console.log("beep boop")
+    }
 
     render() {
 
@@ -34,13 +49,14 @@ class CommentsScreen extends Component {
                         <TextInput
                             placeholder="Say something..."
                             label="comment_input"
-                            // value={this.state.new_comment}
-                            // onChangeText={new_comment => this.setState({ new_comment })}
+                            value={this.state.new_comment}
+                            onChangeText={new_comment => this.setState({ new_comment })}
                             style={styles.input}
                         />
                         <Button
                             icon={<Icon name='arrow-forward' color='#2661B2' />}
                             buttonStyle={styles.button}
+                            onPress={this.postComment()}
                         />
                     </View>
                 </KeyboardAvoidingView>
