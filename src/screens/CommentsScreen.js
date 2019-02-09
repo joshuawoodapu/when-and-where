@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { View, ScrollView, Text, FlatList, SectionList } from 'react-native';
+import { View, ScrollView, StyleSheet, TextInput, KeyboardAvoidingView } from 'react-native';
 import Comment from '../components/commentComponents/Comment';
-import { ListItem } from 'react-native-elements';
 
 class CommentsScreen extends Component {
     static navigationOptions = {
@@ -16,20 +15,53 @@ class CommentsScreen extends Component {
     render() {
 
         return (
-            <ScrollView>
-                {comments.map((c, index) =>
-                    <View key={index}>
-                        <Comment
-                            username={c.user}
-                            avatar={c.avatar_url}
-                            content={c.content}
-                            created={c.created} />
-                    </View>
-                )}
-            </ScrollView>
+            <View style={styles.container}>
+                <ScrollView style={styles.contentContainer}>
+                    {comments.map((c, index) =>
+                        <View key={index}>
+                            <Comment
+                                username={c.user}
+                                avatar={c.avatar_url}
+                                content={c.content}
+                                created={c.created} />
+                        </View>
+                    )}
+                </ScrollView>
+
+                <KeyboardAvoidingView keyboardVerticalOffset={128} behavior={"position"} styles={styles.footer}>
+                    <TextInput
+                        placeholder="Say something..."
+                        label="comment_input"
+                        // value={this.state.email}
+                        // onChangeText={email => this.setState({ email })}
+                        style={styles.input}
+                    />
+                </KeyboardAvoidingView>
+            </View>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
+    contentContainer: {
+        flex: 1
+    },
+    footer: {
+        height: 100
+    },
+    input: {
+        backgroundColor: '#ffffff',
+        borderWidth: 1,
+        borderColor: '#B8BEC1',
+        borderRadius: 30,
+        color: '#B8BEC1',
+        paddingHorizontal: 10,
+        paddingVertical: 15,
+    },
+});
 
 const comments = [
     {
