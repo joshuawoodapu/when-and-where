@@ -1,0 +1,67 @@
+import React, { Component } from 'react';
+import { Alert, Text, TextInput, StyleSheet, View } from 'react-native';
+import RNPickerSelect from 'react-native-picker-select';
+
+class Dropdown extends Component {
+    constructor(props) {
+        super(props);
+
+        this.inputRefs = {};
+
+        this.state = { userSelected: undefined, items: props.choices};
+    }
+
+    render() {
+        return (
+            <View style={styles.container}>
+                <RNPickerSelect
+                    placeholder={{
+                        label: 'Type',
+                        value: null,
+                    }}
+                    items={this.state.items}
+                    onValueChange={(value) => {
+                        this.setState({
+                            userSelected: value,
+                        });
+                    }}
+
+                    style={{ ...pickerSelectStyles }}
+                    value={this.state.userSelected}
+                    ref={(el) => {
+                        this.inputRefs.picker = el;
+                    }}
+                />
+            </View>
+        );
+    }
+}
+
+const styles = StyleSheet.create({
+    container: {
+        paddingHorizontal: 10,
+    },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 14,
+        paddingTop: 13,
+        paddingLeft: 17,
+        paddingVertical: 11,
+        borderWidth: 1,
+        borderColor: '#B8BeC1',
+        borderRadius: 15,
+        color: 'black',
+    },
+    inputAndroid: {
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: '#B8BeC1',
+        borderRadius: 15,
+        backgroundColor: 'white',
+        color: 'black',
+    },
+});
+
+export default Dropdown;
