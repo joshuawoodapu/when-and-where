@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import { Divider } from 'react-native-elements';
+import { View, Text, StyleSheet } from 'react-native';
+import { Avatar, Divider } from 'react-native-elements';
 
 class Comment extends Component {
-    
+
     render() {
+        const {
+            avatar,
+            username,
+            created,
+            content
+        } = this.props;
         return (
-            <View>
-                <Text style={styles.username}>{this.props.username}</Text>
-                <Text style={styles.content}>{this.props.time}</Text>
+            <View style={styles.container}>
+                <Avatar rounded size="medium" source={{ uri: avatar }} />
+
+                <View style={styles.contentContainer}>
+                    <Text style={styles.username}>{username}</Text>
+                    <Text style={styles.content}>{content}</Text>
+                </View>
                 
-                <Text style={styles.content}>{this.props.content}</Text>
-                
-                
+                <Text style={styles.content}>{created}</Text>
+
                 <Divider style={{ backgroundColor: '#B0CAED' }} />
             </View>
         )
@@ -20,6 +29,14 @@ class Comment extends Component {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+    },
+    contentContainer: {
+        flex: 1,
+        borderColor: '#EEE',
+        padding: 5,
+    },
     username: {
         fontSize: 15,
         fontWeight: 'bold',
