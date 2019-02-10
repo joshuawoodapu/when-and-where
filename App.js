@@ -9,6 +9,8 @@ import NewPlanScreen from './src/screens/NewPlanScreen';
 import NotificationsScreen from './src/screens/NotificationsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
+import { Icon } from 'react-native-elements';
+
 
 import { View, StyleSheet }from 'react-native'
 
@@ -27,7 +29,7 @@ export default class App extends React.Component {
 render (){
   return(
     <View flex='1'>
-      <SettingsScreen />
+      <NotificationsScreen />
     </View>
   );
 }
@@ -35,7 +37,7 @@ render (){
 
 
   
-  renderTemp() {
+  renderTemp () {
     const SearchStackNav = createStackNavigator(
       {
         Discovery: DiscoveryScreen
