@@ -5,7 +5,7 @@ import { Card, Icon } from 'react-native-elements';
 export default class ActivityCard extends Component {
     render() {
         return (
-            <Card>
+            <Card containerStyle={styles.cardStyle}>
                 <TouchableOpacity onPress={this.props.onCardPress}>
                     <View style={styles.parentView}>
                         <View style={styles.topRow}>
@@ -15,7 +15,7 @@ export default class ActivityCard extends Component {
                                 </Text>
                             </View>
                             <View style={styles.topRight}>
-                                <Icon 
+                                <Icon
                                     name='add'
                                     color='#2661B2'
                                     size={24}
@@ -30,37 +30,37 @@ export default class ActivityCard extends Component {
                         </View>
                         <View style={styles.bottomRow}>
                             <View style={styles.bottomLeft}>
-                                <Icon 
+                                <Icon
                                     name='star'
                                     color='#FDAF17'
-                                    size={12}
+                                    size={14}
                                 />
-                                <Icon 
+                                <Icon
                                     name='star'
                                     color='#FDAF17'
-                                    size={12}
+                                    size={14}
                                 />
-                                <Icon 
+                                <Icon
                                     name='star'
                                     color='#FDAF17'
-                                    size={12}
+                                    size={14}
                                 />
-                                <Icon 
+                                <Icon
                                     name='star'
                                     color='#FDAF17'
-                                    size={12}
+                                    size={14}
                                 />
-                                <Icon 
+                                <Icon
                                     name='star'
                                     color='#B8BEC1'
-                                    size={12}
+                                    size={14}
                                 />
                             </View>
                             <View style={styles.bottomRight}>
                                 <Icon
-                                    name='favorite'
+                                    name='favorite-border'
                                     color='#F387B8'
-                                    size={16}
+                                    size={18}
                                 />
                             </View>
                         </View>
@@ -71,7 +71,7 @@ export default class ActivityCard extends Component {
     }
 }
 
-styles = StyleSheet.create({
+ const styles = StyleSheet.create({
     parentView: {
         flex: 1,
         flexDirection: 'column'
@@ -90,7 +90,7 @@ styles = StyleSheet.create({
         flex: 1
     },
     plusIcon: {
-        color: '#2661B2', 
+        color: '#2661B2',
     },
     topRow: {
         flexDirection: 'row',
@@ -116,35 +116,33 @@ styles = StyleSheet.create({
         flex: 1
     },
     bottomRow: {
-        marginTop: 10,
+        marginTop: 20,
         flexDirection: 'row',
-        flex: 1
+        flex: 1,
+        alignItems: "stretch",
     },
     bottomLeft: {
         flex: 1,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'flex-start',
     },
-    bottomRight: { 
-
+    bottomRight: {
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
     },
 
 
     cardStyle: {
         marginTop: 15,
-        marginLeft: 20,
-        marginRight: 20,
-        width: (Dimensions.get('window').width * .75),
-        height: 1000,
-        borderWidth: 1,
-        borderRadius: 2,
-        borderColor: '#ddd',
-        borderBottomWidth: 0,
-        shadowColor: '#000',
+        borderWidth: 0,
+        borderRadius: 12,
+        shadowColor: '#000000',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 2,
+        shadowOpacity: 0.16,
+        shadowRadius: 3,
         elevation: 1,
-        backgroundColor: '#FFFFFF'
+        backgroundColor: '#fff'
     },
     sectionStyle: {
         borderBottomWidth: 1,
@@ -153,7 +151,10 @@ styles = StyleSheet.create({
         justifyContent: 'flex-start',
         flexDirection: 'row',
         borderColor: '#ddd',
-        position: 'relative' 
-    }
+        position: 'relative'
+    },
+    notFavorited: {
+      borderWidth: 1,
+    },
 
 });

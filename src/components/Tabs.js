@@ -75,7 +75,7 @@ export default class Tabs extends Component {
                             {key: 'Hanger 18'}
                         ]}
                         showsVerticalScrollIndicator={false}
-                        renderItem={({item}) => 
+                        renderItem={({item}) =>
                                 <ActivityCard onCardPress={this.onActivityCardPress.bind(this)} text={item.key}/>
                         }
                     />
@@ -92,12 +92,12 @@ export default class Tabs extends Component {
                             {key: 'Galentine\'s Day'}
                         ]}
                         showsVerticalScrollIndicator={false}
-                        renderItem={({item}) => 
+                        renderItem={({item}) =>
                                 <PlanCard text={item.key}/>
                         }
                     />
                 </View>
-            );   
+            );
         }
 
     };

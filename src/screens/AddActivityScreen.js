@@ -26,34 +26,4 @@ class AddActivityScreen extends Component {
     }
 }
 
-const styles = StyleSheet.create({
-    searchInput: {
-        height: 40,
-        backgroundColor: '#ffffff',
-        marginTop: 15,
-        marginBottom: 15,
-        marginLeft: 25,
-        marginRight: 25,
-        borderWidth: 2,
-        borderColor: '#B8BeC1',
-        borderRadius: 15,
-        color: '#B8BeC1',
-        paddingHorizontal: 10,
-    },
-    locationInput: {
-        height: 40,
-        backgroundColor: '#ffffff',
-        marginBottom: 20,
-        marginLeft: 25,
-        marginRight: 25,
-        borderWidth: 2,
-        borderColor: '#B8BeC1',
-        borderRadius: 15,
-        color: '#B8BeC1',
-        paddingHorizontal: 10,
-    }
-
-
-});
-
 export default AddActivityScreen;

@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback, ScrollView, Dimensions, FlatList } from 'react-native';
-import ActivityCard from './ActivityCard';
-import PlanCard from './PlanCard';
+import AAActivityCard from './AAActivityCard';
 import Okay2 from '../components/common/Okay2';
 
 
-export default class AATabs extends Component {
+export default class AATabs2 extends Component {
     state = {
         activeTab: 'search'
     };
@@ -14,20 +13,22 @@ export default class AATabs extends Component {
         if (this.state.activeTab === 'search') {
             return (
                 <View style={styles.tabsView}>
-                    <View style={[styles.tabStyle, styles.activeTab]}>
-                        <TouchableWithoutFeedback
-                            style={styles.touchableStyle}
-                            onPress={this.onActivitiesTabPress.bind(this)}
-                        >
+                    <TouchableWithoutFeedback
+                        style={styles.touchableStyle}
+                        onPress={this.onActivitiesTabPress.bind(this)}
+                        key={"search-active"}
+                    >
+                        <View style={[styles.tabStyle, styles.activeTab]}>
                             <Text style={styles.activeTabText}>
                                 Search
                             </Text>
-                        </TouchableWithoutFeedback>
-                    </View>
+                        </View>
+                    </TouchableWithoutFeedback>
                     <View style={[styles.tabStyle, styles.inactiveTab]}>
                         <TouchableWithoutFeedback
                             style={styles.touchableStyle}
                             onPress={this.onPlansTabPress.bind(this)}
+                            key={"myactivities-inactive"}
                         >
                             <Text style={styles.inactiveTabText}>
                                 My Activities
@@ -44,6 +45,7 @@ export default class AATabs extends Component {
                         <TouchableWithoutFeedback
                             style={styles.touchableStyle}
                             onPress={this.onActivitiesTabPress.bind(this)}
+                            key={"search-inactive"}
                         >
                             <Text style={styles.inactiveTabText}>
                                 Search
@@ -54,6 +56,7 @@ export default class AATabs extends Component {
                         <TouchableWithoutFeedback
                             style={styles.touchableStyle}
                             onPress={this.onPlansTabPress.bind(this)}
+                            key={"myactivities-active"}
                         >
                             <Text style={styles.activeTabText}>
                                 My Activities
@@ -65,88 +68,89 @@ export default class AATabs extends Component {
         }
 
     };
-    renderContent() {
+    renderContentHeader() {
+      return(
+        <View style={styles.tabsInputs}>
+          <Okay2 placeholderList={[
+              {placeholder: 'Search',
+                inputContainerStyle: 'tabsInput',
+                inputStyle: 'tabsText',
+                autoCapitalize: "words",
+                stateLabel: "search",
+                iconName: "search",
+                iconColor: "#605985",
+                iconSize: 22},
+              {placeholder: 'Current Location',
+                inputContainerStyle: 'tabsInput',
+                inputStyle: 'tabsText',
+                returnKeyType: 'done',
+                stateLabel: "current_location",
+                iconName: "location-on",
+                iconColor: "#605985",
+                iconSize: 22},
+              ]}
+          />
+        </View>
+      );
+    };
+
+    renderContentFooter() {
         if (this.state.activeTab === 'search') {
-            return (
-                <View style={styles.contentContainer}>
-                    <View style={styles.tabsInputs}>
-                      <Okay2 placeholderList={[
-                          {placeholder: 'Search',
-                            inputContainerStyle: 'tabsInput',
-                            inputStyle: 'tabsText',
-                            autoCapitalize: "words",
-                            stateLabel: "search",
-                            iconName: "search",
-                            iconColor: "#605985",
-                            iconSize: 22},
-                          {placeholder: 'Current Location',
-                            inputContainerStyle: 'tabsInput',
-                            inputStyle: 'tabsText',
-                            returnKeyType: 'done',
-                            stateLabel: "current_location",
-                            iconName: "location-on",
-                            iconColor: "#605985",
-                            iconSize: 22},
-                          ]}
+          var activities = [{title: 'Aloha Sushi', add: true, address: '3030 Freedom Lane, Merced, CA 95340', stars: 5, favorited: true},
+            {title: 'Mystic Sports', add: true, address: '465 Edsel Road, Irvine, CA 92614', stars: 4},
+            {title: 'Primedia', add: true, address: '3903 Turnley Ave, Oakland, CA, 94605', stars: 4, favorited: true},
+            {title: 'Glaciarts', address: '3904 Sarno Ct, Moorpark, CA, 93021', stars: 2},
+            {title: 'Ridgeco', add: true, address: '3906 Chelsea Ct, Rocklin, CA, 95677', stars: 4},
+            {title: 'Lucent Bar & Grille', address: '3906 Mayfield St, Newbury Park, CA, 91320', stars: 3},];
+
+          return (
+              <View flex={6} paddingHorizontal={15}>
+                <FlatList
+                    data={activities}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={({item}) =>
+                      <AAActivityCard
+                        key={item.id}
+                        onCardPress={this.onRActivityCardPress.bind(this)}
+                        title={item.title}
+                        add={item.add}
+                        text={item.title}
+                        address={item.address}
+                        stars={item.stars}
+                        favorited={item.favorited}
                       />
-                    </View>
-                    <View flex={6}>
-                      <FlatList
-                          data={[
-                              {key: 'Aloha Sushi'},
-                              {key: 'Amoeba Records'},
-                              {key: 'Hanger 18'}
-                          ]}
-                          showsVerticalScrollIndicator={false}
-                          renderItem={({item}) =>
-                                  <ActivityCard onCardPress={this.onActivityCardPress.bind(this)} text={item.key}/>
-                          }
-                      />
-                    </View>
-                </View>
-            );
+                    }
+                    keyExtractor={(item, index) => index.toString()}
+                />
+              </View>
+          );
         }
         else if (this.state.activeTab === 'myactivities') {
-            return (
-              <View style={styles.contentContainer}>
-                  <View style={styles.tabsInputs}>
-                  <Okay2 placeholderList={[
-                      {placeholder: 'Search',
-                        inputContainerStyle: 'tabsInput',
-                        inputStyle: 'tabsText',
-                        autoCapitalize: "words",
-                        stateLabel: "search",
-                        iconName: "search",
-                        iconColor: "#605985",
-                        iconSize: 22},
-                      {placeholder: 'Current Location',
-                        inputContainerStyle: 'tabsInput',
-                        inputStyle: 'tabsText',
-                        returnKeyType: 'done',
-                        stateLabel: "current_location",
-                        iconName: "location-on",
-                        iconColor: "#605985",
-                        iconSize: 22},
-                      ]}
-                  />
-                  </View>
-                  <View flex={6}>
-                    <FlatList
-                        data={[
-                            {key: 'Great Falls'},
-                            {key: 'Hanger 18'},
-                            {key: 'Classic Coffee'}
-                        ]}
-                        showsVerticalScrollIndicator={false}
-                        renderItem={({item}) =>
-                                <ActivityCard onCardPress={this.onActivityCardPress.bind(this)} text={item.key}/>
-                        }
-                    />
-                  </View>
-              </View>
-            );
-        }
+          var activities = [{title: 'Aloha Sushi', add: true, address: '3030 Freedom Lane, Merced, CA 95340', stars: 5, favorited: true},
+            {title: 'Primedia', add: true, address: '3903 Turnley Ave, Oakland, CA, 94605', stars: 4, favorited: true},];
 
+          return (
+              <View flex={6} paddingHorizontal={15}>
+                <FlatList
+                    data={activities}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={({item}) =>
+                      <AAActivityCard
+                        key={item.id}
+                        onCardPress={this.onRActivityCardPress.bind(this)}
+                        title={item.title}
+                        add={item.add}
+                        text={item.title}
+                        address={item.address}
+                        stars={item.stars}
+                        favorited={item.favorited}
+                      />
+                    }
+                    keyExtractor={(item, index) => index.toString()}
+                />
+              </View>
+          );
+        }
     };
 
     onActivitiesTabPress() {
@@ -154,7 +158,7 @@ export default class AATabs extends Component {
             this.setState({activeTab: 'search'})
     };
 
-    onActivityCardPress() {
+    onRActivityCardPress() {
         this.props.navigation.navigate('Search');
     };
 
@@ -167,7 +171,10 @@ export default class AATabs extends Component {
         return (
             <View style={styles.parentView}>
                 {this.renderTabs()}
-                {this.renderContent()}
+                <View style={styles.contentContainer}>
+                  {this.renderContentHeader()}
+                  {this.renderContentFooter()}
+                </View>
             </View>
         );
     }
@@ -195,7 +202,7 @@ styles = StyleSheet.create({
         flex: 1
     },
     touchableStyle: {
-        alignSelf: 'stretch',
+        alignSelf: 'stretch'
     },
     activeTab: {
         backgroundColor: '#F0F3F7',

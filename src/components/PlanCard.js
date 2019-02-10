@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Dimensions } from 'react-native';
-import { Card, Icon } from 'react-native-elements'; 
+import { Card, Icon } from 'react-native-elements';
 
 export default class PlanCard extends Component {
     render() {
@@ -14,7 +14,7 @@ export default class PlanCard extends Component {
                             </Text>
                         </View>
                         <View style={styles.topRight}>
-                            <Icon 
+                            <Icon
                                 name='add'
                                 color='#2661B2'
                                 size={24}
@@ -22,7 +22,7 @@ export default class PlanCard extends Component {
                         </View>
                     </View>
                     <View style={styles.middleRow}>
-                        <Icon 
+                        <Icon
                             name='radio-button-unchecked'
                             color='#B0CAED'
                             size={20}
@@ -30,7 +30,7 @@ export default class PlanCard extends Component {
                         <Text style={styles.addressText}>
                             Paint & Wine Night at Mantra
                         </Text>
-                        <Icon 
+                        <Icon
                             name='radio-button-unchecked'
                             color='#B0CAED'
                             size={20}
@@ -45,7 +45,7 @@ export default class PlanCard extends Component {
                     </View>
                     <View style={styles.bottomRow}>
                         <View style={styles.bottomLeft}>
-                            <Icon 
+                            <Icon
                                 name='schedule'
                                 color='#2661B2'
                                 size={20}
@@ -90,7 +90,7 @@ styles = StyleSheet.create({
         flex: 1
     },
     plusIcon: {
-        color: '#2661B2', 
+        color: '#2661B2',
     },
     topRow: {
         flexDirection: 'row',
@@ -124,7 +124,7 @@ styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row'
     },
-    bottomRight: { 
+    bottomRight: {
 
     },
 
@@ -153,7 +153,7 @@ styles = StyleSheet.create({
         justifyContent: 'flex-start',
         flexDirection: 'row',
         borderColor: '#ddd',
-        position: 'relative' 
+        position: 'relative'
     }
 
 });
