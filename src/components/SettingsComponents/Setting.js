@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { Icon } from 'react-native-elements';
 
 class Setting extends Component {
     render() {
@@ -8,16 +9,20 @@ class Setting extends Component {
             {/* header */}
 
                 <View style={styles.leftContainer}>
-                    <View style={styles.placeHolderIcon} />
+                    <View style={styles.iconHolder}>
+                        <Icon name={this.props.iconName} size={30} color="#2661B2" />
+                    </View>
                     <View style={styles.placeHolder2}>
                         <Text style={styles.settingNameText}>
-                            Setting
+                            { this.props.settingName }
                         </Text>
                     </View>
                 </View>
 
                 <View style={styles.rightContainer}>
-                    <Text style={styles.settingSelectionText}> Current Setting </Text>
+                    <Text style={styles.settingSelectionText}>
+                            {this.props.currentSetting}
+                    </Text>
                 </View>
             </TouchableOpacity>
         )
@@ -34,11 +39,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#F0F3F7',
         marginTop: '1%'
     },
-    placeHolderIcon: {
-        flex: 1,
-        backgroundColor: '#55fc55',
+    iconHolder: {
+       // flex: 1,
+       // backgroundColor: '#55fc55',
         flexDirection: 'row',
-        alignContent: 'center'
+        alignContent: 'center',
+        justifyContent: 'center',
+        marginRight: '5%'
     },
     placeHolder2: {
         flex: 2,

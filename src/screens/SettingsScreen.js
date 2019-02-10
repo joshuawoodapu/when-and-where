@@ -13,12 +13,14 @@ class SettingsScreen extends Component {
 
                 <View style={styles.settingsHolder}>
 
-                <Setting />
-                <Setting />
-                <Setting />
-                <Setting />
-                <Setting />
-                <Setting />
+                <Setting settingName='Me'
+                    currentSetting='Jen Smith'
+                    iconName='user'/>
+                <Setting settingName='Notifications' currentSetting='All' iconName='user'/>
+                <Setting settingName='Account' currentSetting='john.doe@gmail.com' iconName='user'/>
+                <Setting settingName='Privacy' iconName='user'/>
+                <Setting settingName='Help' currentSetting='Questions?' iconName='user'/>
+                <Setting settingName='Log Out' iconName='user'/>
 
                 </View>
             </View>
