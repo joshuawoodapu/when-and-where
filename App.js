@@ -29,7 +29,7 @@ export default class App extends React.Component {
 render (){
   return(
     <View flex='1'>
-      <NotificationsScreen />
+      <ProfileScreen />
     </View>
   );
 }
