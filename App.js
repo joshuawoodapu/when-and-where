@@ -1,6 +1,7 @@
 import React from 'react';
 import firebase from 'firebase';
 import { createAppContainer, createBottomTabNavigator, createStackNavigator } from 'react-navigation';
+import { View, StyleSheet }from 'react-native'
 import OnBoardingScreens from './src/screens/OnBoardingScreens';
 import LoginScreen from './src/screens/LoginScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
@@ -13,7 +14,10 @@ import AddActivityScreen from './src/screens/AddActivityScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import CreateActivityScreen from './src/screens/CreateActivityScreen';
 import ActivityScreen from './src/screens/ActivityScreen';
-import { View, StyleSheet }from 'react-native'
+import NewPlan1Screen from './src/screens/NewPlan1Screen';
+import ViewPlan from './src/screens/ViewPlan';
+
+
 
 export default class App extends React.Component {
   componentWillMount() {

@@ -1,50 +1,31 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, DatePickerIOS } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import SwitchToggle from "../components/common/Switch.js";
 import { Avatar } from 'react-native-elements';
 import { Icon } from 'react-native-elements';
-import FlipToggle from 'react-native-flip-toggle-button';
+import Modal from "react-native-modal";
 
 
-export default class NewPlanScreen extends Component {
-
-  constructor(props) {
-         super(props);
-         this.state = {
-           isSwitch1On: false,}
-
-           this.state = {chosenDate: new Date()};
-
-           this.setDate = this.setDate.bind(this);
-         };
-
-         setDate(newDate) {
-           this.setState({chosenDate: newDate});
-         }
-
+export default class NewPlanScreen1 extends Component {
 
     render() {
         return (
             <ScrollView style={form.formStyle}>
 
-                <View style={stylesTextBlueStart.formStyle}>
-                <Text style={stylesTextBlueCenter.text}>New Plan</Text>
-                </View>
+            <Modal isVisible={true}>
+              <View style={styles.modalContainer}>
 
                 <View style={styles.headerStyle}>
-                <Text style={styles.headerTextStyle}>Create A New Plan</Text>
+                <Text style={styles.headerTextStyle}>Confirmation</Text>
                 </View>
 
                 <View style={stylesText.formStyle}>
                 <Text style={stylesText.text}>Plan Name</Text>
                 </View>
 
-                <TextInput
-                placeholder="Typing"
-                returnKeyType="next"
-                style={form.input}
-                onSubmitEditing={() => this.emailInput.focus()}
-                />
+                <View style={stylesText.formStyle}>
+                <Text style={stylesTextBlueCenter.text}>Halloween Night</Text>
+                </View>
 
             <View style={stylesText.formStyle}>
             <Text style={stylesText.text}>Whos Going?</Text>
@@ -73,12 +54,10 @@ export default class NewPlanScreen extends Component {
             <Text style={stylesText.text}>When?</Text>
             </View>
 
-            <View style={stylesDate.container}>
-            <DatePickerIOS
-            date={this.state.chosenDate}
-            onDateChange={this.setDate}
-            />
+            <View style={stylesTextBlueCenter.formStyle}>
+            <Text style={stylesTextBlueCenter.text}>Wednesday, October 31 at 3:00 PM</Text>
             </View>
+
 
             <View style={stylesText.formStyle}>
             <Text style={stylesText.text}>Privacy</Text>
@@ -86,30 +65,40 @@ export default class NewPlanScreen extends Component {
 
             <View style={containerStyle.rowContainer}>
 
-            <FlipToggle
-                           value={this.state.isSwitch1On}
-                           buttonWidth={34}
-                           buttonHeight={20.4}
-                           buttonRadius={50}
-                           buttonOffColor={'#727e83'}
-                           sliderOffColor={'#fff'}
-                           buttonOnColor={'#B0CAED'}
-                           sliderOnColor={'#fff'}
-                           onToggle={(value) => {
-                           this.setState({ isSwitch1On: value });
-                           }}
+            <Icon
+            raised
+            name='lock'
+            type='font-awesome'
+            color='#2661B2'
             />
 
             <View style={stylesText.formStyle}>
-            <Text style={stylesTextBlueCenter.text}>Make Plan Private</Text>
+            <Text style={stylesTextBlueCenter.text}>Private</Text>
             </View>
 
             </View>
 
+            <View style={containerStyle.rowContainer}>
 
-            <TouchableOpacity style={button.buttonContainer}>
-                <Text style={button.buttonText}>CONTINUE</Text>
-            </TouchableOpacity>
+            <Icon
+            raised
+            name='close'
+            type='font-awesome'
+            color='#2661B2'
+            onPress={() => console.log('check')} />
+
+            <Icon
+            raised
+            name='check'
+            type='font-awesome'
+            color='#2661B2'
+            onPress={() => console.log('Private')} />
+
+            </View>
+
+            </View>
+            </Modal>
+
             </ScrollView>
         );
     }
@@ -193,29 +182,6 @@ const stylesTextBlueCenter = StyleSheet.create({
     formStyle: {
        padding: 35,
        flex: 1,
-       alignItems: 'center',
-       justifyContent: 'center',
-    },
-    text: {
-        height: 50,
-        marginBottom: 25,
-        borderRadius: 15,
-        color: '#2661B2',
-        paddingHorizontal: 10,
-    },
-    redirect: {
-        height: 50,
-        marginBottom: 25,
-        borderRadius: 15,
-        color: '#ED7248',
-        paddingHorizontal: 10,
-    }
-});
-
-const stylesTextBlueStart = StyleSheet.create({
-    formStyle: {
-       padding: 35,
-       flex: 1,
        flexDirection: 'row',
        alignSelf: 'flex-start'
     },
@@ -245,9 +211,32 @@ const containerStyle = StyleSheet.create({
   }
 });
 
-const stylesDate = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-  },
+const stylesActivityCard = StyleSheet.create({
+    formStyle: {
+       padding: 35,
+       flex: 1,
+       flexDirection: 'row',
+       alignSelf: 'center'
+    },
+    buttonContainer: {
+       backgroundColor: '#F0F3F7',
+       paddingVertical: 20,
+       paddingHorizontal: 20,
+       borderRadius: 30,
+       width: 330,
+    },
+    text: {
+        height: 50,
+        marginBottom: 25,
+        borderRadius: 15,
+        color: '#2661B2',
+        paddingHorizontal: 10,
+    },
+    redirect: {
+        height: 50,
+        marginBottom: 25,
+        borderRadius: 15,
+        color: '#F0F3F7',
+        paddingHorizontal: 10,
+    }
 });
