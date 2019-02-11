@@ -5,6 +5,7 @@ import OnBoardingScreens from './src/screens/OnBoardingScreens';
 import LoginScreen from './src/screens/LoginScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
 import DiscoveryScreen from './src/screens/DiscoveryScreen';
+import MyPlansScreen from './src/screens/MyPlansScreen';
 import NewPlanScreen from './src/screens/NewPlanScreen';
 import NotificationsScreen from './src/screens/NotificationsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
@@ -47,7 +48,8 @@ export default class App extends React.Component {
     );
     const ProfileStackNav = createStackNavigator(
       {
-        Profile: ProfileScreen
+        Profile: ProfileScreen,
+        MyPlans: MyPlansScreen
       }
     );
     const AppNavigator = createBottomTabNavigator(

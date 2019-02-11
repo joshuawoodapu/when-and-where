@@ -22,9 +22,13 @@ class RegistrationScreen extends Component {
         this.setState({ error: '', loading: true });
 
         if( password === password_confirm ){
+            console.log(email + password)
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then(this.onRegisterSuccess.bind(this))
-                .catch(this.onRegisterFail.bind(this));
+                .catch(error => {
+                    console.log(error.code)
+                    this.onRegisterFail.bind(this)
+                });
         } else {
             this.setState({ error: "Passwords do not match", loading: false });
         }
@@ -43,12 +47,11 @@ class RegistrationScreen extends Component {
             loading: false,
             error: ''
         });
-        const user = await firebase.auth().currentUser;
+        const user = await firebase.auth().currentUser; 
         console.log(user);
         //await AsyncStorage.setItem('accessToken', user.accessToken);
         //await AsyncStorage.setItem('refreshToken', user.refreshToken);
         await AsyncStorage.setItem('logged', 'true');
-
 
         this.props.navigation.navigate('App');
     }
@@ -64,6 +67,32 @@ class RegistrationScreen extends Component {
         );
     }
 
+    handleNameChange = (typedText) => {
+        this.setState({name:typedText}, () => {
+          console.log(typedText);
+        });
+    }
+
+    handleEmailChange = (typedText) => {
+        this.setState({email:typedText}, () => {
+          console.log(typedText);
+        });
+    }
+
+    handlePasswordChange = (typedText) => {
+        this.setState({password:typedText}, () => {
+          console.log("passwordType");
+        });
+    }
+
+    handlePasswordConfirmChange = (typedText) => {
+        this.setState({password_confirm:typedText}, () => {
+          console.log("passwordConfirmType");
+        });
+    }
+
+    
+
     render() {
         return (
             <DismissKeyboard>
@@ -77,24 +106,28 @@ class RegistrationScreen extends Component {
                         inputContainerStyle: 'regScreenInput',
                         autoCorrect: false,
                         autoCapitalize: "words",
-                        stateLabel: "name"},
+                        stateLabel: "name",
+                        onChange: this.handleNameChange},
                       {placeholder: 'Email',
                         inputContainerStyle: 'regScreenInput',
                         autoCorrect: false,
                         autoCapitalize: "none",
                         stateLabel: "email",
-                        spellcheck: false},
+                        spellcheck: false,
+                        onChange: this.handleEmailChange},
                       {placeholder: 'Password',
                         inputContainerStyle: 'regScreenInput',
                         secureTextEntry: true,
                         autoCorrect: false,
-                        stateLabel: "password"},
+                        stateLabel: "password",
+                        onChange: this.handlePasswordChange},
                       {placeholder: 'Confirm Password',
                         inputContainerStyle: 'regScreenInput',
                         secureTextEntry: true,
                         returnKeyType: 'done',
                         autoCorrect: false,
-                        stateLabel: "password_confirm"},
+                        stateLabel: "password_confirm",
+                        onChange: this.handlePasswordConfirmChange},
                       ]}
                   />
                 </View>

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
-
 export default class ActivityCard extends Component {
     render() {
         return (
-            <Card wrapperStyle={styles.parentView}>
+            <Card containerStyle={styles.cardStyle}>
                 <TouchableOpacity onPress={this.props.onCardPress}>
+                    <View style={styles.parentView}>
                         <View style={styles.topRow}>
                             <View style={styles.topLeft}>
                                 <Text style={styles.titleText}>
@@ -14,7 +14,7 @@ export default class ActivityCard extends Component {
                                 </Text>
                             </View>
                             <View style={styles.topRight}>
-                                <Icon 
+                                <Icon
                                     name='add'
                                     color='#2661B2'
                                     size={24}
@@ -25,70 +25,67 @@ export default class ActivityCard extends Component {
                             <Text style={styles.addressText}>
                                 425 E. Foothill Blvd, Azusa, CA
                             </Text>
-
                         </View>
                         <View style={styles.bottomRow}>
                             <View style={styles.bottomLeft}>
-                                <Icon 
+                                <Icon
                                     name='star'
                                     color='#FDAF17'
-                                    size={12}
+                                    size={14}
                                 />
-                                <Icon 
+                                <Icon
                                     name='star'
                                     color='#FDAF17'
-                                    size={12}
+                                    size={14}
                                 />
-                                <Icon 
+                                <Icon
                                     name='star'
                                     color='#FDAF17'
-                                    size={12}
+                                    size={14}
                                 />
-                                <Icon 
+                                <Icon
                                     name='star'
                                     color='#FDAF17'
-                                    size={12}
+                                    size={14}
                                 />
-                                <Icon 
+                                <Icon
                                     name='star'
                                     color='#B8BEC1'
-                                    size={12}
+                                    size={14}
                                 />
                             </View>
                             <View style={styles.bottomRight}>
                                 <Icon
-                                    name='favorite'
+                                    name='favorite-border'
                                     color='#F387B8'
-                                    size={16}
+                                    size={18}
                                 />
                             </View>
                         </View>
+                    </View>
                 </TouchableOpacity>
             </Card>
         );
     }
 }
-
-styles = StyleSheet.create({
+ const styles = StyleSheet.create({
     parentView: {
         flex: 1,
         flexDirection: 'column'
     },
     titleText: {
         color: '#2661B2',
-        fontWeight: 'bold',
+        fontFamily: 'circular-std-bold',
         fontSize: 14
     },
     addressText: {
         color: '#2661B2',
-        fontSize: 12
+        fontSize: 12,
+        fontFamily: 'circular-std-book'
     },
     cardContainer: {
         padding: 0,
         flex: 1
-    },
-    plusIcon: {
-        color: '#2661B2', 
     },
     topRow: {
         flexDirection: 'row',
@@ -96,38 +93,43 @@ styles = StyleSheet.create({
         flex: 1
     },
     topRight: {
-        flex: 1,
-        alignSelf: 'flex-start',
-        justifyContent: 'flex-start',
-        alignContent: 'flex-start',
-        alignItems: 'flex-end'
+        position: 'absolute',
+        right: 0
     },
     topLeft: {
         flex: 1,
-        alignSelf:'flex-end',
-        justifyContent: 'flex-end',
-        alignContent: 'flex-end',
-        alignItems: 'flex-end',
+        alignItems: 'flex-start',
     },
     middleRow: {
         flexDirection: 'row',
-        flex: 1
+        flex: 1,
+        marginTop: 6
     },
     bottomRow: {
-        marginTop: 10,
+        marginTop: 20,
         flexDirection: 'row',
-        flex: 1
+        flex: 1,
     },
     bottomLeft: {
         flex: 1,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        alignItems: 'flex-start',
     },
-    bottomRight: { 
-
+    bottomRight: {
+      position: 'absolute',
+      right: 3
     },
     cardStyle: {
-        backgroundColor: '#FFFFFF',
-        flex: 1
+        marginBottom: 5,
+        marginTop: 15,
+        borderWidth: 0,
+        borderRadius: 12,
+        shadowColor: '#000000',
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.46,
+        shadowRadius: 2,
+        elevation: 1,
+        backgroundColor: '#fff'
     },
     sectionStyle: {
         borderBottomWidth: 1,
@@ -136,7 +138,9 @@ styles = StyleSheet.create({
         justifyContent: 'flex-start',
         flexDirection: 'row',
         borderColor: '#ddd',
-        position: 'relative' 
-    }
-
+        position: 'relative'
+    },
+    notFavorited: {
+      borderWidth: 1,
+    },
 });

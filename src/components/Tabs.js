@@ -159,12 +159,12 @@ styles = StyleSheet.create({
     activeTabText: {
         color: '#413C77',
         fontSize: 18,
-        fontWeight: 'bold'
+        fontFamily: 'circular-std-bold'
     },
     inactiveTabText: {
         color: '#6A6789',
         fontSize: 18,
-        fontWeight: 'bold'
+        fontFamily: 'circular-std-bold'
     },
     contentView: {
         flexGrow: 1,

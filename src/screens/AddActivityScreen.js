@@ -17,10 +17,26 @@ class AddActivityScreen extends Component {
         location: ''
     };
 
+    handleSearchChange = (typedText) => {
+        this.setState({search:typedText}, () => {
+          console.log(typedText);
+        });
+    }
+
+    handleLocationChange = (typedText) => {
+        this.setState({location:typedText}, () => {
+          console.log(typedText);
+        });
+    }
+
     render() {
         return (
             <View style={{flex:1, backgroundColor:"#000"}}>
-                <AATabs navigation={this.props.navigation}/>
+                <AATabs 
+                    navigation={this.props.navigation} 
+                    handleSearch={this.handleSearchChange} 
+                    handleLocation={this.handleLocationChange}
+                />
             </View>
         )
     }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {View, TextInput, StyleSheet} from 'react-native';
 import Tabs from '../components/Tabs';
+import Okay2 from '../components/common/Okay2';
 
 class DiscoveryScreen extends Component {
     static navigationOptions = {
@@ -20,15 +21,27 @@ class DiscoveryScreen extends Component {
     render() {
         return (
             <View style={{flex:1}}>
-                <TextInput
-                    placeholder="Search"
-                    style={styles.searchInput}
-                />
-                <TextInput
-                    placeholder="Current Location"
-                    style={styles.locationInput}
-                />
-
+                <View style={styles.discoveryInputs}>
+                    <Okay2 placeholderList={[
+                        {placeholder: 'Search',
+                        inputContainerStyle: 'tabsInput',
+                        inputStyle: 'tabsText',
+                        autoCapitalize: "words",
+                        stateLabel: "search",
+                        iconName: "search",
+                        iconColor: "#605985",
+                        iconSize: 22},
+                        {placeholder: 'Current Location',
+                        inputContainerStyle: 'tabsInput',
+                        inputStyle: 'tabsText',
+                        returnKeyType: 'done',
+                        stateLabel: "current_location",
+                        iconName: "location-on",
+                        iconColor: "#605985",
+                        iconSize: 22},
+                        ]}
+                    />
+                </View>
                 <Tabs navigation={this.props.navigation}/>
             </View>
         )
@@ -36,6 +49,12 @@ class DiscoveryScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+    discoveryInputs: {
+        height: 120,
+        justifyContent: "space-around",
+        paddingVertical: 10,
+        paddingHorizontal: 20
+    },
     searchInput: {
         height: 40,
         backgroundColor: '#ffffff',

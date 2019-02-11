@@ -16,7 +16,7 @@ class Okay2 extends Component
 
   handleChangeText = (typedText) => {
      this.setState({text:typedText}, () => {
-       console.log(this.state.text);
+       console.log('built in');
      });
    }
 
@@ -24,7 +24,8 @@ class Okay2 extends Component
   {
     return (
         this.state.inputs.map(( phObject, index ) => (
-          <Input key={index}
+          <Input 
+            key={index}
             placeholder={phObject.placeholder}
             inputContainerStyle={styles[phObject.inputContainerStyle] || styles.defaultInput}
             inputStyle={styles[phObject.inputStyle] || styles.text}
@@ -33,7 +34,7 @@ class Okay2 extends Component
             ref={ref => this[index] = ref}
             value={this.state[phObject.stateLabel] || null}
             onSubmitEditing={phObject.returnKeyType=="done" ? null : () => this[index+1].focus()}
-            onChangeText={this.handleChangeText}
+            onChangeText={phObject.onChange || this.handleChangeText}
             autoCorrect = {phObject.autoCorrect || true}
             autoCapitalize = {phObject.autoCapitalize || null}
             autoComplete = {phObject.autoComplete || null}
@@ -138,6 +139,7 @@ const styles = StyleSheet.create(
 {
   text:
   {
+    fontFamily: 'circular-std-book',
     fontSize: 14,
   },
   viewStyle: {
