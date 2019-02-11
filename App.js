@@ -13,8 +13,10 @@ import AppLoading from './src/screens/AppLoading';
 import ActivityScreen from './src/screens/ActivityScreen';
 import CreateActivityScreen from './src/screens/CreateActivityScreen';
 import AddActivityScreen from './src/screens/AddActivityScreen';
+import SettingsScreen from './src/screens/SettingsScreen';
 
 
+import { View, StyleSheet }from 'react-native'
 
 export default class App extends React.Component {
   componentWillMount() {
@@ -28,7 +30,18 @@ export default class App extends React.Component {
     });
   }
 
-  render() {
+render (){
+  return(
+    <View flex='1'>
+      <ProfileScreen />
+    </View>
+  );
+}
+
+
+
+  
+  renderTemp () {
     const SearchStackNav = createStackNavigator(
       {
         Discovery: DiscoveryScreen,
