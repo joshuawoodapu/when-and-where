@@ -1,6 +1,6 @@
 import React from 'react';
 import firebase from 'firebase';
-import { createAppContainer, createBottomTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
+import { createAppContainer, createBottomTabNavigator, createStackNavigator } from 'react-navigation';
 import OnBoardingScreens from './src/screens/OnBoardingScreens';
 import LoginScreen from './src/screens/LoginScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
@@ -9,11 +9,10 @@ import MyPlansScreen from './src/screens/MyPlansScreen';
 import NewPlanScreen from './src/screens/NewPlanScreen';
 import NotificationsScreen from './src/screens/NotificationsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
-import AppLoading from './src/screens/AppLoading';
-import ActivityScreen from './src/screens/ActivityScreen';
-import CreateActivityScreen from './src/screens/CreateActivityScreen';
 import AddActivityScreen from './src/screens/AddActivityScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
+import CreateActivityScreen from './src/screens/CreateActivityScreen';
+import ActivityScreen from './src/screens/ActivityScreen';
 
 
 import { View, StyleSheet }from 'react-native'
@@ -29,23 +28,11 @@ export default class App extends React.Component {
       messagingSenderId: "521022677241"
     });
   }
-
-render (){
-  return(
-    <View flex='1'>
-      <ProfileScreen />
-    </View>
-  );
-}
-
-
-
   
-  renderTemp () {
+  render () {
     const SearchStackNav = createStackNavigator(
       {
-        Discovery: DiscoveryScreen,
-        Activity: ActivityScreen
+        Discovery: DiscoveryScreen
       }
     );
     const NewPlanStackNav = createStackNavigator(
@@ -65,37 +52,26 @@ render (){
         MyPlans: MyPlansScreen
       }
     );
-    const AppNavigator = createBottomTabNavigator(
+    const AppNavigatorNav = createBottomTabNavigator(
       {
         SearchStack: SearchStackNav,
         NewPlanStack: NewPlanStackNav,
         NotificationsStack: NotificationsStackNav,
         ProfileStack: ProfileStackNav
-      },
-      {
-        headerMode: 'screen'
       }
     );
-    const AuthStack = createStackNavigator(
+    const MainNavigator = createStackNavigator(
       {
         OnBoarding: OnBoardingScreens,
         Login: LoginScreen,
-        Registration: RegistrationScreen
+        Registration: RegistrationScreen,
+        AppNav: AppNavigatorNav
       },
       {
         headerMode: 'screen'
       }
     );
-    const AppContainer = createAppContainer(createSwitchNavigator(
-      {
-        App: AppNavigator,
-        Auth: AuthStack,
-        Loading: AppLoading
-      },
-      {
-        initialRouteName: 'Loading',
-      }
-    ));
+    const AppContainer = createAppContainer(MainNavigator);
     return (
       <AppContainer/>
     );

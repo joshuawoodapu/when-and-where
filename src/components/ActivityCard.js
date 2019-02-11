@@ -87,6 +87,9 @@ export default class ActivityCard extends Component {
         padding: 0,
         flex: 1
     },
+    plusIcon: {
+        color: '#2661B2',
+    },
     topRow: {
         flexDirection: 'row',
         height: 15,
@@ -109,6 +112,7 @@ export default class ActivityCard extends Component {
         marginTop: 20,
         flexDirection: 'row',
         flex: 1,
+        alignItems: "stretch",
     },
     bottomLeft: {
         flex: 1,
@@ -116,8 +120,9 @@ export default class ActivityCard extends Component {
         alignItems: 'flex-start',
     },
     bottomRight: {
-      position: 'absolute',
-      right: 3
+      flex: 1,
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
     },
     cardStyle: {
         marginBottom: 5,
@@ -125,9 +130,9 @@ export default class ActivityCard extends Component {
         borderWidth: 0,
         borderRadius: 12,
         shadowColor: '#000000',
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.46,
-        shadowRadius: 2,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.16,
+        shadowRadius: 3,
         elevation: 1,
         backgroundColor: '#fff'
     },

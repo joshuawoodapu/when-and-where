@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback, ScrollView, Dimensions, FlatList } from 'react-native';
-import ActivityCard from './ActivityCard';
-import PlanCard from './PlanCard';
+import AAActivityCard from './AAActivityCard';
 import Okay2 from '../components/common/Okay2';
 
 
@@ -14,20 +13,22 @@ export default class AATabs extends Component {
         if (this.state.activeTab === 'search') {
             return (
                 <View style={styles.tabsView}>
-                    <View style={[styles.tabStyle, styles.activeTab]}>
-                        <TouchableWithoutFeedback
-                            style={styles.touchableStyle}
-                            onPress={this.onActivitiesTabPress.bind(this)}
-                        >
+                    <TouchableWithoutFeedback
+                        style={styles.touchableStyle}
+                        onPress={this.onActivitiesTabPress.bind(this)}
+                        key={"search-active"}
+                    >
+                        <View style={[styles.tabStyle, styles.activeTab]}>
                             <Text style={styles.activeTabText}>
                                 Search
                             </Text>
-                        </TouchableWithoutFeedback>
-                    </View>
+                        </View>
+                    </TouchableWithoutFeedback>
                     <View style={[styles.tabStyle, styles.inactiveTab]}>
                         <TouchableWithoutFeedback
                             style={styles.touchableStyle}
                             onPress={this.onPlansTabPress.bind(this)}
+                            key={"myactivities-inactive"}
                         >
                             <Text style={styles.inactiveTabText}>
                                 My Activities
@@ -44,6 +45,7 @@ export default class AATabs extends Component {
                         <TouchableWithoutFeedback
                             style={styles.touchableStyle}
                             onPress={this.onActivitiesTabPress.bind(this)}
+                            key={"search-inactive"}
                         >
                             <Text style={styles.inactiveTabText}>
                                 Search
@@ -54,6 +56,7 @@ export default class AATabs extends Component {
                         <TouchableWithoutFeedback
                             style={styles.touchableStyle}
                             onPress={this.onPlansTabPress.bind(this)}
+                            key={"myactivities-active"}
                         >
                             <Text style={styles.activeTabText}>
                                 My Activities
@@ -65,7 +68,33 @@ export default class AATabs extends Component {
         }
 
     };
-    renderContent() {
+    renderContentHeader() {
+      return(
+        <View style={styles.tabsInputs}>
+          <Okay2 placeholderList={[
+              {placeholder: 'Search',
+                inputContainerStyle: 'tabsInput',
+                inputStyle: 'tabsText',
+                autoCapitalize: "words",
+                stateLabel: "search",
+                iconName: "search",
+                iconColor: "#605985",
+                iconSize: 22},
+              {placeholder: 'Current Location',
+                inputContainerStyle: 'tabsInput',
+                inputStyle: 'tabsText',
+                returnKeyType: 'done',
+                stateLabel: "current_location",
+                iconName: "location-on",
+                iconColor: "#605985",
+                iconSize: 22},
+              ]}
+          />
+        </View>
+      );
+    };
+
+    renderContentFooter() {
         if (this.state.activeTab === 'search') {
             return (
                 <View style={styles.contentContainer}>
@@ -104,9 +133,11 @@ export default class AATabs extends Component {
                                   <ActivityCard onCardPress={this.onActivityCardPress.bind(this)} text={item.key}/>
                           }
                       />
-                    </View>
-                </View>
-            );
+                    }
+                    keyExtractor={(item, index) => index.toString()}
+                />
+              </View>
+          );
         }
         else if (this.state.activeTab === 'myactivities') {
             return (
@@ -148,9 +179,8 @@ export default class AATabs extends Component {
                     />
                   </View>
               </View>
-            );
+          );
         }
-
     };
 
     onActivitiesTabPress() {
@@ -158,7 +188,7 @@ export default class AATabs extends Component {
             this.setState({activeTab: 'search'})
     };
 
-    onActivityCardPress() {
+    onRActivityCardPress() {
         this.props.navigation.navigate('Search');
     };
 
@@ -171,7 +201,10 @@ export default class AATabs extends Component {
         return (
             <View style={styles.parentView}>
                 {this.renderTabs()}
-                {this.renderContent()}
+                <View style={styles.contentContainer}>
+                  {this.renderContentHeader()}
+                  {this.renderContentFooter()}
+                </View>
             </View>
         );
     }
@@ -199,7 +232,7 @@ styles = StyleSheet.create({
         flex: 1
     },
     touchableStyle: {
-        alignSelf: 'stretch',
+        alignSelf: 'stretch'
     },
     activeTab: {
         backgroundColor: '#F0F3F7',
