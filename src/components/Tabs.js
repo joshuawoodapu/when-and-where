@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableWithoutFeedback, ScrollView, Dimensions, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, ScrollView, Dimensions, FlatList } from 'react-native';
 import ActivityCard from './ActivityCard';
 import PlanCard from './PlanCard';
 
@@ -13,25 +13,29 @@ export default class Tabs extends Component {
         if (this.state.activeTab === 'activities') {
             return (
                 <View style={styles.tabsView}>
-                    <View style={[styles.tabStyle, styles.activeTab]}>
-                        <TouchableWithoutFeedback
-                            style={styles.touchableStyle}
+                    <View style={[styles.activeLeft, styles.activeTab]}>
+                        <TouchableHighlight
+                            style={styles.activeLeft}
                             onPress={this.onActivitiesTabPress.bind(this)}
+                            key={"search-active"}
+                            underlayColor="#F0F3F7"
+                            activeOpacity={1}
                         >
-                            <Text style={styles.activeTabText}>
-                                Activities
-                            </Text>
-                        </TouchableWithoutFeedback>
+                                <Text style={styles.activeTabText}>
+                                    Activities
+                                </Text>
+                        </TouchableHighlight>
                     </View>
-                    <View style={[styles.tabStyle, styles.inactiveTab]}>
-                        <TouchableWithoutFeedback
-                            style={styles.touchableStyle}
+                    <View style={[styles.inactiveRight, styles.inactiveTab]}>
+                        <TouchableHighlight
+                            style={styles.inactiveRight}
                             onPress={this.onPlansTabPress.bind(this)}
+                            key={"myactivities-inactive"}
                         >
                             <Text style={styles.inactiveTabText}>
                                 Plans
                             </Text>
-                        </TouchableWithoutFeedback>
+                        </TouchableHighlight>
                     </View>
                 </View>
             );
@@ -39,27 +43,31 @@ export default class Tabs extends Component {
         else if (this.state.activeTab === 'plans') {
             return (
                 <View style={styles.tabsView}>
-                    <View style={[styles.tabStyle, styles.inactiveTab]}>
-                        <TouchableWithoutFeedback
-                            style={styles.touchableStyle}
-                            onPress={this.onActivitiesTabPress.bind(this)}
-                        >
-                            <Text style={styles.inactiveTabText}>
-                                Activities
-                            </Text>
-                        </TouchableWithoutFeedback>
-                    </View>
-                    <View style={[styles.tabStyle, styles.activeTab]}>
-                        <TouchableWithoutFeedback
-                            style={styles.touchableStyle}
-                            onPress={this.onPlansTabPress.bind(this)}
-                        >
-                            <Text style={styles.activeTabText}>
-                                Plans
-                            </Text>
-                        </TouchableWithoutFeedback>
-                    </View>
+                <View style={[styles.inactiveLeft, styles.inactiveTab]}>
+                    <TouchableHighlight
+                        style={styles.inactiveLeft}
+                        onPress={this.onActivitiesTabPress.bind(this)}
+                        key={"search-inactive"}
+                    >
+                        <Text style={styles.inactiveTabText}>
+                            Activities
+                        </Text>
+                    </TouchableHighlight>
                 </View>
+                <View style={[styles.activeRight, styles.activeTab]}>
+                    <TouchableHighlight
+                        style={styles.activeRight}
+                        onPress={this.onPlansTabPress.bind(this)}
+                        key={"myactivities-active"}
+                        underlayColor="#F0F3F7"
+                        activeOpacity={1}
+                    >
+                        <Text style={styles.activeTabText}>
+                            Plans
+                        </Text>
+                    </TouchableHighlight>
+                </View>
+            </View>
             );
         }
 
@@ -93,7 +101,7 @@ export default class Tabs extends Component {
                         ]}
                         showsVerticalScrollIndicator={false}
                         renderItem={({item}) =>
-                                <PlanCard text={item.key}/>
+                                <PlanCard onCardPress={this.onPlansCardPress.bind(this)} text={item.key}/>
                         }
                     />
                 </View>
@@ -114,6 +122,10 @@ export default class Tabs extends Component {
     onPlansTabPress() {
         if (this.state.activeTab !== 'plans')
             this.setState({activeTab: 'plans'})
+    };
+
+    onPlansCardPress() {
+        this.props.navigation.navigate('PlanView');
     };
 
     render() {

@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
         minHeight: '10%',
         width: '90%',
         alignSelf: 'center',
-        justifySelf: 'center',
         justifyContent: 'center',
         alignContent: 'center',
         backgroundColor: '#F0F3F7',
@@ -40,8 +39,6 @@ const styles = StyleSheet.create({
 
     },
     iconHolder: {
-       // flex: 1,
-       // backgroundColor: '#55fc55',
         flexDirection: 'row',
         alignContent: 'center',
         justifyContent: 'center',

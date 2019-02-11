@@ -1,5 +1,15 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, DatePickerIOS } from 'react-native';
+import { 
+    StyleSheet, 
+    Text, 
+    View, 
+    TextInput, 
+    TouchableOpacity, 
+    ScrollView, 
+    DatePickerIOS, 
+    DatePickerAndroid, 
+    Platform } 
+    from 'react-native';
 import SwitchToggle from "../components/common/Switch.js";
 import { Avatar } from 'react-native-elements';
 import { Icon } from 'react-native-elements';
@@ -8,20 +18,28 @@ import FlipToggle from 'react-native-flip-toggle-button';
 
 export default class NewPlanScreen extends Component {
 
-  constructor(props) {
-         super(props);
-         this.state = {
-           isSwitch1On: false,}
+    state = {isSwitch1On: false, chosenDate: new Date()}
 
-           this.state = {chosenDate: new Date()};
+    renderDatePicker = () => {
+        if (Platform.OS === 'ios')
+            return (
+                <DatePickerIOS
+                date={this.state.chosenDate}
+                onDateChange={this.setDate}
+                />
+            )
+        else 
+            return (
+                <DatePickerAndroid 
+                    date={this.state.chosenDate}
+                    onDateChange={this.setDate}
+                />
+            )
+    }
 
-           this.setDate = this.setDate.bind(this);
-         };
-
-         setDate(newDate) {
-           this.setState({chosenDate: newDate});
-         }
-
+    onContinuePress() {
+        this.props.navigation.navigate('NewPlan1');
+    }
 
     render() {
         return (
@@ -74,10 +92,10 @@ export default class NewPlanScreen extends Component {
             </View>
 
             <View style={stylesDate.container}>
-            <DatePickerIOS
-            date={this.state.chosenDate}
-            onDateChange={this.setDate}
-            />
+                <DatePickerIOS
+                    date={this.state.chosenDate}
+                    onDateChange={this.setDate}
+                    />            
             </View>
 
             <View style={stylesText.formStyle}>
@@ -107,7 +125,7 @@ export default class NewPlanScreen extends Component {
             </View>
 
 
-            <TouchableOpacity style={button.buttonContainer}>
+            <TouchableOpacity onPress={this.onContinuePress.bind(this)} style={button.buttonContainer}>
                 <Text style={button.buttonText}>CONTINUE</Text>
             </TouchableOpacity>
             </ScrollView>
@@ -117,7 +135,7 @@ export default class NewPlanScreen extends Component {
 
 const form = StyleSheet.create({
     formStyle: {
-       padding: 35,
+       flex: 1
     },
     input: {
         height: 50,

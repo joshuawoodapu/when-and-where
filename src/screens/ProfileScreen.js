@@ -4,12 +4,17 @@ import ReusableHeader from '../components/ReusableHeader';
 
 
 class ProfileScreen extends Component {
+
+    onPressProfile() {
+        this.props.navigation.navigate('Settings');
+    }
+
     render() {
         return (
             <View style={styles.mainContainer}>
                 <View style={styles.topViewContainer}>
                     <ReusableHeader title="PROFILE"/>
-                    <TouchableOpacity style={styles.button} />
+                    <TouchableOpacity onPress={this.onPressProfile.bind(this)} style={styles.button} />
                 </View>
                 
             </View>
@@ -28,11 +33,10 @@ const styles = StyleSheet.create({
         flex: 1
     },
     button:{
-        justifySelf: 'flex-end',
         width: 30,
         height: 30,
         color: '#ff4c0a',
-        borderWidth: '5px'
+        borderWidth: 5
     } 
 });
 

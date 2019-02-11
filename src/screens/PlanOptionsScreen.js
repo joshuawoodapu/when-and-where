@@ -11,6 +11,10 @@ export default class PlanOptionsScreen extends Component {
           isSwitch1On: false,}
         };
 
+    onCollabPress() {
+        this.props.navigation.navigate('CollabInvite');
+    }
+
     render() {
         return (
            <View>
@@ -54,7 +58,7 @@ export default class PlanOptionsScreen extends Component {
                     </View>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.buttonContainer}>
+                <TouchableOpacity onPress={this.onCollabPress.bind(this)} style={styles.buttonContainer}>
                     <View style={styles.organizeView}>
                         <Icon
                             name='supervisor-account'

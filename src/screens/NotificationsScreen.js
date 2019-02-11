@@ -11,15 +11,15 @@ class NotificationsScreen extends Component {
                 <ReusableHeader title="NOTIFICATIONS"/>
                 <Text style={styles.oldText}>New</Text>
                 <View style={styles.notifsView}>
-                     <Notification iconName='bells' message="Notification 1"/>
-                     <Notification iconName='bells' message="Notification 2"/>
-                     <Notification iconName='bells' message="Notification 3"/>
+                     <Notification iconName='notifications' message="Notification 1"/>
+                     <Notification iconName='notifications' message="Notification 2"/>
+                     <Notification iconName='notifications' message="Notification 3"/>
                 </View>
                 <Text style={styles.earlierText}>Earlier</Text>
                 <View style={styles.notifsView}>
-                     <Notification iconName='bells' message="Notification 1"/>
-                     <Notification iconName='bells' message="Notification 2"/>
-                     <Notification iconName='bells' message="Notification 3"/>
+                     <Notification iconName='notifications' message="Notification 1"/>
+                     <Notification iconName='notifications' message="Notification 2"/>
+                     <Notification iconName='notifications' message="Notification 3"/>
                 </View>
             </View>
         )

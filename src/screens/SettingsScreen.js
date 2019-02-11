@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {ScrollView ,View, Text, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import Setting from '../../src/components/SettingsComponents/Setting';
 import ReusableHeader from '../components/ReusableHeader';
 
@@ -15,13 +15,12 @@ class SettingsScreen extends Component {
 
                 <Setting settingName='Me'
                     currentSetting='Jen Smith'
-                    iconName='user'/>
-                <Setting settingName='Notifications' currentSetting='All' iconName='user'/>
-                <Setting settingName='Account' currentSetting='john.doe@gmail.com' iconName='user'/>
-                <Setting settingName='Privacy' iconName='user'/>
-                <Setting settingName='Help' currentSetting='Questions?' iconName='user'/>
-                <Setting settingName='Log Out' iconName='user'/>
-
+                    iconName='edit'/>
+                <Setting settingName='Notifications' currentSetting='All' iconName='notifications'/>
+                <Setting settingName='Account' currentSetting='john.doe@gmail.com' iconName='person'/>
+                <Setting settingName='Privacy' iconName='lock'/>
+                <Setting settingName='Log Out' iconName='not-interested'/>
+                <Setting settingName='Help' currentSetting='Questions?' iconName='help'/>
                 </View>
             </View>
         )
@@ -32,9 +31,7 @@ class SettingsScreen extends Component {
 
 const styles = StyleSheet.create({
     mainContainer: {
-        flex: 1,
-
-        
+        flex: 1, 
     },
     settingsHolder: {
         flex: 1,
