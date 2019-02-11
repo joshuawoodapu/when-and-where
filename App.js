@@ -8,6 +8,8 @@ import DiscoveryScreen from './src/screens/DiscoveryScreen';
 import NewPlanScreen from './src/screens/NewPlanScreen';
 import NotificationsScreen from './src/screens/NotificationsScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
+import NewPlan1Screen from './src/screens/NewPlan1Screen';
+import ViewPlan from './src/screens/ViewPlan';
 
 
 

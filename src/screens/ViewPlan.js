@@ -17,7 +17,7 @@ export default class ViewPlan extends Component {
 
             <Icon
             raised
-            name='more_vert'
+            name='more-vert'
             type='font-awesome'
             color='#b8bec1' />
 
@@ -30,7 +30,7 @@ export default class ViewPlan extends Component {
 
             <Icon
             raised
-            name='arrow_forward'
+            name='arrow-forward'
             type='font-awesome'
             color='#b8bec1' />
 

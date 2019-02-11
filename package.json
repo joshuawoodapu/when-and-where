@@ -14,6 +14,9 @@
     "firebase": "^5.7.3",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "react-native-elements": "^1.0.0",
+    "react-native-flip-toggle-button": "^1.0.5",
+    "react-native-modal": "^7.0.2",
     "react-native-swiper": "^1.5.14",
     "react-navigation": "^3.0.9"
   },
