@@ -78,7 +78,8 @@ export default class AATabs extends Component {
                             stateLabel: "search",
                             iconName: "search",
                             iconColor: "#605985",
-                            iconSize: 22},
+                            iconSize: 22,
+                            onChange: this.props.handleSearch},
                           {placeholder: 'Current Location',
                             inputContainerStyle: 'tabsInput',
                             inputStyle: 'tabsText',
@@ -86,7 +87,8 @@ export default class AATabs extends Component {
                             stateLabel: "current_location",
                             iconName: "location-on",
                             iconColor: "#605985",
-                            iconSize: 22},
+                            iconSize: 22,
+                            onChange: this.props.handleLocation},
                           ]}
                       />
                     </View>

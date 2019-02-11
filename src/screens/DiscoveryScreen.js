@@ -18,6 +18,18 @@ class DiscoveryScreen extends Component {
         location: ''
     };
 
+    handleSearchChange = (typedText) => {
+        this.setState({search:typedText}, () => {
+          console.log(typedText);
+        });
+    }
+
+    handleLocationChange = (typedText) => {
+        this.setState({location:typedText}, () => {
+          console.log(typedText);
+        });
+    }
+
     render() {
         return (
             <View style={{flex:1}}>
@@ -30,7 +42,8 @@ class DiscoveryScreen extends Component {
                         stateLabel: "search",
                         iconName: "search",
                         iconColor: "#605985",
-                        iconSize: 22},
+                        iconSize: 22,
+                        onChange: this.handleSearchChange},
                         {placeholder: 'Current Location',
                         inputContainerStyle: 'tabsInput',
                         inputStyle: 'tabsText',
@@ -38,7 +51,8 @@ class DiscoveryScreen extends Component {
                         stateLabel: "current_location",
                         iconName: "location-on",
                         iconColor: "#605985",
-                        iconSize: 22},
+                        iconSize: 22,
+                        onChange: this.handleLocationChange},
                         ]}
                     />
                 </View>

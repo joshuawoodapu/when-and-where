@@ -35,9 +35,9 @@ class Okay2 extends Component
             value={this.state[phObject.stateLabel] || null}
             onSubmitEditing={phObject.returnKeyType=="done" ? null : () => this[index+1].focus()}
             onChangeText={phObject.onChange || this.handleChangeText}
-            autoCorrect = {phObject.autoCorrect || true}
-            autoCapitalize = {phObject.autoCapitalize || null}
-            autoComplete = {phObject.autoComplete || null}
+            autoCorrect = {phObject.autoCorrect}
+            autoCapitalize = {phObject.autoCapitalize}
+            autoComplete = {phObject.autoComplete}
             spellcheck = {phObject.spellcheck || true}
             leftIcon = {phObject.iconName ? <Icon
                                               name={phObject.iconName}
