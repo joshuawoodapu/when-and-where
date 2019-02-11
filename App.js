@@ -13,8 +13,6 @@ import AddActivityScreen from './src/screens/AddActivityScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import CreateActivityScreen from './src/screens/CreateActivityScreen';
 import ActivityScreen from './src/screens/ActivityScreen';
-
-
 import { View, StyleSheet }from 'react-native'
 
 export default class App extends React.Component {
@@ -76,4 +74,5 @@ export default class App extends React.Component {
       <AppContainer/>
     );
   }
-}
+} 
+
