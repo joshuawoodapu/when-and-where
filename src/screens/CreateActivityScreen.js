@@ -3,11 +3,10 @@ import {View, Text, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet, T
 import {Input} from 'react-native-elements';
 import RHeader from '../components/common/RHeader';
 import RButton from '../components/common/RButton';
-
 import Okay2 from '../components/common/Okay2';
 import Dropdown from '../components/common/Dropdown';
-
 import Spinner from "../components/common/Spinner";
+import Toggle from '../components/common/Toggle';
 import firebase from 'firebase';
 
 class CreateActivityScreen extends Component {
@@ -67,10 +66,12 @@ class CreateActivityScreen extends Component {
                     {placeholder: 'Address',
                       inputContainerStyle: 'defaultInput',
                       stateLabel: "address",
+                      autoCorrect: false,
                       autoCapitalize: "words"},
                     {placeholder: 'Phone Number',
                       inputContainerStyle: 'defaultInput',
                       returnKeyType: 'done',
+                      autoCorrect: false,
                       stateLabel: "phone"},
                     ]}
                 />
@@ -87,11 +88,25 @@ class CreateActivityScreen extends Component {
                   {this.state.error}
               </Text>
 
-              <View flex={3}>
-                <Text style={form.tempToggle}>Make Activity Private</Text>
-                <Text></Text>
-                <Text></Text>
-                <Text style={form.tempToggle}>Save to My Activities</Text>
+              <View flex={3} paddingHorizontal={40} justifyContent="flex-start">
+                <View flexDirection="row" alignItems="center" paddingBottom={27}>
+                  <Toggle style={styles.createActivityToggle}
+                    buttonOffColor={'#727e83'}
+                    sliderOffColor={'#fff'}
+                    buttonOnColor={'#B0CAED'}
+                    sliderOnColor={'#2661B2'}
+                  />
+                  <Text style={form.toggleLabel}>Make Activity Private</Text>
+                </View>
+                <View flexDirection="row" alignItems="center">
+                  <Toggle
+                    buttonOffColor={'#727e83'}
+                    sliderOffColor={'#fff'}
+                    buttonOnColor={'#B0CAED'}
+                    sliderOnColor={'#2661B2'}
+                  />
+                  <Text style={form.toggleLabel}>Save to My Activities</Text>
+                </View>
               </View>
 
               {this.renderButton()}
@@ -114,10 +129,10 @@ const form = StyleSheet.create({
         color: '#E23737',
         marginTop: 10
     },
-    tempToggle: {
+    toggleLabel: {
       fontSize: 14,
       color: "#2661B2",
-      paddingLeft: 75
+      paddingLeft: 10
     }
 });
 

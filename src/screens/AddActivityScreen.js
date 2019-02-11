@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {View, TextInput, StyleSheet} from 'react-native';
-import AATabs from '../components/AATabs';
+import AATabs_FixTabs from '../components/AATabs_FixTabs';
 
 class AddActivityScreen extends Component {
     static navigationOptions = {
@@ -19,8 +19,8 @@ class AddActivityScreen extends Component {
 
     render() {
         return (
-            <View style={{flex:1, backgroundColor:"#000"}}>
-                <AATabs navigation={this.props.navigation}/>
+            <View flex={1}>
+                <AATabs_FixTabs navigation={this.props.navigation}/>
             </View>
         )
     }
