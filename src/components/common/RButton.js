@@ -32,7 +32,7 @@ const styles = {
         height: 10
     },
     viewStyle: {
-        paddingHorizontal: 48,
+        paddingHorizontal: 20,
         paddingBottom: 25,
         paddingTop: 5,
       }

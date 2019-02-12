@@ -16,7 +16,7 @@ class ProfileScreen extends Component {
                     <ReusableHeader title="PROFILE"/>
                     <TouchableOpacity onPress={this.onPressProfile.bind(this)} style={styles.button} />
                 </View>
-                
+
             </View>
         )
     }
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         height: 30,
         color: '#ff4c0a',
         borderWidth: 5
-    } 
+    }
 });
 
 export default ProfileScreen;

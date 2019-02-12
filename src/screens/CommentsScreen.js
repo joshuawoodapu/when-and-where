@@ -6,7 +6,7 @@ import { Button, Icon } from 'react-native-elements';
 class CommentsScreen extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
+        this.state = {
             new_comment: '',
             loading: false
         };

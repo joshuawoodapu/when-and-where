@@ -3,7 +3,7 @@ import {View, Text, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet, T
 import {Input} from 'react-native-elements';
 import RHeader from '../components/common/RHeader';
 import RButton from '../components/common/RButton';
-import Okay2 from '../components/common/Okay2';
+import DynamicInput from '../components/common/DynamicInput';
 import Dropdown from '../components/common/Dropdown';
 import Spinner from "../components/common/Spinner";
 import Toggle from '../components/common/Toggle';
@@ -58,7 +58,7 @@ class CreateActivityScreen extends Component {
                 <RHeader>Create Activity</RHeader>
               </View>
               <View style={form.formStyle}>
-                <Okay2 placeholderList={[
+                <DynamicInput placeholderList={[
                     {placeholder: 'Activity Name',
                       inputContainerStyle: 'defaultInput',
                       autoCapitalize: "words",

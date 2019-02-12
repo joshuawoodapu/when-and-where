@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableWithoutFeedback, ScrollView, Dimensions, FlatList } from 'react-native';
 import ActivityCard from './ActivityCard';
 import PlanCard from './PlanCard';
-import Okay2 from '../components/common/Okay2';
+import DynamicInput from '../components/common/DynamicInput';
 
 
 export default class AATabs extends Component {
@@ -70,12 +70,13 @@ export default class AATabs extends Component {
             return (
                 <View style={styles.contentContainer}>
                     <View style={styles.tabsInputs}>
-                      <Okay2 placeholderList={[
+                      <DynamicInput placeholderList={[
                           {placeholder: 'Search',
                             inputContainerStyle: 'tabsInput',
                             inputStyle: 'tabsText',
                             autoCapitalize: "words",
                             stateLabel: "search",
+                            iconStyle: "Icon",
                             iconName: "search",
                             iconColor: "#605985",
                             iconSize: 22,
@@ -85,6 +86,7 @@ export default class AATabs extends Component {
                             inputStyle: 'tabsText',
                             returnKeyType: 'done',
                             stateLabel: "current_location",
+                            iconStyle: "Icon",
                             iconName: "location-on",
                             iconColor: "#605985",
                             iconSize: 22,
@@ -112,12 +114,13 @@ export default class AATabs extends Component {
             return (
               <View style={styles.contentContainer}>
                   <View style={styles.tabsInputs}>
-                  <Okay2 placeholderList={[
+                  <DynamicInput placeholderList={[
                       {placeholder: 'Search',
                         inputContainerStyle: 'tabsInput',
                         inputStyle: 'tabsText',
                         autoCapitalize: "words",
                         stateLabel: "search",
+                        iconStyle: "Icon",
                         iconName: "search",
                         iconColor: "#605985",
                         iconSize: 22,
@@ -127,6 +130,7 @@ export default class AATabs extends Component {
                         inputStyle: 'tabsText',
                         returnKeyType: 'done',
                         stateLabel: "current_location",
+                        iconStyle: "Icon",
                         iconName: "location-on",
                         iconColor: "#605985",
                         iconSize: 22,

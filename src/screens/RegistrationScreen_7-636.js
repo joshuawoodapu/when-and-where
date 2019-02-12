@@ -1,11 +1,11 @@
 /*FOR CAMPBELL'S USE -- PLEASE IGNORE*/
 import React, { Component } from 'react';
 import {View, Text, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet, TouchableOpacity} from 'react-native';
-import {Input} from 'react-native-elements';
+import {DynamicInput} from 'react-native-elements';
 import RHeader from '../components/common/RHeader';
-import RInput from '../components/common/RInput';
+import DynamicInput from '../components/common/DynamicInput';
 
-import Okay2 from '../components/common/Okay2';
+import DynamicInput from '../components/common/DynamicInput';
 
 
 import Footer from '../components/Footer';
@@ -69,7 +69,7 @@ class RegistrationScreen extends Component {
             <View>
                 <RHeader>YO</RHeader>
                 <View style={form.formStyle}>
-                  <Okay2 placeholderList={[
+                  <DynamicInput placeholderList={[
                       {placeholder: 'Full Name',
                         inputContainerStyle: 'regScreenInput',
                         secureTextEntry: false},
@@ -82,7 +82,7 @@ class RegistrationScreen extends Component {
                       ]}
                   />
                     {/*
-                      <Okay2 (PRE-REFS & ONSUBMIT) placeholderList={[
+                      <DynamicInput (PRE-REFS & ONSUBMIT) placeholderList={[
                           {placeholder: 'Full Name',
                             inputContainerStyle: 'regScreenInput',
                             secureTextEntry: false},
@@ -132,25 +132,25 @@ class RegistrationScreen extends Component {
                         },
                       ]}
 
-                      <Input
+                      <DynamicInput
                         placeholder="First" returnKeyType="next" onSubmitEditing={() => this.passwordRef.focus()}
                       />
-                      <Input
+                      <DynamicInput
                         placeholder="Second" secureTextEntry ref={ref => this.passwordRef = ref}
                       />
 
                       <Fuck placeholderList={['Fourth', 'Fifth']}/>
 
-                      <Input
-                        placeholder="Input 1"
-                        inputContainerStyle={form.input}
+                      <DynamicInput
+                        placeholder="DynamicInput 1"
+                        inputContainerStyle={form.DynamicInput}
                         returnKeyType="next"
 
                       />
-                      <Input
+                      <DynamicInput
                         label="input2"
-                        placeholder="Input 2"
-                        inputContainerStyle={form.input}
+                        placeholder="DynamicInput 2"
+                        inputContainerStyle={form.DynamicInput}
                       />
 
                     <TextInput
@@ -159,7 +159,7 @@ class RegistrationScreen extends Component {
                         value={this.state.name}
                         onChangeText={name => this.setState({ name })}
                         returnKeyType="next"
-                        style={form.input}
+                        style={form.DynamicInput}
                         onSubmitEditing={() => this.emailInput.focus()}
                     />
                     <TextInput
@@ -168,8 +168,8 @@ class RegistrationScreen extends Component {
                         value={this.state.email}
                         onChangeText={email => this.setState({ email })}
                         returnKeyType="next"
-                        style={form.input}
-                        ref={(input) => this.emailInput = input}
+                        style={form.DynamicInput}
+                        ref={(DynamicInput) => this.emailInput = DynamicInput}
                         onSubmitEditing={() => this.passwordInput.focus()}
                     />
                     <TextInput
@@ -179,8 +179,8 @@ class RegistrationScreen extends Component {
                         value={this.state.password}
                         onChangeText={password => this.setState({ password })}
                         returnKeyType="next"
-                        style={form.input}
-                        ref={(input) => this.passwordInput = input}
+                        style={form.DynamicInput}
+                        ref={(DynamicInput) => this.passwordInput = DynamicInput}
                         onSubmitEditing={() => this.confirmInput.focus()}
                     />
                     <TextInput
@@ -190,8 +190,8 @@ class RegistrationScreen extends Component {
                         value={this.state.password_confirm}
                         onChangeText={password_confirm => this.setState({ password_confirm })}
                         returnKeyType="go"
-                        style={form.input}
-                        ref={(input) => this.confirmInput = input}
+                        style={form.DynamicInput}
+                        ref={(DynamicInput) => this.confirmInput = DynamicInput}
                     />
                     */}
                 </View>
@@ -213,7 +213,7 @@ class RegistrationScreen extends Component {
 const form = StyleSheet.create({
     formStyle: {
        padding: 35, },
-    input: {
+    DynamicInput: {
         height: 50,
         backgroundColor: '#ffffff',
         marginBottom: 25,

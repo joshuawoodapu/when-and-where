@@ -4,7 +4,7 @@ import {Input} from 'react-native-elements';
 import RHeader from '../components/common/RHeader';
 import RButton from '../components/common/RButton';
 
-import Okay2 from '../components/common/Okay2';
+import DynamicInput from '../components/common/DynamicInput';
 
 import Footer from '../components/Footer';
 import Spinner from "../components/common/Spinner";
@@ -47,7 +47,7 @@ class RegistrationScreen extends Component {
             loading: false,
             error: ''
         });
-        const user = await firebase.auth().currentUser; 
+        const user = await firebase.auth().currentUser;
         console.log(user);
         //await AsyncStorage.setItem('accessToken', user.accessToken);
         //await AsyncStorage.setItem('refreshToken', user.refreshToken);
@@ -61,9 +61,11 @@ class RegistrationScreen extends Component {
             return <Spinner size="small" />; }
 
         return (
+          <View flex={1} paddingHorizontal={28} paddingBottom={28}>
             <RButton flex={1} onPress={this.onButtonPress.bind(this)}>
                 CONTINUE
             </RButton>
+          </View>
         );
     }
 
@@ -91,7 +93,7 @@ class RegistrationScreen extends Component {
         });
     }
 
-    
+
 
     render() {
         return (
@@ -101,7 +103,7 @@ class RegistrationScreen extends Component {
                 <RHeader>Create Account</RHeader>
               </View>
               <View style={form.formStyle}>
-                  <Okay2 placeholderList={[
+                  <DynamicInput placeholderList={[
                       {placeholder: 'Full Name',
                         inputContainerStyle: 'regScreenInput',
                         autoCorrect: false,

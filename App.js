@@ -20,6 +20,9 @@ import CommentsScreen from './src/screens/CommentsScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import VotingScreen from './src/screens/VotingScreen';
 import InviteCollabScreen from './src/screens/InviteCollabScreen';
+import { Icon } from 'react-native-elements';
+import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon3 from 'react-native-vector-icons/FontAwesome';
 
 
 export default class App extends React.Component {
@@ -68,14 +71,58 @@ export default class App extends React.Component {
     );
     const AppNavigator = createBottomTabNavigator(
       {
-        SearchStack: SearchStackNav,
-        NewPlanStack: NewPlanStackNav,
-        NotificationsStack: NotificationsStackNav,
-        ProfileStack: ProfileStackNav
+        SearchStack: {
+            screen: SearchStackNav,
+            path: '/',
+            navigationOptions: {
+              tabBarIcon: ({ focused, tintColor }) => {
+                  const iconName = `ios-information-circle${focused ? '' : '-outline'}`;
+                  return <Icon name="search" size={35} color={tintColor}/>;
+              },
+              tabBarLabel: false
+          },
+        },
+        NewPlanStack: {
+            screen: NewPlanStackNav,
+            path: '/',
+            navigationOptions: {
+              tabBarIcon: ({ focused, tintColor  }) => {
+                  const iconName = `ios-information-circle${focused ? '' : '-outline'}`;
+                  return <Icon2 name="lead-pencil" size={35} color={tintColor}/>;
+              },
+          },
+        },
+        NotificationsStack: {
+            screen: NotificationsStackNav,
+            path: '/',
+            navigationOptions: {
+              tabBarIcon: ({ focused, tintColor  }) => {
+                  const iconName = `ios-information-circle${focused ? '' : '-outline'}`;
+                  return <Icon3 name="bell" size={28} color={tintColor}/>;
+              },
+          },
+        },
+        ProfileStack: {
+            screen: ProfileStackNav,
+            path: '/',
+            navigationOptions: {
+              tabBarIcon: ({ focused, tintColor }) => {
+                  const iconName = `ios-information-circle${focused ? '' : '-outline'}`;
+                  return <Icon2 name="account" size={40} color={tintColor}/>;
+              },
+          },
+        }
+      },
+      {
+        tabBarOptions: {
+          showLabel: false,
+          activeTintColor: "#ED7248",
+          inactiveTintColor: "#B8BEC1"
+        }
       },
       {
         headerMode: 'screen'
-      }
+      },
     );
     const AuthStack = createStackNavigator(
       {

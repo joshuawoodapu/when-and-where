@@ -1,15 +1,29 @@
 import React, { Component } from 'react';
 import { View, Image, Text, TextInput, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, Keyboard, AsyncStorage } from 'react-native';
 import firebase from 'firebase';
-import Spinner from "../components/common/Spinner"
+import Spinner from "../components/common/Spinner";
+import DynamicInput from "../components/common/DynamicInput";
+import RButton from "../components/common/RButton";
 import LoginRedirect from '../components/loginComponents/LoginRedirect';
 
 class LoginScreen extends Component {
     static navigationOptions = {
         header: null,
     };
-    
+
     state = { email: '', password: '', error: '', loading: false };
+
+    handlePasswordChange = (typedText) => {
+        this.setState({password:typedText}, () => {
+          console.log("passwordType");
+        });
+    }
+
+    handleEmailChange = (typedText) => {
+        this.setState({email:typedText}, () => {
+          console.log(typedText);
+        });
+    }
 
     onButtonPress() {
         const { email, password } = this.state;
@@ -27,13 +41,13 @@ class LoginScreen extends Component {
     }
 
     onLoginSuccess = async () => {
-        this.setState({ 
+        this.setState({
             email: '',
             password: '',
             loading: false,
             error: ''
         });
-        const user = await firebase.auth().currentUser; 
+        const user = await firebase.auth().currentUser;
         console.log(user);
         //await AsyncStorage.setItem('accessToken', user.accessToken);
         //await AsyncStorage.setItem('refreshToken', user.refreshToken);
@@ -47,11 +61,9 @@ class LoginScreen extends Component {
             return <Spinner size="small" />; }
 
         return (
-            <View style={button.viewStyle}>
-                <TouchableOpacity style={button.buttonContainer} onPress={this.onButtonPress.bind(this)}>
-                    <Text style={button.buttonText}>LOG IN</Text>
-                </TouchableOpacity>
-            </View>
+          <RButton flex={1} onPress={this.onButtonPress.bind(this)}>
+              LOG IN
+          </RButton>
         );
     }
 
@@ -63,25 +75,35 @@ class LoginScreen extends Component {
                     source={require('../components/images/whenwherelogo.png')}/>
 
                     <View style={styles.formStyle}>
-                        <TextInput 
-                            placeholder="Email"
-                            label="Email"
-                            value={this.state.email}
-                            onChangeText={email => this.setState({ email })}
-                            returnKeyType="next"
-                            style={styles.input1}
-                        />
-                        <TextInput 
-                            secureTextEntry
-                            placeholder="Password"
-                            label="Password"
-                            value={this.state.password}
-                            onChangeText={password => this.setState({ password })}
-                            returnKeyType="next"
-                            style={styles.input2}
+                        <DynamicInput placeholderList={[
+                            {placeholder: 'Email',
+                              inputContainerStyle: 'loginInput',
+                              inputStyle: "loginText",
+                              autoCapitalize: "none",
+                              spellCheck: false,
+                              stateLabel: "email",
+                              iconStyle: "MCIcon",
+                              iconName: "email-variant",
+                              iconColor: "#B8BEC1",
+                              iconSize: 22,
+                              onChange: this.handleEmailChange},
+                            {placeholder: 'Password',
+                              secureTextEntry: true,
+                              inputContainerStyle: 'loginInput',
+                              inputStyle: "loginText",
+                              stateLabel: "password",
+                              returnKeyType: "done",
+                              autoCorrect: false,
+                              autoCapitalize: "none",
+                              iconStyle: "MCIcon",
+                              iconName: "lock",
+                              iconColor: "#B8BEC1",
+                              iconSize: 22,
+                              onChange: this.handlePasswordChange},
+                            ]}
                         />
                     </View>
-            
+
                     <Text style={styles.errorTextStyle}>
                         {this.state.error}
                     </Text>
@@ -89,7 +111,7 @@ class LoginScreen extends Component {
 
 
                     {this.renderButton()}
-                    
+
                 </View>
             </DismissKeyboard>
         )
@@ -124,8 +146,8 @@ const styles = StyleSheet.create({
         borderColor: '#0ac45555',
         borderWidth: 2 },
     formStyle: {
-        // padding: 35,
-        justifyContent: 'space-between', },
+        flex: 2,
+        justifyContent: 'space-around', },
     input2: {
         height: 50,
         backgroundColor: '#ffffff',

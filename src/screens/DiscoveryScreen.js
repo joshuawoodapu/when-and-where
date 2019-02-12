@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {View, TextInput, StyleSheet} from 'react-native';
 import Tabs from '../components/Tabs';
-import Okay2 from '../components/common/Okay2';
+import DynamicInput from '../components/common/DynamicInput';
 
 class DiscoveryScreen extends Component {
     static navigationOptions = {
@@ -10,7 +10,7 @@ class DiscoveryScreen extends Component {
             color: '#2661B2',
             fontSize: 14,
             fontFamily: 'circular-std-bold'
-        }        
+        }
     };
 
     state = {
@@ -34,12 +34,13 @@ class DiscoveryScreen extends Component {
         return (
             <View style={{flex:1}}>
                 <View style={styles.discoveryInputs}>
-                    <Okay2 placeholderList={[
+                    <DynamicInput placeholderList={[
                         {placeholder: 'Search',
                         inputContainerStyle: 'tabsInput',
                         inputStyle: 'tabsText',
                         autoCapitalize: "words",
                         stateLabel: "search",
+                        iconStyle: "Icon",
                         iconName: "search",
                         iconColor: "#605985",
                         iconSize: 22,
@@ -49,6 +50,7 @@ class DiscoveryScreen extends Component {
                         inputStyle: 'tabsText',
                         returnKeyType: 'done',
                         stateLabel: "current_location",
+                        iconStyle: "Icon",
                         iconName: "location-on",
                         iconColor: "#605985",
                         iconSize: 22,
@@ -80,7 +82,7 @@ const styles = StyleSheet.create({
         borderColor: '#B8BeC1',
         borderRadius: 15,
         color: '#B8BeC1',
-        paddingHorizontal: 10, 
+        paddingHorizontal: 10,
     },
     locationInput: {
         height: 40,
@@ -92,9 +94,9 @@ const styles = StyleSheet.create({
         borderColor: '#B8BeC1',
         borderRadius: 15,
         color: '#B8BeC1',
-        paddingHorizontal: 10, 
+        paddingHorizontal: 10,
     }
-    
+
 
 });
 

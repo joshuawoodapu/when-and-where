@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, ScrollView, Dimensions, FlatList } from 'react-native';
 import AAActivityCard from './AAActivityCard';
-import Okay2 from '../components/common/Okay2';
+import DynamicInput from '../components/common/DynamicInput';
 
 
 export default class AATabs_FixTabs extends Component {
@@ -75,12 +75,13 @@ export default class AATabs_FixTabs extends Component {
     renderContentHeader() {
       return(
         <View style={styles.tabsInputs}>
-          <Okay2 placeholderList={[
+          <DynamicInput placeholderList={[
               {placeholder: 'Search',
                 inputContainerStyle: 'tabsInput',
                 inputStyle: 'tabsText',
                 autoCapitalize: "words",
                 stateLabel: "search",
+                iconStyle: "Icon",
                 iconName: "search",
                 iconColor: "#605985",
                 iconSize: 22},
@@ -89,6 +90,7 @@ export default class AATabs_FixTabs extends Component {
                 inputStyle: 'tabsText',
                 returnKeyType: 'done',
                 stateLabel: "current_location",
+                iconStyle: "Icon",
                 iconName: "location-on",
                 iconColor: "#605985",
                 iconSize: 22},

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
-import { 
-    StyleSheet, 
-    Text, 
-    View, 
-    TextInput, 
-    TouchableOpacity, 
-    ScrollView, 
-    DatePickerIOS, 
-    DatePickerAndroid, 
-    Platform } 
+import {
+    StyleSheet,
+    Text,
+    View,
+    TextInput,
+    TouchableOpacity,
+    ScrollView,
+    DatePickerIOS,
+    DatePickerAndroid,
+    Platform }
     from 'react-native';
 import SwitchToggle from "../components/common/Switch.js";
 import { Avatar } from 'react-native-elements';
@@ -28,9 +28,9 @@ export default class NewPlanScreen extends Component {
                 onDateChange={this.setDate}
                 />
             )
-        else 
+        else
             return (
-                <DatePickerAndroid 
+                <DatePickerAndroid
                     date={this.state.chosenDate}
                     onDateChange={this.setDate}
                 />
@@ -95,7 +95,7 @@ export default class NewPlanScreen extends Component {
                 <DatePickerIOS
                     date={this.state.chosenDate}
                     onDateChange={this.setDate}
-                    />            
+                    />
             </View>
 
             <View style={stylesText.formStyle}>
