@@ -5,7 +5,7 @@ import { Icon } from 'react-native-elements';
 class Setting extends Component {
     render() {
         return (
-            <TouchableOpacity style={styles.mainContainer}> 
+            <TouchableOpacity onPress={this.props.onPress} style={styles.mainContainer}> 
             {/* header */}
 
                 <View style={styles.leftContainer}>

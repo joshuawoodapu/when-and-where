@@ -22,7 +22,12 @@ class AppLoading extends Component {
         //const accessToken = await AsyncStorage.getItem('accessToken');
         //const refreshToken = await AsyncStorage.getItem('refreshToken');
         const logged = await AsyncStorage.getItem('logged');
-        this.props.navigation.navigate(logged ? 'App' : 'Auth');
+        const onBoarded = await AsyncStorage.getItem('onBoarded');
+        if (logged && onBoarded)
+            this.props.navigation.navigate('Login');
+        else 
+            this.props.navigation.navigate(logged ? 'App' : 'Auth');
+
       }
     render() {
         return (

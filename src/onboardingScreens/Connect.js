@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text, Image, AsyncStorage } from 'react-native';
 import StartButton from '../components/StartButton';
 
 class Connect extends React.Component {
-  onStartButtonPress() {
+  onStartButtonPress = async () => {
+    await AsyncStorage.setItem('onBoarded', 'true');
     this.props.navigation.navigate('Login');
   }
 

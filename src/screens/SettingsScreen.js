@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, AsyncStorage} from 'react-native';
 import Setting from '../../src/components/SettingsComponents/Setting';
 import ReusableHeader from '../components/ReusableHeader';
 
 
 class SettingsScreen extends Component {
+    onLogOutPress = async () => {
+        await AsyncStorage.setItem('logged', 'false');
+        this.props.navigation.navigate('Auth');
+    }
+
     render() {
         return (
             <View style={styles.mainContainer}> 
@@ -19,7 +24,7 @@ class SettingsScreen extends Component {
                 <Setting settingName='Notifications' currentSetting='All' iconName='notifications'/>
                 <Setting settingName='Account' currentSetting='john.doe@gmail.com' iconName='person'/>
                 <Setting settingName='Privacy' iconName='lock'/>
-                <Setting settingName='Log Out' iconName='not-interested'/>
+                <Setting settingName='Log Out' onPress={this.onLogOutPress.bind(this)} iconName='not-interested'/>
                 <Setting settingName='Help' currentSetting='Questions?' iconName='help'/>
                 </View>
             </View>
