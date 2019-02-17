@@ -39,19 +39,27 @@ class RegistrationScreen extends Component {
     }
 
     onRegisterSuccess = async () => {
-        this.setState({
-            name: '',
-            email: '',
-            password: '',
-            password_confirm: '',
-            loading: false,
-            error: ''
-        });
         const user = await firebase.auth().currentUser;
+        
         console.log(user);
+
+        firebase.firestore().collection('users').add({
+          name: this.state.name,
+          userId: user.uid,
+        });
+
         //await AsyncStorage.setItem('accessToken', user.accessToken);
         //await AsyncStorage.setItem('refreshToken', user.refreshToken);
         await AsyncStorage.setItem('logged', 'true');
+
+        this.setState({
+          name: '',
+          email: '',
+          password: '',
+          password_confirm: '',
+          loading: false,
+          error: ''
+        });
 
         this.props.navigation.navigate('App');
     }

@@ -1,5 +1,5 @@
 import React from 'react';
-import firebase from 'firebase';
+import firebase from 'expo-firebase-app';
 import { createAppContainer, createBottomTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import OnBoardingScreens from './src/screens/OnBoardingScreens';
 import LoginScreen from './src/screens/LoginScreen';
