@@ -9,13 +9,19 @@ class SettingsScreen extends Component {
         await AsyncStorage.setItem('logged', 'false');
         this.props.navigation.navigate('Auth');
     }
+        static navigationOptions = ({navigation}) => ({
+            headerTitle: 'SETTINGS',
+            headerTitleStyle: {
+                color: '#2661B2',
+                fontSize: 14,
+                fontFamily: 'circular-std-bold',
+            },
+        });
 
     render() {
         return (
             <View style={styles.mainContainer}> 
-            
-                <ReusableHeader title="SETTINGS"/>
-
+        
                 <View style={styles.settingsHolder}>
 
                 <Setting settingName='Me'
