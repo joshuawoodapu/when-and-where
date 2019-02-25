@@ -23,7 +23,10 @@
     "react-native-pie-chart": "^1.0.13",
     "react-native-swiper": "^1.5.14",
     "react-native-vector-icons": "^6.2.0",
-    "react-navigation": "3.0.9"
+    "react-navigation": "3.0.9",
+    "react-redux": "^6.0.1",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0",

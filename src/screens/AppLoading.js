@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import {View, AsyncStorage, Image} from 'react-native';
+import { View, AsyncStorage, Image } from 'react-native';
 import { Font } from 'expo';
+import { connect } from 'react-redux';
 import firebase from 'firebase';
+import * as actions from '../redux/actions';
 
 class AppLoading extends Component {
     state = {fontLoaded: false}
@@ -19,11 +21,17 @@ class AppLoading extends Component {
 
           });
         this.setState({ fontLoaded:true })
-        //const accessToken = await AsyncStorage.getItem('accessToken');
-        //const refreshToken = await AsyncStorage.getItem('refreshToken');
-        const logged = await AsyncStorage.getItem('logged');
+        let user = await firebase.auth().currentUser;
+        const logged = (user !== null);
+
         const onBoarded = await AsyncStorage.getItem('onBoarded');
+
+        if (logged) 
+          this.props.userLoad(user);
+
         if (logged && onBoarded)
+            this.props.navigation.navigate('App');
+        else if (onBoarded)
             this.props.navigation.navigate('Login');
         else 
             this.props.navigation.navigate(logged ? 'App' : 'Auth');
@@ -40,4 +48,8 @@ class AppLoading extends Component {
     }
 }
 
-export default AppLoading;
+const mapStateToProps = state => {
+    return { user: state.user };
+}
+
+export default connect(mapStateToProps, actions)(AppLoading);

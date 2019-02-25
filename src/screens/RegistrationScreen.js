@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import {View, Text, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet, TouchableOpacity} from 'react-native';
-import {Input} from 'react-native-elements';
+import {View, Text, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet, TouchableOpacity, Vibration} from 'react-native';
+import { connect } from 'react-redux';
+import * as actions from '../redux/actions';
 import RHeader from '../components/common/RHeader';
 import RButton from '../components/common/RButton';
-
 import DynamicInput from '../components/common/DynamicInput';
-
 import Footer from '../components/Footer';
 import Spinner from "../components/common/Spinner";
 import firebase from 'firebase';
@@ -23,13 +22,16 @@ class RegistrationScreen extends Component {
 
         if( password === password_confirm ){
             console.log(email + password)
-            firebase.auth().createUserWithEmailAndPassword(email, password)
+            firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
+              firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then(this.onRegisterSuccess.bind(this))
                 .catch(error => {
                     console.log(error.code)
                     this.onRegisterFail.bind(this)
                 });
+            });
         } else {
+            Vibration.vibrate(1000)
             this.setState({ error: "Passwords do not match", loading: false });
         }
     }
@@ -41,7 +43,6 @@ class RegistrationScreen extends Component {
     onRegisterSuccess = async () => {
         const user = await firebase.auth().currentUser;
         
-        console.log(user);
 
         await firebase.database().ref('users/' + user.uid).set({
           fullName: this.state.name
@@ -49,7 +50,10 @@ class RegistrationScreen extends Component {
 
         //await AsyncStorage.setItem('accessToken', user.accessToken);
         //await AsyncStorage.setItem('refreshToken', user.refreshToken);
-        await AsyncStorage.setItem('logged', 'true');
+
+        if (user !== null)
+            this.props.userLoad(user);
+
 
         this.setState({
           name: '',
@@ -175,4 +179,8 @@ const DismissKeyboard = ({children}) => (
     </TouchableWithoutFeedback>
 );
 
-export default RegistrationScreen;
+const mapStateToProps = state => {
+  return { user: state.user };
+}
+
+export default connect(mapStateToProps, actions)(RegistrationScreen);

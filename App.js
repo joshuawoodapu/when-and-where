@@ -3,6 +3,8 @@ import firebase from 'firebase';
 import { YellowBox } from 'react-native';
 import _ from 'lodash';
 import { createAppContainer, createBottomTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
+import { Provider } from 'react-redux';
+import { store } from './src/redux/store';
 import OnBoardingScreens from './src/screens/OnBoardingScreens';
 import LoginScreen from './src/screens/LoginScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
@@ -153,7 +155,9 @@ export default class App extends React.Component {
       }
     ));
     return (
-      <AppContainer/>
+      <Provider store={store}>
+        <AppContainer/>
+      </Provider>
     );
   }
 }

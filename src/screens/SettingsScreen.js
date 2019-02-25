@@ -7,7 +7,7 @@ import ReusableHeader from '../components/ReusableHeader';
 class SettingsScreen extends Component {
     onLogOutPress = async () => {
         await AsyncStorage.setItem('logged', 'false');
-        this.props.navigation.navigate('Auth');
+        this.props.navigation.navigate('Login');
     }
         static navigationOptions = ({navigation}) => ({
             headerTitle: 'SETTINGS',

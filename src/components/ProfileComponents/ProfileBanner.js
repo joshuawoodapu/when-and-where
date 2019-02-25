@@ -11,7 +11,7 @@ class ProfileBanner extends Component {
                     source={require('../../onboardingArt/1_corgi.png')}/>
 
                 <View style={styles.secondaryTextContainer}>
-                    <Text style={styles.profileName}>Jen Smith</Text>
+                    <Text style={styles.profileName}>{this.props.name}</Text>
                     <Text style={styles.locationText}>
                         Los Angeles, CA
                     </Text>
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     profilePic: {
             height: 100,
             width: 100,
-            justifySelf: 'center',
+            justifyContent: 'center',
             alignSelf: 'center',
             // borderWidth: 5,
             // borderColor: 'orange'
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     },
     secondaryTextContainer: {
         paddingLeft: '3%',
-        flexDirection: 'col',
+        flexDirection: 'column',
         justifyContent: 'center',
         alignContent: 'flex-start',
         // borderWidth: 5,

@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import { connect } from 'react-redux';
+import * as actions from '../redux/actions';
 import RHeader from '../components/common/RHeader';
 import Tabs from '../components/Tabs';
 import ProfileBanner from '../components/ProfileComponents/ProfileBanner';
 import ProfileDescription from '../components/ProfileComponents/ProfileDescription';
 import { Icon } from 'react-native-elements';
-
-
 
 class ProfileScreen extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -26,9 +26,13 @@ class ProfileScreen extends Component {
         )
     });
 
+    state = {
+        fullName: ''
+    };
+
     onPressProfile() {
         this.props.navigation.navigate('Settings');
-    }
+    };
 
     _pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -51,7 +55,7 @@ class ProfileScreen extends Component {
         return (
             <View style={styles.topViewContainer}>
                 <View style={styles.rowContainer}>
-                        <ProfileBanner />
+                        <ProfileBanner name={this.props.user.fullName} />
                 </View>
 
                 <View style={styles.descriptionContainer}>
@@ -70,7 +74,7 @@ class ProfileScreen extends Component {
 const styles = StyleSheet.create({
     topViewContainer:{
         flex: 1,
-        flexDirection: 'col',
+        flexDirection: 'column',
         justifyContent: 'center'
     },
     rowContainer: {
@@ -83,12 +87,16 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignContent: 'center',
-        // borderWidth: 5,
-        // borderColor: 'purple'
+        // borderColor: 'purple'        // borderWidth: 5,
+
     },
     Tabs: {
         flex: 1
     }
 });
 
-export default ProfileScreen;
+const mapStateToProps = state => {
+    return { user: state.user };
+}
+
+export default connect(mapStateToProps, actions)(ProfileScreen);

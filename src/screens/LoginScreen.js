@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { View, Image, Text, TextInput, StyleSheet, TouchableWithoutFeedback, TouchableOpacity, Keyboard, AsyncStorage } from 'react-native';
+import { View, Image, Text, TextInput, StyleSheet, TouchableWithoutFeedback, Keyboard, AsyncStorage } from 'react-native';
+import { connect } from 'react-redux';
 import firebase from 'firebase';
+import * as actions from '../redux/actions';
 import Spinner from "../components/common/Spinner";
 import DynamicInput from "../components/common/DynamicInput";
 import RButton from "../components/common/RButton";
@@ -29,11 +31,13 @@ class LoginScreen extends Component {
         const { email, password } = this.state;
         this.setState({ error: '', loading: true });
 
-        firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(this.onLoginSuccess.bind(this))
-            .catch(() => {
-                this.setState({ error: "We can't find an account with that email address", loading: false });
-            });
+        firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then(this.onLoginSuccess.bind(this))
+                .catch((error) => {
+                    this.setState({ error: error, loading: false });
+                });
+        });
     }
 
     onLoginFail() {
@@ -49,9 +53,10 @@ class LoginScreen extends Component {
         });
         const user = await firebase.auth().currentUser;
         console.log(user);
+        if (user !== null)
+            this.props.userLoad(user);
         //await AsyncStorage.setItem('accessToken', user.accessToken);
         //await AsyncStorage.setItem('refreshToken', user.refreshToken);
-        await AsyncStorage.setItem('logged', 'true');
 
         this.props.navigation.navigate('App');
     }
@@ -193,4 +198,8 @@ const button = StyleSheet.create({
     }
 });
 
-export default LoginScreen;
+const mapStateToProps = state => {
+    return { user: state.user };
+}
+
+export default connect(mapStateToProps, actions)(LoginScreen);
