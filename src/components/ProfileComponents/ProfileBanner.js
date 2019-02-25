@@ -25,6 +25,7 @@ class ProfileBanner extends Component {
 
 const styles = StyleSheet.create({
     mainContainer: {
+        marginLeft: 15,
         flexDirection: 'row',
         flex: 1,
         justifyContent: 'flex-start',
