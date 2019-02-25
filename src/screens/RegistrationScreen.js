@@ -37,7 +37,7 @@ class RegistrationScreen extends Component {
     }
 
     onRegisterFail() {
-        this.setState({ error: 'Registration Failed.', loading: false });
+        this.setState({ error: 'Registration failed.', loading: false });
     }
 
     onRegisterSuccess = async () => {

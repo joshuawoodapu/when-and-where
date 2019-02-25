@@ -199,7 +199,7 @@ export default class NewPlanScreen extends Component {
               <Modal isVisible={this.state.isModalVisible}>
 
 {/* Modal Starts */}
-              <View style={{ flex: 1, paddingTop: 100, paddingBottom: 200 }}>
+              <View style={{ flex: 1, paddingTop: 100, paddingBottom: 100 }}>
 
               <View style={styles.modalContainer}>
 
