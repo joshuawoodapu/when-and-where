@@ -6,12 +6,9 @@ import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 class DynamicInput extends Component
 {
-  constructor( props )
-  {
+  constructor(props){
     super(props);
-
     const inputs = props.placeholderList;
-
     this.state = { inputs };
   }
 

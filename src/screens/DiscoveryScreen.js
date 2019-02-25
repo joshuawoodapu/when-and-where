@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, TextInput, StyleSheet} from 'react-native';
+import {View, Text, TextInput, StyleSheet} from 'react-native';
 import Tabs from '../components/Tabs';
 import DynamicInput from '../components/common/DynamicInput';
 
@@ -15,17 +15,50 @@ class DiscoveryScreen extends Component {
 
     state = {
         search: '',
-        location: ''
-    };
+        location: '',
+        searchLat: 0.0,
+        searchLng: 0.0,
+        error: '',
+        locationPredictions: []
+    }
 
-    handleSearchChange = (typedText) => {
-        this.setState({search:typedText}, () => {
+    componentWillMount(){
+        // TODO: fix setState to actually work
+        // gets current location and set initial region to this
+        navigator.geolocation.getCurrentPosition(
+            position => {                
+                this.setState({
+                    searchLat: position.coords.latitude,
+                    searchLng: position.coords.longitude
+                }, () => {
+                    console.log("current loc: " + this.state.searchLat + ", " + this.state.searchLng);
+                }
+                );
+            }, 
+            error => this.setState({ error: error.message }),
+            { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
+        );
+    }
+
+    handleSearchChange = async (typedText) => {
+        this.setState({search: typedText}, () => {
           console.log(typedText);
         });
+        const apiURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${global.apiKey}&input=${this.state.search}&location=${this.state.searchLat},${this.state.searchLng}&radius=60000`;
+        
+        try {
+            let result = await fetch(apiURL);
+            let json = await result.json();
+            this.setState({ locationPredictions: json['predictions'] });
+            console.log(this.state.locationPredictions)
+            console.log("----------------------------------------------")
+        } catch (err){
+            console.error(err)
+        }
     }
 
     handleLocationChange = (typedText) => {
-        this.setState({location:typedText}, () => {
+        this.setState({location: typedText}, () => {
           console.log(typedText);
         });
     }
@@ -45,6 +78,7 @@ class DiscoveryScreen extends Component {
                         iconColor: "#605985",
                         iconSize: 22,
                         onChange: this.handleSearchChange},
+                        
                         {placeholder: 'Current Location',
                         inputContainerStyle: 'tabsInput',
                         inputStyle: 'tabsText',
