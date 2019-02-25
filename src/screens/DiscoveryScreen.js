@@ -13,27 +13,27 @@ class DiscoveryScreen extends Component {
         }
     };
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            search: '',
-            location: '',
-            searchLat: 0,
-            searchLng: 0,
-            error: '',
-            locationPredictions: []
-        }
+    state = {
+        search: '',
+        location: '',
+        searchLat: 0.0,
+        searchLng: 0.0,
+        error: '',
+        locationPredictions: []
     }
 
-    componentDidMount(){
+    componentWillMount(){
         // TODO: fix setState to actually work
         // gets current location and set initial region to this
         navigator.geolocation.getCurrentPosition(
-            position => {
+            position => {                
                 this.setState({
                     searchLat: position.coords.latitude,
                     searchLng: position.coords.longitude
-                });
+                }, () => {
+                    console.log("current loc: " + this.state.searchLat + ", " + this.state.searchLng);
+                }
+                );
             }, 
             error => this.setState({ error: error.message }),
             { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
@@ -44,11 +44,14 @@ class DiscoveryScreen extends Component {
         this.setState({search: typedText}, () => {
           console.log(typedText);
         });
-        const apiURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${global.apiKey}&input=${this.state.search}&location=${this.state.searchLat},${this.state.searchLng}&radius=2000`;
+        const apiURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${global.apiKey}&input=${this.state.search}&location=${this.state.searchLat},${this.state.searchLng}&radius=60000`;
+        
         try {
             let result = await fetch(apiURL);
             let json = await result.json();
             this.setState({ locationPredictions: json['predictions'] });
+            console.log(this.state.locationPredictions)
+            console.log("----------------------------------------------")
         } catch (err){
             console.error(err)
         }
