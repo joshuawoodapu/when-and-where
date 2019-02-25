@@ -5,10 +5,20 @@ import Notification from '../components/NotificationComponents/Notification';
 
 
 class NotificationsScreen extends Component {
+
+        static navigationOptions = ({navigation}) => ({
+            headerTitle: 'NOTIFICATIONS',
+            headerTitleStyle: {
+                color: '#2661B2',
+                fontSize: 14,
+                fontFamily: 'circular-std-bold',
+            },
+        });
+
+
     render() {
         return (
             <View style={styles.mainContainer}>
-                <ReusableHeader title="NOTIFICATIONS"/>
                 <Text style={styles.oldText}>New</Text>
                 <View style={styles.notifsView}>
                      <Notification iconName='notifications' message="Notification 1"/>
@@ -39,7 +49,8 @@ const styles = StyleSheet.create({
         marginLeft: '5%',
         color: '#727E83',
         fontSize: 15,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'circular-std-bold',
 
     },
     earlierText: {
@@ -47,7 +58,8 @@ const styles = StyleSheet.create({
         marginLeft: '5%',
         color: '#727E83',
         fontSize: 15,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'circular-std-bold',
 
     }
 });
