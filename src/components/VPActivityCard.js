@@ -16,7 +16,6 @@ export default class VPActivityCard extends Component {
     }
   }
 
-
   onYesPress() {
     if (this.state.yesVote == false && this.state.noVote == false) {
       this.setState({ yesVote: true });
@@ -161,36 +160,34 @@ export default class VPActivityCard extends Component {
 
   /* should take in an activitySlot as a param */
   renderPieChart = (voteNums) => (
-    <View style={votingModalStyles.container}>
-      <View style={votingModalStyles.modalContent}>
+    <View style={votingModalStyles.modalContent}>
 
-        <View style={votingModalStyles.closeButton}>
-          <Icon
-            name='clear'
-            color='#2661B2'
-            size={30}
-            onPress={this.toggleVotingModal}
-          />
-        </View>
+      <View style={votingModalStyles.closeButton}>
+        <Icon
+          name='clear'
+          color='#2661B2'
+          size={30}
+          onPress={this.toggleVotingModal}
+        />
+      </View>
 
-        <View style={votingModalStyles.centered}>
-          <Text style={votingModalStyles.header}> Voting Results </Text>
-          <PieChart
-            style={{ marginBottom: 25 }}
-            chart_wh={225}
-            series={voteNums}
-            sliceColor={sliceColors}
-          />
-        </View>
+      <View style={votingModalStyles.centered}>
+        <Text style={votingModalStyles.header}> Voting Results </Text>
+        <PieChart
+          style={{ marginBottom: 25 }}
+          chart_wh={225}
+          series={voteNums}
+          sliceColor={sliceColors}
+        />
+      </View>
 
-        <View style={votingModalStyles.votingLegendContainer}>
-          {activityGroup1.map((activity, index) =>
-            <View style={votingModalStyles.keyContainer} key={activity.activityName}>
-              <View style={{ width: 20, height: 20, borderRadius: 100 / 2, backgroundColor: sliceColors[index], marginRight: 7 }} />
-              <Text style={votingModalStyles.actName}>{activity.activityName}</Text>
-            </View>
-          )}
-        </View>
+      <View style={votingModalStyles.votingLegendContainer}>
+        {activityGroup1.map((activity, index) =>
+          <View style={votingModalStyles.keyContainer} key={activity.activityName}>
+            <View style={{ width: 20, height: 20, borderRadius: 100 / 2, backgroundColor: sliceColors[index], marginRight: 7 }} />
+            <Text style={votingModalStyles.actName}>{activity.activityName}</Text>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -263,31 +260,6 @@ export default class VPActivityCard extends Component {
   }
 }
 
-const sliceColors = ['#F7D055', '#F387B8', '#6A6789', '#A0C1ED', '#EC7248'];
-
-let activityGroup1 = [
-  {
-    activityName: 'The Broad',
-    numVotes: 5
-  },
-  {
-    activityName: 'LACMA',
-    numVotes: 3
-  },
-  {
-    activityName: 'California Science Center',
-    numVotes: 4
-  },
-  {
-    activityName: 'The Getty',
-    numVotes: 7
-  },
-  {
-    activityName: 'MOCA',
-    numVotes: 1
-  }
-];
-
 const styles = StyleSheet.create({
   timeView: {
     width: 62,
@@ -351,9 +323,6 @@ const styles = StyleSheet.create({
 });
 
 const votingModalStyles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
   modalContent: {
     backgroundColor: "white",
     padding: 18,
@@ -390,3 +359,28 @@ const votingModalStyles = StyleSheet.create({
     flexWrap: 'wrap'
   },
 });
+
+const sliceColors = ['#F7D055', '#F387B8', '#6A6789', '#A0C1ED', '#EC7248'];
+
+let activityGroup1 = [
+  {
+    activityName: 'The Broad',
+    numVotes: 5
+  },
+  {
+    activityName: 'LACMA',
+    numVotes: 3
+  },
+  {
+    activityName: 'California Science Center',
+    numVotes: 4
+  },
+  {
+    activityName: 'The Getty',
+    numVotes: 7
+  },
+  {
+    activityName: 'MOCA',
+    numVotes: 1
+  }
+];
