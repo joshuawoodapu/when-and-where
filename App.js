@@ -1,5 +1,7 @@
 import React from 'react';
-import firebase from 'expo-firebase-app';
+import firebase from 'firebase';
+import { YellowBox } from 'react-native';
+import _ from 'lodash';
 import { createAppContainer, createBottomTabNavigator, createStackNavigator, createSwitchNavigator } from 'react-navigation';
 import OnBoardingScreens from './src/screens/OnBoardingScreens';
 import LoginScreen from './src/screens/LoginScreen';
@@ -24,9 +26,15 @@ import { Icon } from 'react-native-elements';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon3 from 'react-native-vector-icons/FontAwesome';
 
-
 export default class App extends React.Component {
   componentWillMount() {
+    YellowBox.ignoreWarnings(['Setting a timer']);
+    const _console = _.clone(console);
+    console.warn = message => {
+      if (message.indexOf('Setting a timer') <= -1) {
+        _console.warn(message);
+      }
+    };
     firebase.initializeApp({
       apiKey: "AIzaSyDCp3X_njrJy-_RJYTzUOvWZQrPYdekBak",
       authDomain: "when-and-where-c8a71.firebaseapp.com",

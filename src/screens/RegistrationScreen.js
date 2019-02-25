@@ -43,9 +43,8 @@ class RegistrationScreen extends Component {
         
         console.log(user);
 
-        firebase.firestore().collection('users').add({
-          name: this.state.name,
-          userId: user.uid,
+        await firebase.database().ref('users/' + user.uid).set({
+          fullName: this.state.name
         });
 
         //await AsyncStorage.setItem('accessToken', user.accessToken);
@@ -149,9 +148,7 @@ class RegistrationScreen extends Component {
                 <View flex={2}>
                   <Footer/>
                 </View>
-
                 {this.renderButton()}
-
             </View>
             </DismissKeyboard>
         )
