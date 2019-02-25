@@ -1,144 +1,67 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import SwitchToggle from "../components/common/Switch.js";
 import { Avatar } from 'react-native-elements';
 import { Icon } from 'react-native-elements';
 import Modal from "react-native-modal";
+import {StyleSheet,Text,View,TextInput,TouchableOpacity,ScrollView,
+    DatePickerIOS,DatePickerAndroid,Platform,TimePickerAndroid} from 'react-native';
+import RHeader from "../components/common/RHeader.js";
+import RButton from "../components/common/RButton.js";
+import DynamicInput from "../components/common/DynamicInput.js";
+import Toggle from "../components/common/Toggle.js";
+import Avatars from '../../src/components/common/Avatars';
+import FlipToggle from 'react-native-flip-toggle-button';
 
 
 export default class NewPlanScreen1 extends Component {
 
+  state = {
+  isModalVisible: false,
+};
+
+_toggleModal = () =>
+  this.setState({ isModalVisible: !this.state.isModalVisible });
+
     render() {
         return (
-            <ScrollView style={form.formStyle}>
 
-            <Modal isVisible={true}>
-              <View style={styles.modalContainer}>
 
-                <View style={styles.headerStyle}>
-                <Text style={styles.headerTextStyle}>Confirmation</Text>
+
+              <ScrollView flex={1} showsVerticalScrollIndicator={false}>
+              <View flex={1}>
+              <View flex={1} paddingLeft={33} paddingTop={35}>
+                <RHeader>Confirmation</RHeader>
+              </View>
+
+              <View paddingHorizontal={24} paddingTop={17} paddingBottom={27}>
+                <Text style={styles.textLabel}>PLAN NAME</Text>
+                <Text>Sample Name</Text>
+              </View>
+
+              <View paddingHorizontal={24}>
+                <Text style={styles.textLabel}>WHOS GOING?</Text>
+              </View>
+
+              <View paddingBottom={2} paddingHorizontal={8}>
+                <Avatars />
+              </View>
+
+              <View paddingHorizontal={24} paddingBottom={24}>
+                <Text style={styles.textLabel}>WHEN?</Text>
+                <Text> Wednesday, October 31 at 3:00 PM </Text>
+              </View>
+
+              <View paddingHorizontal={24}>
+                <Text style={styles.textLabel}>PRIVACY</Text>
+                <Text> Private </Text>
                 </View>
+              </View>
 
-                <View style={stylesText.formStyle}>
-                <Text style={stylesText.text}>Plan Name</Text>
-                </View>
+          </ScrollView>
 
-                <View style={stylesText.formStyle}>
-                <Text style={stylesTextBlueCenter.text}>Halloween Night</Text>
-                </View>
-
-            <View style={stylesText.formStyle}>
-            <Text style={stylesText.text}>Whos Going?</Text>
-            </View>
-
-            <View style={containerStyle.rowContainer}>
-
-            <Avatar
-            rounded
-            source={{uri:'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',  }}
-            />
-
-            <Avatar
-            rounded
-            source={{uri:'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',  }}
-            />
-
-            <Avatar
-            rounded
-            source={{uri:'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',  }}
-            />
-
-            </View>
-
-            <View style={stylesText.formStyle}>
-            <Text style={stylesText.text}>When?</Text>
-            </View>
-
-            <View style={stylesTextBlueCenter.formStyle}>
-            <Text style={stylesTextBlueCenter.text}>Wednesday, October 31 at 3:00 PM</Text>
-            </View>
-
-
-            <View style={stylesText.formStyle}>
-            <Text style={stylesText.text}>Privacy</Text>
-            </View>
-
-            <View style={containerStyle.rowContainer}>
-
-            <Icon
-            raised
-            name='lock'
-            type='font-awesome'
-            color='#2661B2'
-            />
-
-            <View style={stylesText.formStyle}>
-            <Text style={stylesTextBlueCenter.text}>Private</Text>
-            </View>
-
-            </View>
-
-            <View style={containerStyle.rowContainer}>
-
-            <Icon
-            raised
-            name='close'
-            type='font-awesome'
-            color='#2661B2'
-            onPress={() => console.log('check')} />
-
-            <Icon
-            raised
-            name='check'
-            type='font-awesome'
-            color='#2661B2'
-            onPress={() => console.log('Private')} />
-
-            </View>
-
-            </View>
-            </Modal>
-
-            </ScrollView>
         );
     }
 }
-
-const form = StyleSheet.create({
-    formStyle: {
-       padding: 35,
-    },
-    input: {
-        height: 50,
-        backgroundColor: '#ffffff',
-        marginBottom: 25,
-        borderWidth: 2,
-        borderColor: '#B8BeC1',
-        borderRadius: 15,
-        color: '#B8BeC1',
-        paddingHorizontal: 10,
-    }
-});
-
-const button = StyleSheet.create({
-    buttonContainer: {
-       backgroundColor: '#ED7248',
-       paddingVertical: 20,
-       paddingHorizontal: 20,
-       borderRadius: 30,
-       width: 330,
-    },
-    buttonText: {
-        textAlign: 'center',
-        color: '#ffffff',
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    viewStyle: {
-        alignItems: 'center',
-        justifyContent: 'center',
-    }
-});
 
 const styles = StyleSheet.create({
     headerStyle: {
@@ -152,91 +75,44 @@ const styles = StyleSheet.create({
         fontSize: 30,
         color: '#605985',
         fontWeight: 'bold',
-    }
-});
-
-const stylesText = StyleSheet.create({
+    },
+    textLabel: {
+      fontFamily: 'circular-std-medium',
+      fontSize: 12,
+      color: '#B8BEC1',
+      paddingLeft: 11,
+      paddingVertical: 6
+    },
     formStyle: {
-       padding: 35,
-       flex: 1,
-       flexDirection: 'row',
-       alignSelf: 'flex-start'
+      flex: 4,
+      paddingHorizontal: 24,
+      justifyContent: 'space-around'
     },
-    text: {
-        height: 50,
-        marginBottom: 25,
-        borderRadius: 15,
-        color: '#b8bec1',
-        paddingHorizontal: 10,
+    errorTextStyle: {
+        fontSize: 12,
+        alignSelf: 'center',
+        color: '#E23737',
+        marginTop: 10
     },
-    redirect: {
-        height: 50,
-        marginBottom: 25,
-        borderRadius: 15,
-        color: '#ED7248',
-        paddingHorizontal: 10,
+    toggleLabel: {
+      fontSize: 14,
+      color: "#2661B2",
+      paddingLeft: 10
+    },
+    toggleContainer: {
+      paddingHorizontal: 9,
+      justifyContent: "flex-start",
+      flexDirection: "row",
+      alignItems: "center",
+      paddingBottom: 43
+    },
+    dateStyle: {
+      fontSize: 10
     }
 });
-
-const stylesTextBlueCenter = StyleSheet.create({
-    formStyle: {
-       padding: 35,
-       flex: 1,
-       flexDirection: 'row',
-       alignSelf: 'flex-start'
-    },
-    text: {
-        height: 50,
-        marginBottom: 25,
-        borderRadius: 15,
-        color: '#2661B2',
-        paddingHorizontal: 10,
-    },
-    redirect: {
-        height: 50,
-        marginBottom: 25,
-        borderRadius: 15,
-        color: '#ED7248',
-        paddingHorizontal: 10,
-    }
-});
-
-const containerStyle = StyleSheet.create({
+const stylesDate = StyleSheet.create({
   container: {
-    padding: 8,
-    backgroundColor: "#ffffff",
+    flex: 1,
+    justifyContent: 'center',
   },
-  rowContainer: {
-    flexDirection: 'row'
-  }
-});
-
-const stylesActivityCard = StyleSheet.create({
-    formStyle: {
-       padding: 35,
-       flex: 1,
-       flexDirection: 'row',
-       alignSelf: 'center'
-    },
-    buttonContainer: {
-       backgroundColor: '#F0F3F7',
-       paddingVertical: 20,
-       paddingHorizontal: 20,
-       borderRadius: 30,
-       width: 330,
-    },
-    text: {
-        height: 50,
-        marginBottom: 25,
-        borderRadius: 15,
-        color: '#2661B2',
-        paddingHorizontal: 10,
-    },
-    redirect: {
-        height: 50,
-        marginBottom: 25,
-        borderRadius: 15,
-        color: '#F0F3F7',
-        paddingHorizontal: 10,
-    }
 });
