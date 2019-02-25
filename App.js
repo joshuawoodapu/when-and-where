@@ -35,7 +35,8 @@ export default class App extends React.Component {
       storageBucket: "when-and-where-c8a71.appspot.com",
       messagingSenderId: "521022677241"
     });
-    global.apiKey = 'AIzaSyA3Nw78OyUJy6u5Mi3F00AFeYDrmw8dPxw';
+    global.apiKey = 'AIzaSyBwRjjKEx0uuRVz-iuvhx_zDTzcBYNHS5g';
+
   }
 
   render() {

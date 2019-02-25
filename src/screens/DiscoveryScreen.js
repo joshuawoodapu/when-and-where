@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, TextInput, StyleSheet} from 'react-native';
+import {View, Text, TextInput, StyleSheet} from 'react-native';
 import Tabs from '../components/Tabs';
 import DynamicInput from '../components/common/DynamicInput';
 
@@ -17,14 +17,39 @@ class DiscoveryScreen extends Component {
         super(props);
         this.state = {
             search: '',
-            location: ''
+            location: '',
+            searchLat: 0,
+            searchLng: 0,
+            error: ''
         }
     }
 
-    handleSearchChange = (typedText) => {
+    componentDidMount(){
+        // get current location and set initial region to this
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                this.setState({
+                    searchLat: position.coords.latitude,
+                    searchLng: position.coords.longitude
+                });
+            }, 
+            error => this.setState({ error: error.message }),
+            { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
+        );
+    }
+
+    handleSearchChange = async (typedText) => {
         this.setState({search: typedText}, () => {
           console.log(typedText);
         });
+        const apiURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${global.apiKey}&input=${this.state.search}&location=${this.state.searchLat},${this.state.searchLng}&radius=2000`;
+        try {
+            const result = await fetch(apiURL);
+            const json = await result.json();
+            console.log(json);
+        } catch (err){
+            console.error(err)
+        }   
     }
 
     handleLocationChange = (typedText) => {
