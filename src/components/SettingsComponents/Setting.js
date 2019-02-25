@@ -10,7 +10,7 @@ class Setting extends Component {
 
                 <View style={styles.leftContainer}>
                     <View style={styles.iconHolder}>
-                        <Icon name={this.props.iconName} size={30} color="#2661B2" />
+                        <Icon name={this.props.iconName} size={30} color="#2661B2"/>
                     </View>
                     <View style={styles.placeHolder2}>
                         <Text style={styles.settingNameText}>
@@ -40,12 +40,15 @@ const styles = StyleSheet.create({
         marginTop: '1%'
     },
     iconHolder: {
-       // flex: 1,
-       // backgroundColor: '#55fc55',
+        // flex: 1,
+        // backgroundColor: '#55fc55',
         flexDirection: 'row',
         alignContent: 'center',
         justifyContent: 'center',
-        marginRight: '5%'
+        marginRight: 15,
+        alignItems: 'center'
+        // borderWidth: 4,
+        // borderColor: 'orange'
     },
     placeHolder2: {
         flex: 2,
@@ -56,21 +59,25 @@ const styles = StyleSheet.create({
     settingNameText:{
         color: '#2661B2',
         fontSize: 15,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'circular-std-bold',
     },
     settingSelectionText: {
         color: '#727E83',
-        fontSize: 14
+        fontSize: 14,
+        fontFamily: 'circular-std-bold',
     },
     leftContainer: {
-        paddingLeft: '5%',
+        marginLeft: 15,
         flex: 1.5,
         flexDirection: 'row',
-        alignContent: 'center'
+        alignContent: 'center',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     rightContainer: {
         paddingRight: '5%',
-        flex: 1,
+        flex: 1.5,
         flexDirection: 'row',
         justifyContent: 'flex-end',
         alignItems: 'center'
