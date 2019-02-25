@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignContent: 'center',
         justifyContent: 'center',
+        alignItems: 'center',
         marginRight: '5%'
     },
     placeHolder2: {
