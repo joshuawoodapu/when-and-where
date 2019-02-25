@@ -3,6 +3,7 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import RHeader from '../components/common/RHeader';
 import Tabs from '../components/Tabs';
 import ProfileBanner from '../components/ProfileComponents/ProfileBanner';
+import ProfileDescription from '../components/ProfileComponents/ProfileDescription';
 import { Icon } from 'react-native-elements';
 
 
@@ -35,6 +36,13 @@ class ProfileScreen extends Component {
                 <View style={styles.rowContainer}>
                         <ProfileBanner />
                 </View>
+
+                <View style={styles.descriptionContainer}>
+                <ProfileDescription
+                description="Hello friends, this is my description"
+                planCount='250'
+                />
+                </View>
                 <Tabs style={styles.Tabs}/>
             </View>
         )
@@ -53,11 +61,13 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center'
     },
-    button:{
-        width: 30,
-        height: 30,
-        color: '#ff4c0a',
-        borderWidth: 5
+    descriptionContainer:{
+        flex: .25,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignContent: 'center',
+        // borderWidth: 5,
+        // borderColor: 'purple'
     },
     Tabs: {
         flex: 1

@@ -49,7 +49,8 @@ const styles = StyleSheet.create({
         marginLeft: '5%',
         color: '#727E83',
         fontSize: 15,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'circular-std-bold',
 
     },
     earlierText: {
@@ -57,7 +58,8 @@ const styles = StyleSheet.create({
         marginLeft: '5%',
         color: '#727E83',
         fontSize: 15,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'circular-std-bold',
 
     }
 });

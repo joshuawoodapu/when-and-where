@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
             width: 100,
             justifySelf: 'center',
             alignSelf: 'center',
-            borderWidth: 5,
-            borderColor: 'orange'
+            // borderWidth: 5,
+            // borderColor: 'orange'
     },
     locationText:{
         color: '#2661B2',
@@ -48,8 +48,8 @@ const styles = StyleSheet.create({
         flexDirection: 'col',
         justifyContent: 'center',
         alignContent: 'flex-start',
-        borderWidth: 5,
-        borderColor: 'blue'
+        // borderWidth: 5,
+        // borderColor: 'blue'
     },
     profileName: {
         fontSize: 30,
