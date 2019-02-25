@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         alignContent: 'center',
     },
     oldText: {
-        marginLeft: '5%',
+        marginLeft: 15,
         color: '#727E83',
         fontSize: 15,
         fontWeight: 'bold',
@@ -54,8 +54,8 @@ const styles = StyleSheet.create({
 
     },
     earlierText: {
-        marginTop: '5%',
-        marginLeft: '5%',
+        marginTop: 15,
+        marginLeft: 15,
         color: '#727E83',
         fontSize: 15,
         fontWeight: 'bold',

@@ -29,7 +29,7 @@ class ProfileScreen extends Component {
     onPressProfile() {
         this.props.navigation.navigate('Settings');
     }
-
+zx
     render() {
         return (
             <View style={styles.topViewContainer}>
