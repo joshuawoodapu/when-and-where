@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
+import PieChart from 'react-native-pie-chart';
+
 
 export default class VPActivityCard extends Component {
     state = { yesVote: false, noVote: false};
+
 
     onYesPress() {
         if (this.state.yesVote == false && this.state.noVote == false) {
@@ -67,7 +70,7 @@ export default class VPActivityCard extends Component {
                   key={this.props.keyExtractor + "_yes"}
                   name='check'
                   color='green'
-                  size={22}
+                  size={18}
               />
         );
       }
@@ -77,7 +80,7 @@ export default class VPActivityCard extends Component {
                   key={this.props.keyExtractor + "_yes"}
                   name='check'
                   color='#2699FB'
-                  size={22}
+                  size={18}
               />
         );
       }
@@ -90,7 +93,7 @@ export default class VPActivityCard extends Component {
                   key={this.props.keyExtractor + "_no"}
                   name='close'
                   color='red'
-                  size={22}
+                  size={18}
               />
         );
       }
@@ -100,21 +103,104 @@ export default class VPActivityCard extends Component {
                   key={this.props.keyExtractor + "_no"}
                   name='close'
                   color='#2699FB'
-                  size={22}
+                  size={18}
               />
         );
       }
     }
 
+    renderTopLine(ind) {
+      if (ind != 0) {
+        return(
+          <View flex={1}>
+            <View flex={3}
+              style={{
+              borderLeftWidth: 1,
+              borderLeftColor: '#B0CAED',
+              }}
+            />
+            <View flex={1} />
+          </View>
+        );
+      }
+      else {
+        return(<View flex={4}/>);
+      }
+    }
+
+    renderBottomLine(ind) {
+      if (ind != this.props.totalSlots) {
+        return(
+          <View flex={1}>
+            <View flex={1} />
+            <View flex={3}
+              style={{
+              borderLeftWidth: 1,
+              borderLeftColor: '#B0CAED',
+              }}
+            />
+          </View>
+        );
+      }
+      else {
+        return(<View flex={4}/>);
+      }
+    }
+
     render() {
+        const sliceColors = ['#F7D055', '#F387B8', '#6A6789', '#A0C1ED', '#EC7248'];
+
+        let activityGroup1 = [
+            {
+                activityName: 'The Broad',
+                numVotes: 5
+            },
+            {
+                activityName: 'LACMA',
+                numVotes: 3
+            },
+            {
+                activityName: 'California Science Center',
+                numVotes: 4
+            },
+            {
+                activityName: 'The Getty',
+                numVotes: 7
+            },
+            {
+                activityName: 'MOCA',
+                numVotes: 1
+            }
+        ];
+
+        let voteNums = [];
+        activityGroup1.map((activity) => {
+            voteNums.push(activity.numVotes);
+        });
+
         return (
             <View flex={1} flexDirection="row">
                 <View style={styles.timeView}>
                     <Text style={styles.timeText}>{this.props.startTime}</Text>
                 </View>
+
+                <View flex={1} alignItems='center' justifyContent='center'>
+                  <View flex={4}>
+                    {this.renderTopLine(this.props.index)}
+                  </View>
+                  <PieChart
+                      chart_wh={31}
+                      series={voteNums}
+                      sliceColor={sliceColors}
+                  />
+                  <View flex={4}>
+                    {this.renderBottomLine(this.props.index)}
+                  </View>
+                </View>
+
                 <View style={styles.cardSectionStyle}>
                     <Card containerStyle={styles.cardStyle}>
-                      <View flex={1} flexDirection="row">
+                      <View flex={5} flexDirection="row">
                         <View flex={1}>
                           <TouchableOpacity onPress={this.props.onCardPress.bind(this)}>
                               <View style={styles.parentView}>
@@ -148,9 +234,9 @@ export default class VPActivityCard extends Component {
 
  const styles = StyleSheet.create({
    timeView: {
-     flex: 1,
+     width: 62,
      justifyContent: 'center',
-     paddingHorizontal: 15
+     paddingLeft: 15,
    },
    timeText: {
      fontSize: 11,
