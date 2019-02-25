@@ -3,77 +3,44 @@ import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Avatar } from 'react-native-elements';
 
 export default class Avatars extends Component {
+    renderName(name) {
+      return(
+        <Text style={styles.userNameText}>{name}</Text>
+      );
+    }
+
     render() {
         return (
-           <View style={styles.viewStyle}>
+           <View style={styles[this.props.avatarContainer] || styles.viewStyle} flexDirection="column">
                 <Avatar
-                    size="medium"
-                    rounded
-                    source={{
-                    uri:
-                        'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-                    }}
+                    size={this.props.size}
+                    rounded={this.props.rounded}
+                    source={{uri: this.props.uri}}
                 />
-
-                <Avatar
-                    size="medium"
-                    rounded
-                    source={{
-                    uri:
-                        'https://s3.amazonaws.com/uifaces/faces/twitter/kfriedson/128.jpg',
-                    }}
-                />
-
-                <Avatar
-                    size="medium"
-                    rounded
-                    source={{
-                    uri:
-                        'https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg',
-                    }}
-                />
-
-                <Avatar
-                    size="medium"
-                    rounded
-                    source={{
-                    uri:
-                        'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-                    }}
-                />
-
-                <Avatar
-                    size="medium"
-                    rounded
-                    source={{
-                    uri:
-                        'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-                    }}
-                />
-
-                <View style={styles.iconView}>
-                <TouchableOpacity>
-                    <Avatar
-                        medium
-                        rounded
-                        icon={{name: 'add'}}
-                    />
-                </TouchableOpacity>
-                </View> 
-
-            </View> 
+                <View paddingTop={6}>
+                  {this.renderName(this.props.name)}
+                </View>
+            </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
     viewStyle: {
+        flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        margin: 25
+        paddingRight: 15
     },
-    iconView: {
-        justifyContent: 'center',
-        alignItems: 'center',
+    newPlanContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingRight: 15
+    },
+    userNameText: {
+        fontFamily: 'circular-std-bold',
+        fontSize: 12,
+        color: "#2661B2"
     }
 });

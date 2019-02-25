@@ -110,8 +110,8 @@ const styles = StyleSheet.create({
         paddingVertical: 8
     },
     votingLegendContainer: {
-        justifyContent: 'center', 
-        alignItems: 'flex-start', 
+        justifyContent: 'center',
+        alignItems: 'flex-start',
         flexDirection: 'row',
         flexWrap: 'wrap'
     },
@@ -141,6 +141,5 @@ let activityGroup1 = [
 ];
 
 const sliceColors = ['#F7D055', '#F387B8', '#6A6789', '#A0C1ED', '#EC7248'];
-
 
 export default NewPlanScreen;
