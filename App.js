@@ -20,9 +20,8 @@ import CommentsScreen from './src/screens/CommentsScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
 import VotingScreen from './src/screens/VotingScreen';
 import InviteCollabScreen from './src/screens/InviteCollabScreen';
+import SharePlanModal from './src/screens/SharePlanModal';
 import { Icon } from 'react-native-elements';
-import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
-import Icon3 from 'react-native-vector-icons/FontAwesome';
 
 
 export default class App extends React.Component {
@@ -40,9 +39,11 @@ export default class App extends React.Component {
   render() {
     const SearchStackNav = createStackNavigator(
       {
+        ViewPlan: ViewPlanScreen,
+        CreateActivity: CreateActivityScreen,
+        PlanShare: SharePlanModal,
         Discovery: DiscoveryScreen,
         Activity: ActivityScreen,
-        PlanView: ViewPlanScreen,
         PlanOptions: PlanOptionsScreen,
         CommentsView: CommentsScreen,
         AddActivity: AddActivityScreen,
@@ -53,12 +54,13 @@ export default class App extends React.Component {
     const NewPlanStackNav = createStackNavigator(
       {
         NewPlan: NewPlanScreen,
-        NewPlan1 : NewPlan1Screen,
+        NewPlan1: NewPlan1Screen,
         CreateActivity: CreateActivityScreen
       }
     );
     const NotificationsStackNav = createStackNavigator(
       {
+        VotingView: VotingScreen,
         Notifications: NotificationsScreen
       }
     );
@@ -88,7 +90,7 @@ export default class App extends React.Component {
             navigationOptions: {
               tabBarIcon: ({ focused, tintColor  }) => {
                   const iconName = `ios-information-circle${focused ? '' : '-outline'}`;
-                  return <Icon2 name="lead-pencil" size={35} color={tintColor}/>;
+                  return <Icon name="edit" size={35} color={tintColor}/>;
               },
           },
         },
@@ -98,7 +100,7 @@ export default class App extends React.Component {
             navigationOptions: {
               tabBarIcon: ({ focused, tintColor  }) => {
                   const iconName = `ios-information-circle${focused ? '' : '-outline'}`;
-                  return <Icon3 name="bell" size={28} color={tintColor}/>;
+                  return <Icon name="notifications" size={35} color={tintColor}/>;
               },
           },
         },
@@ -108,7 +110,7 @@ export default class App extends React.Component {
             navigationOptions: {
               tabBarIcon: ({ focused, tintColor }) => {
                   const iconName = `ios-information-circle${focused ? '' : '-outline'}`;
-                  return <Icon2 name="account" size={40} color={tintColor}/>;
+                  return <Icon name="person" size={38} color={tintColor}/>;
               },
           },
         }

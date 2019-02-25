@@ -4,6 +4,12 @@ import { Card, Icon } from 'react-native-elements';
 
 export default class AAActivityCard extends Component {
     renderInfo() {
+      if (this.props.address.includes(",")) {
+        var index = this.props.address.indexOf(",");
+        var streetAddress = this.props.address.substr(0, index + 1);
+        var cityStateAddress = this.props.address.substr(index + 2);
+      }
+
       return(
         <View>
           <View style={styles.topRow}>
@@ -19,7 +25,10 @@ export default class AAActivityCard extends Component {
 
           <View style={styles.middleRow}>
             <Text style={styles.addressText}>
-              {this.props.address}
+              {streetAddress}
+            </Text>
+            <Text style={styles.addressText}>
+              {cityStateAddress}
             </Text>
           </View>
         </View>
@@ -133,7 +142,8 @@ export default class AAActivityCard extends Component {
     },
     addressText: {
         color: '#2661B2',
-        fontSize: 12
+        fontSize: 12,
+        paddingVertical: 1
     },
     cardContainer: {
         padding: 0,
@@ -155,11 +165,10 @@ export default class AAActivityCard extends Component {
         alignItems: 'flex-start',
     },
     middleRow: {
-        flexDirection: 'row',
-        flex: 1
+        flex: 1,
     },
     bottomRow: {
-        marginTop: 20,
+        marginTop: 16,
         flexDirection: 'row',
         flex: 1,
         alignItems: "stretch",
@@ -174,8 +183,6 @@ export default class AAActivityCard extends Component {
       flexDirection: 'row',
       justifyContent: 'flex-end',
     },
-
-
     cardStyle: {
         marginTop: 15,
         borderWidth: 0,

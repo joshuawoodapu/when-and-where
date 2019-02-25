@@ -22,7 +22,6 @@ class RegistrationScreen extends Component {
         this.setState({ error: '', loading: true });
 
         if( password === password_confirm ){
-            console.log(email + password)
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then(this.onRegisterSuccess.bind(this))
                 .catch(error => {
@@ -70,30 +69,20 @@ class RegistrationScreen extends Component {
     }
 
     handleNameChange = (typedText) => {
-        this.setState({name:typedText}, () => {
-          console.log(typedText);
-        });
+        this.setState({name:typedText});
     }
 
     handleEmailChange = (typedText) => {
-        this.setState({email:typedText}, () => {
-          console.log(typedText);
-        });
+        this.setState({email:typedText});
     }
 
     handlePasswordChange = (typedText) => {
-        this.setState({password:typedText}, () => {
-          console.log("passwordType");
-        });
+        this.setState({password:typedText});
     }
 
     handlePasswordConfirmChange = (typedText) => {
-        this.setState({password_confirm:typedText}, () => {
-          console.log("passwordConfirmType");
-        });
+        this.setState({password_confirm:typedText});
     }
-
-
 
     render() {
         return (

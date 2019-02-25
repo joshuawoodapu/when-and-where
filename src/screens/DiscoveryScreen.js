@@ -19,15 +19,11 @@ class DiscoveryScreen extends Component {
     };
 
     handleSearchChange = (typedText) => {
-        this.setState({search:typedText}, () => {
-          console.log(typedText);
-        });
+        this.setState({search:typedText});
     }
 
     handleLocationChange = (typedText) => {
-        this.setState({location:typedText}, () => {
-          console.log(typedText);
-        });
+        this.setState({location:typedText});
     }
 
     render() {

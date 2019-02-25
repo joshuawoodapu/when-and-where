@@ -110,8 +110,8 @@ const styles = StyleSheet.create({
         paddingVertical: 8
     },
     votingLegendContainer: {
-        justifyContent: 'center', 
-        alignItems: 'flex-start', 
+        justifyContent: 'center',
+        alignItems: 'flex-start',
         flexDirection: 'row',
         flexWrap: 'wrap'
     },

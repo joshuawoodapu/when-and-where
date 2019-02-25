@@ -14,15 +14,11 @@ class LoginScreen extends Component {
     state = { email: '', password: '', error: '', loading: false };
 
     handlePasswordChange = (typedText) => {
-        this.setState({password:typedText}, () => {
-          console.log("passwordType");
-        });
+        this.setState({password:typedText});
     }
 
     handleEmailChange = (typedText) => {
-        this.setState({email:typedText}, () => {
-          console.log(typedText);
-        });
+        this.setState({email:typedText});
     }
 
     onButtonPress() {
