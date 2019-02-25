@@ -47,7 +47,7 @@ class ProfileScreen extends Component {
                 planCount='250'
                 />
                 </View>
-                <Tabs style={styles.Tabs}/>
+                <Tabs navigation={this.props.navigation} style={styles.Tabs}/>
             </View>
         )
     }
