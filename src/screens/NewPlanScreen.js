@@ -23,11 +23,17 @@ export default class NewPlanScreen extends Component {
         }
     };
 
-    state = {
-      isSwitch1On: false,
+    constructor(props) {
+    super(props);
+    monthNames = ["January", "February", "March", "April", "May","June","July", "August", "September", "October", "November","December"];
+    this.state = {
+      isSwitch1On: false, 
       chosenDate: new Date(),
       isModalVisible: false
-    }
+        };
+
+    this.setDate = this.setDate.bind(this);
+  }
 
     openDatePicker() {
         try {
@@ -35,7 +41,7 @@ export default class NewPlanScreen extends Component {
               date: new Date()
             });
             if (action !== DatePickerAndroid.dismissedAction) {
-              // Selected year, month (0-11), day
+
             }
           } catch ({code, message}) {
             console.warn('Cannot open date picker', message);
@@ -51,7 +57,7 @@ export default class NewPlanScreen extends Component {
             is24Hour: false,
           });
           if (action !== TimePickerAndroid.dismissedAction) {
-            // Selected year, month (0-11), day
+
           }
         } catch ({code, message}) {
           console.warn('Cannot open time picker', message);
@@ -79,25 +85,43 @@ export default class NewPlanScreen extends Component {
             )
     }
 
-    onContinuePress() {
-        this.props.navigation.navigate('NewPlan1');
+    setDate(newDate) {
+      this.setState({chosenDate: newDate});
     }
+
+    onContinuePress() {
+        this._toggleModal();
+        var displayDate = monthNames[this.state.chosenDate.getMonth()] + " "
+        + this.state.chosenDate.getDate() + ", " + this.state.chosenDate.getFullYear();
+        var lHours = this.state.chosenDate.getHours();
+        var ampm = "AM"
+
+        if (lHours > 12) {
+          lHours = lHours-12;
+          ampm = "PM";
+        }
+
+        var displayTime = lHours + ":" + this.state.chosenDate.getMinutes() + " " + ampm;
+        this.setState()
+
+        console.log(displayDate);
+        console.log(displayTime);
+    }
+
+    _toggleModal = () =>
+    this.setState({ isModalVisible: !this.state.isModalVisible });
 
     renderButton(){
         if (this.state.loading) {
             return <Spinner size="small" />; }
-
         return (
           <View paddingHorizontal={28}>
-            <RButton flex={1} onPress={this._toggleModal.bind(this)}>
+            <RButton flex={1} onPress={this.onContinuePress.bind(this)}>
                 CONTINUE
             </RButton>
           </View>
         );
     }
-
-  _toggleModal = () =>
-    this.setState({ isModalVisible: !this.state.isModalVisible });
 
     render() {
       /* When we get the users we want, we need to store the following info: */
@@ -114,7 +138,6 @@ export default class NewPlanScreen extends Component {
 
         return (
           <ScrollView flex={1} showsVerticalScrollIndicator={false}>
-
           <View flex={1}>
               <View flex={1} paddingLeft={33} paddingTop={35}>
                 <RHeader>Create a New Plan</RHeader>
@@ -130,11 +153,10 @@ export default class NewPlanScreen extends Component {
                 />
               </View>
 
-{/*avatars*/}
               <View paddingHorizontal={24}>
-                <Text style={styles.textLabel}>WHOS GOING?</Text>
+                <Text style={styles.textLabel}>WHO'S GOING?</Text>
               </View>
-              <View flexDirection="row" flex={1} paddingBottom={2} paddingHorizontal={35}>
+              <View flexDirection="row" flex={1} paddingBottom={21} paddingHorizontal={35}>
                 <View flex={6}>
                   <FlatList
                       data={avatars}
@@ -152,8 +174,6 @@ export default class NewPlanScreen extends Component {
                       keyExtractor={(item, index) => index.toString()}
                   />
                 </View>
-
-{/*plus button*/}
                 <View flex={1} justifyContent="center" alignItems="center">
                   <TouchableOpacity>
                       <Icon
@@ -164,8 +184,8 @@ export default class NewPlanScreen extends Component {
                   </TouchableOpacity>
                 </View>
               </View>
+              {/* ^ Need to make Avatars component more dynamic with styling */}
 
-{/*when*/}
               <View paddingHorizontal={24} paddingBottom={24}>
                 <Text style={styles.textLabel}>WHEN?</Text>
                 <View style={styles.dateStyle}>

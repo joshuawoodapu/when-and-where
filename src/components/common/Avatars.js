@@ -30,13 +30,15 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
         paddingRight: 15
     },
     newPlanContainer: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingRight: 15
+        alignItems: 'center',
+        paddingRight: 12
     },
     userNameText: {
         fontFamily: 'circular-std-bold',

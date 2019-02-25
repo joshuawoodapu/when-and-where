@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableWithoutFeedback, ScrollView, Dimensions, FlatList } from 'react-native';
-import ActivityCard from './ActivityCard';
-import PlanCard from './PlanCard';
+import { StyleSheet, Text, View, TouchableHighlight, ScrollView, Dimensions, FlatList } from 'react-native';
+import AAActivityCard from './AAActivityCard';
 import DynamicInput from '../components/common/DynamicInput';
 
 
@@ -14,25 +13,29 @@ export default class AATabs extends Component {
         if (this.state.activeTab === 'search') {
             return (
                 <View style={styles.tabsView}>
-                    <View style={[styles.tabStyle, styles.activeTab]}>
-                        <TouchableWithoutFeedback
-                            style={styles.touchableStyle}
+                    <View style={[styles.activeLeft, styles.activeTab]}>
+                        <TouchableHighlight
+                            style={styles.activeLeft}
                             onPress={this.onActivitiesTabPress.bind(this)}
+                            key={"search-active"}
+                            underlayColor="#F0F3F7"
+                            activeOpacity={1}
                         >
-                            <Text style={styles.activeTabText}>
-                                Search
-                            </Text>
-                        </TouchableWithoutFeedback>
+                                <Text style={styles.activeTabText}>
+                                    Search
+                                </Text>
+                        </TouchableHighlight>
                     </View>
-                    <View style={[styles.tabStyle, styles.inactiveTab]}>
-                        <TouchableWithoutFeedback
-                            style={styles.touchableStyle}
+                    <View style={[styles.inactiveRight, styles.inactiveTab]}>
+                        <TouchableHighlight
+                            style={styles.inactiveRight}
                             onPress={this.onPlansTabPress.bind(this)}
+                            key={"myactivities-inactive"}
                         >
                             <Text style={styles.inactiveTabText}>
                                 My Activities
                             </Text>
-                        </TouchableWithoutFeedback>
+                        </TouchableHighlight>
                     </View>
                 </View>
             );
@@ -40,121 +43,120 @@ export default class AATabs extends Component {
         else if (this.state.activeTab === 'myactivities') {
             return (
                 <View style={styles.tabsView}>
-                    <View style={[styles.tabStyle, styles.inactiveTab]}>
-                        <TouchableWithoutFeedback
-                            style={styles.touchableStyle}
+                    <View style={[styles.inactiveLeft, styles.inactiveTab]}>
+                        <TouchableHighlight
+                            style={styles.inactiveLeft}
                             onPress={this.onActivitiesTabPress.bind(this)}
+                            key={"search-inactive"}
                         >
                             <Text style={styles.inactiveTabText}>
                                 Search
                             </Text>
-                        </TouchableWithoutFeedback>
+                        </TouchableHighlight>
                     </View>
-                    <View style={[styles.tabStyle, styles.activeTab]}>
-                        <TouchableWithoutFeedback
-                            style={styles.touchableStyle}
+                    <View style={[styles.activeRight, styles.activeTab]}>
+                        <TouchableHighlight
+                            style={styles.activeRight}
                             onPress={this.onPlansTabPress.bind(this)}
+                            key={"myactivities-active"}
+                            underlayColor="#F0F3F7"
+                            activeOpacity={1}
                         >
                             <Text style={styles.activeTabText}>
                                 My Activities
                             </Text>
-                        </TouchableWithoutFeedback>
+                        </TouchableHighlight>
                     </View>
                 </View>
             );
         }
 
     };
-    renderContent() {
+    renderContentHeader() {
+      return(
+        <View style={styles.tabsInputs}>
+          <DynamicInput placeholderList={[
+              {placeholder: 'Search',
+                inputContainerStyle: 'tabsInput',
+                inputStyle: 'tabsText',
+                autoCapitalize: "words",
+                stateLabel: "search",
+                iconStyle: "Icon",
+                iconName: "search",
+                iconColor: "#605985",
+                iconSize: 22},
+              {placeholder: 'Current Location',
+                inputContainerStyle: 'tabsInput',
+                inputStyle: 'tabsText',
+                returnKeyType: 'done',
+                stateLabel: "current_location",
+                iconStyle: "Icon",
+                iconName: "location-on",
+                iconColor: "#605985",
+                iconSize: 22},
+              ]}
+          />
+        </View>
+      );
+    };
+
+    renderContentFooter() {
         if (this.state.activeTab === 'search') {
-            return (
-                <View style={styles.contentContainer}>
-                    <View style={styles.tabsInputs}>
-                      <DynamicInput placeholderList={[
-                          {placeholder: 'Search',
-                            inputContainerStyle: 'tabsInput',
-                            inputStyle: 'tabsText',
-                            autoCapitalize: "words",
-                            stateLabel: "search",
-                            iconStyle: "Icon",
-                            iconName: "search",
-                            iconColor: "#605985",
-                            iconSize: 22,
-                            onChange: this.props.handleSearch},
-                          {placeholder: 'Current Location',
-                            inputContainerStyle: 'tabsInput',
-                            inputStyle: 'tabsText',
-                            returnKeyType: 'done',
-                            stateLabel: "current_location",
-                            iconStyle: "Icon",
-                            iconName: "location-on",
-                            iconColor: "#605985",
-                            iconSize: 22,
-                            onChange: this.props.handleLocation},
-                          ]}
+          var activities = [{title: 'Aloha Sushi', add: true, address: '3030 Freedom Lane, Merced, CA 95340', stars: 5, favorited: true},
+            {title: 'Mystic Sports', add: true, address: '465 Edsel Road, Irvine, CA 92614', stars: 4},
+            {title: 'Primedia', add: true, address: '3903 Turnley Ave, Oakland, CA, 94605', stars: 4, favorited: true},
+            {title: 'Glaciarts', address: '3904 Sarno Ct, Moorpark, CA, 93021', stars: 2},
+            {title: 'Ridgeco', add: true, address: '3906 Chelsea Ct, Rocklin, CA, 95677', stars: 4},
+            {title: 'Lucent Bar & Grille', address: '3906 Mayfield St, Newbury Park, CA, 91320', stars: 3},];
+
+          return (
+              <View flex={6} paddingHorizontal={15}>
+                <FlatList
+                    data={activities}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={({item}) =>
+                      <AAActivityCard
+                        key={item.id}
+                        onCardPress={this.onRActivityCardPress.bind(this)}
+                        title={item.title}
+                        add={item.add}
+                        text={item.title}
+                        address={item.address}
+                        stars={item.stars}
+                        favorited={item.favorited}
                       />
-                    </View>
-                    <View flex={6}>
-                      <FlatList
-                          data={[
-                              {key: 'Aloha Sushi'},
-                              {key: 'Amoeba Records'},
-                              {key: 'Hanger 18'}
-                          ]}
-                          showsVerticalScrollIndicator={false}
-                          renderItem={({item}) =>
-                                  <ActivityCard onCardPress={this.onActivityCardPress.bind(this)} text={item.key}/>
-                          }
-                      />
-                    </View>
-                </View>
-            );
+                    }
+                    keyExtractor={(item, index) => index.toString()}
+                />
+              </View>
+          );
         }
         else if (this.state.activeTab === 'myactivities') {
-            return (
-              <View style={styles.contentContainer}>
-                  <View style={styles.tabsInputs}>
-                  <DynamicInput placeholderList={[
-                      {placeholder: 'Search',
-                        inputContainerStyle: 'tabsInput',
-                        inputStyle: 'tabsText',
-                        autoCapitalize: "words",
-                        stateLabel: "search",
-                        iconStyle: "Icon",
-                        iconName: "search",
-                        iconColor: "#605985",
-                        iconSize: 22,
-                        onChange: this.props.handleSearch},
-                      {placeholder: 'Current Location',
-                        inputContainerStyle: 'tabsInput',
-                        inputStyle: 'tabsText',
-                        returnKeyType: 'done',
-                        stateLabel: "current_location",
-                        iconStyle: "Icon",
-                        iconName: "location-on",
-                        iconColor: "#605985",
-                        iconSize: 22,
-                        onChange: this.props.handleLocation},
-                      ]}
-                  />
-                  </View>
-                  <View flex={6}>
-                    <FlatList
-                        data={[
-                            {key: 'Great Falls'},
-                            {key: 'Hanger 18'},
-                            {key: 'Classic Coffee'}
-                        ]}
-                        showsVerticalScrollIndicator={false}
-                        renderItem={({item}) =>
-                                <ActivityCard onCardPress={this.onActivityCardPress.bind(this)} text={item.key}/>
-                        }
-                    />
-                  </View>
-              </View>
-            );
-        }
+          var activities = [{title: 'Aloha Sushi', add: true, address: '3030 Freedom Lane, Merced, CA 95340', stars: 5, favorited: true},
+            {title: 'Primedia', add: true, address: '3903 Turnley Ave, Oakland, CA, 94605', stars: 4, favorited: true},];
 
+          return (
+              <View flex={6} paddingHorizontal={15}>
+                <FlatList
+                    data={activities}
+                    showsVerticalScrollIndicator={false}
+                    renderItem={({item}) =>
+                      <AAActivityCard
+                        key={item.id}
+                        onCardPress={this.onRActivityCardPress.bind(this)}
+                        title={item.title}
+                        add={item.add}
+                        text={item.title}
+                        address={item.address}
+                        stars={item.stars}
+                        favorited={item.favorited}
+                      />
+                    }
+                    keyExtractor={(item, index) => index.toString()}
+                />
+              </View>
+          );
+        }
     };
 
     onActivitiesTabPress() {
@@ -162,7 +164,7 @@ export default class AATabs extends Component {
             this.setState({activeTab: 'search'})
     };
 
-    onActivityCardPress() {
+    onRActivityCardPress() {
         this.props.navigation.navigate('Search');
     };
 
@@ -175,7 +177,10 @@ export default class AATabs extends Component {
         return (
             <View style={styles.parentView}>
                 {this.renderTabs()}
-                {this.renderContent()}
+                <View style={styles.contentContainer}>
+                  {this.renderContentHeader()}
+                  {this.renderContentFooter()}
+                </View>
             </View>
         );
     }
@@ -196,22 +201,41 @@ styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
     },
-    tabStyle: {
-        width: Dimensions.get('window').width/2,
-        justifyContent: 'center',
-        alignItems: 'center',
-        flex: 1
+    activeLeft: {
+      flex: 1,
+      alignSelf: 'stretch',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderTopRightRadius: 10,
     },
-    touchableStyle: {
-        alignSelf: 'stretch',
+    activeRight: {
+      flex: 1,
+      alignSelf: 'stretch',
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderTopLeftRadius: 10,
     },
     activeTab: {
         backgroundColor: '#F0F3F7',
-        borderTopRightRadius: 10,
+    },
+    inactiveRight: {
+      flex: 1,
+      alignSelf: 'stretch',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#FFFFFF',
+      borderBottomLeftRadius: 10,
     },
     inactiveTab: {
-        backgroundColor: '#FFFFFF',
-        borderBottomLeftRadius: 10,
+      backgroundColor: '#FFFFFF',
+    },
+    inactiveLeft: {
+      flex: 1,
+      alignSelf: 'stretch',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#FFFFFF',
+      borderBottomRightRadius: 10,
     },
     activeTabText: {
         color: '#413C77',
@@ -222,13 +246,6 @@ styles = StyleSheet.create({
         color: '#6A6789',
         fontSize: 18,
         fontWeight: 'bold'
-    },
-    contentView: {
-        flexGrow: 1,
-        justifyContent: 'space-between'
-    },
-    contentStyle: {
-        backgroundColor: '#F0F3F7',
     },
     contentContainer: {
         backgroundColor: '#F0F3F7',

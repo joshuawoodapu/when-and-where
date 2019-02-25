@@ -76,7 +76,7 @@ export default class ActivityCard extends Component {
     titleText: {
         color: '#2661B2',
         fontFamily: 'circular-std-bold',
-        fontSize: 14
+        fontSize: 14,
     },
     addressText: {
         color: '#2661B2',
@@ -92,12 +92,12 @@ export default class ActivityCard extends Component {
     },
     topRow: {
         flexDirection: 'row',
-        height: 15,
-        flex: 1
+        flex: 1,
+        paddingVertical: 2
     },
     topRight: {
         position: 'absolute',
-        right: 0
+        right: 0,
     },
     topLeft: {
         flex: 1,

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {View, TextInput, StyleSheet} from 'react-native';
-import AATabs_FixTabs from '../components/AATabs_FixTabs';
+import AATabs from '../components/AATabs';
 
 class AddActivityScreen extends Component {
     static navigationOptions = {
@@ -18,23 +18,19 @@ class AddActivityScreen extends Component {
     };
 
     handleSearchChange = (typedText) => {
-        this.setState({search:typedText}, () => {
-          console.log(typedText);
-        });
+        this.setState({search:typedText});
     }
 
     handleLocationChange = (typedText) => {
-        this.setState({location:typedText}, () => {
-          console.log(typedText);
-        });
+        this.setState({location:typedText});
     }
 
     render() {
         return (
             <View flex={1}>
-                <AATabs_FixTabs 
+                <AATabs
                 navigation={this.props.navigation}
-                handleSearch={this.handleSearchChange} 
+                handleSearch={this.handleSearchChange}
                 handleLocation={this.handleLocationChange}
                 />
             </View>

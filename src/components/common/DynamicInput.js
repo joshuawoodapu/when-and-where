@@ -13,9 +13,7 @@ class DynamicInput extends Component
   }
 
   handleChangeText = (typedText) => {
-     this.setState({text:typedText}, () => {
-       console.log('built in');
-     });
+     this.setState({text:typedText});
    }
 
    handleIcon(iconStyle, iconName, iconSize, iconColor) {
@@ -108,6 +106,14 @@ const styles = StyleSheet.create(
     borderRadius: 10,
     paddingVertical: 11,
     backgroundColor: "#fff"
+  },
+  createNewPlanInput: {
+    height: 40,
+    borderWidth: 1,
+    borderColor: '#7FC4FD',
+    borderRadius: 12,
+    paddingLeft: 20,
+    paddingVertical: 11,
   },
   tabsText: {
     fontSize: 14,

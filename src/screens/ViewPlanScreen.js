@@ -1,14 +1,27 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import VPActivityCard from '../components/VPActivityCard';
 import SwitchToggle from "../components/common/Switch.js";
-import { Avatar } from 'react-native-elements';
+import RHeader from "../components/common/RHeader.js";
 import { Icon } from 'react-native-elements'
 
 export default class ViewPlanScreen extends Component {
-
-    onOptionsPress() {
-        this.props.navigation.navigate('PlanOptions');
-    }
+  static navigationOptions = ({navigation}) => ({
+        headerTitle: 'VIEW PLAN',
+        headerTitleStyle: {
+            color: '#2661B2',
+            fontSize: 14,
+            fontFamily: 'circular-std-bold',
+        },
+        headerRight: (
+          <Icon
+            name="more-vert"
+            size={30}
+            color="#B8BEC1"
+            onPress={()=>{ navigation.navigate('PlanOptions'); }}
+          />
+        )
+    });
 
     onAddPress() {
         this.props.navigation.navigate('AddActivity');
@@ -18,145 +31,99 @@ export default class ViewPlanScreen extends Component {
         this.props.navigation.navigate('CommentsView');
     }
 
-    onArrowPress() {
+    onPiePress() {
         this.props.navigation.navigate('VotingView')
     }
 
+    onSharePress() {
+        /* Right now, leads to dead-end sharing modal lol */
+        this.props.navigation.navigate('PlanShare')
+    }
+
+    onRActivityCardPress() {
+        this.props.navigation.navigate('Activity');
+    };
+
     render() {
+      var activities = [{tempColor: "#000", title: 'Molino Metro', address: '1016 N El Molino Ave, Pasadena, CA 91104', yVote: true, startTime: '12:30PM'},
+        {tempColor: "#ddd", title: 'Azusa Pacific University', address: '701 E. Foothill Blvd, Azusa, CA 91702', startTime: '2:00PM'},
+        {title: 'Popeyes Chicken', address: '994 E Alosta Ave, Azusa, CA 91702', nVote: true, startTime: '5:00PM'},
+        {title: 'Joseph\'s House', address: '2310 N Cherry St, Pasadena, CA 91820', yVote: true, startTime: '7:30PM'},
+        {title: 'Halloween Horror Nights', address: '100 Universal City Plaza, Universal City, CA 91608', startTime: '9:00PM'},
+        {title: 'Cold Stone Creamery', address: '3730 S Figueroa St, Los Angeles, CA 90007', nVote: true, startTime: '11:30PM'},];
+      var numSlots = activities.length-1;
+
         return (
-            <ScrollView style={form.formStyle}>
-                <TouchableOpacity style={containerStyle.rowContainer}>
-                    <View style={stylesText.formStyle}>
-                        <Text style={stylesText.text}>View Plan</Text>
-                    </View>
-                    <Icon
-                    onPress={this.onOptionsPress.bind(this)}
-                    raised
-                    name='more-vert'
-                    color='#b8bec1' />
-                </TouchableOpacity>
-                <TouchableOpacity style={containerStyle.rowContainer}>
-                    <View style={styles.headerStyle}>
-                        <Text style={styles.headerTextStyle}>Halloween Night</Text>
-                    </View>
-                    <Icon
-                    onPress={this.onArrowPress.bind(this)}
-                    raised
-                    name='arrow-forward'
-                    color='#b8bec1' />
-                </TouchableOpacity>
-                <View style={stylesActivityCard.buttonContainer}>
-                    <Text style={stylesActivityCard.text}>Josephs House</Text>
-                    <Text style={stylesActivityCard.text}>2310 N Cherry St,</Text>
-                    <Text style={stylesActivityCard.text}>Pasadena, CA 91820</Text>
-                    <TouchableOpacity style={containerStyle.rowContainer}>
-                        <Icon
-                        raised
-                        name='add'
-                        color='#b8bec1' />
-
-                        <Icon
-                        raised
-                        name='check'
-                        color='#b8bec1' />
-                    </TouchableOpacity>
-                </View>
-
-            <View style={stylesActivityCard.buttonContainer}>
-                <Text style={stylesActivityCard.text}>Halloween Horror Nights</Text>
-                <Text style={stylesActivityCard.text}>100 Universal City Plaza,</Text>
-                <Text style={stylesActivityCard.text}>Universal City, CA 91608</Text>
-                <TouchableOpacity style={containerStyle.rowContainer}>
-                    <Icon
-                    raised
-                    name='add'
-                    color='#b8bec1' />
-
-                    <Icon
-                    raised
-                    name='check'
-                    color='#b8bec1' />
-                </TouchableOpacity>
-            </View>
-
-            <View style={stylesActivityCard.buttonContainer}>
-                <Text style={stylesActivityCard.text}>Cold Stone Creamery</Text>
-                <Text style={stylesActivityCard.text}>3730 S Figueroa St,</Text>
-                <Text style={stylesActivityCard.text}>Los Angeles, CA 90007</Text>
-                <TouchableOpacity style={containerStyle.rowContainer}>
-                    <Icon
-                    raised
-                    name='add'
-                    color='#b8bec1' />
-
-                    <Icon
-                    raised
-                    name='check'
-                    color='#b8bec1' />
-                </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity onPress={this.onPressViewComments.bind(this)}>
-                <View style={stylesText.formStyle}>
-                    <Text style={stylesText.text}>View Comments...</Text>
-                </View>
-            </TouchableOpacity>
-
-
-            <View style={containerStyle.rowContainer}>
-
+            <ScrollView flex={1} showsVerticalScrollIndicator={false}>
+              <View flexDirection="row" padding={15} alignItems="center">
+                <RHeader>Halloween Night</RHeader>
                 <Icon
-                raised
-                name='add'
-                color='#2661B2'
-                onPress={this.onAddPress.bind(this)} />
+                  name="share"
+                  size={30}
+                  color="#B8BEC1"
+                  onPress={this.onSharePress.bind(this)}
+                />
+              </View>
 
-                <View style={stylesTextBlueStart.formStyle}>
-                    <Text style={stylesTextBlueStart.text}>Add a New Activity</Text>
-                </View>
-            </View>
+              <View flex={1} paddingRight={20}>
+                  <View flex={1}>
+                    <FlatList
+                        data={activities}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({item, index}) =>
+                          <VPActivityCard
+                            key={item.id}
+                            onCardPress={this.onRActivityCardPress.bind(this)}
+                            title={item.title}
+                            text={item.title}
+                            address={item.address}
+                            yesVote={item.yVote}
+                            noVote={item.nVote}
+                            startTime={item.startTime}
+                            index={index}
+                            totalSlots={numSlots}
+                          />
+                        }
+                        keyExtractor={(item, index) => index.toString()}
+                    />
+                  </View>
 
+                  <View flex={1}>
+                    <TouchableOpacity onPress={this.onPressViewComments.bind(this)}>
+                      <View paddingLeft={145} flexDirection='row' alignItems='center'>
+                        <Icon
+                          name='chat-bubble'
+                          color='#B0CAED'
+                          size={16}
+                        />
+                        <View paddingLeft={6}>
+                          <Text style={styles.viewCommentsText}>View Comments…</Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
 
+                  <View flex={1} paddingTop={38}>
+                    <TouchableOpacity onPress={this.onAddPress.bind(this)}>
+                      <View paddingLeft={80} flexDirection='row' alignItems='center'>
+                        <Icon
+                          name='add-circle'
+                          color='#0E91D6'
+                          size={31}
+                        />
+                        <View paddingLeft={35}>
+                          <Text style={styles.addActivityText}>Add a New Activity</Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+              </View>
             </ScrollView>
+
         )
     }
 }
 
-const form = StyleSheet.create({
-    formStyle: {
-       padding: 35,
-    },
-    input: {
-        height: 50,
-        backgroundColor: '#ffffff',
-        marginBottom: 25,
-        borderWidth: 2,
-        borderColor: '#B8BeC1',
-        borderRadius: 15,
-        color: '#B8BeC1',
-        paddingHorizontal: 10,
-    }
-});
-
-const button = StyleSheet.create({
-    buttonContainer: {
-       backgroundColor: '#ED7248',
-       paddingVertical: 20,
-       paddingHorizontal: 20,
-       borderRadius: 30,
-       width: 330,
-    },
-    buttonText: {
-        textAlign: 'center',
-        color: '#ffffff',
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    viewStyle: {
-        alignItems: 'center',
-        justifyContent: 'center',
-    }
-});
 
 const styles = StyleSheet.create({
     headerStyle: {
@@ -170,114 +137,15 @@ const styles = StyleSheet.create({
         fontSize: 30,
         color: '#605985',
         fontWeight: 'bold',
-    }
-});
-
-const stylesText = StyleSheet.create({
-    formStyle: {
-       padding: 35,
-       flex: 1,
-       flexDirection: 'row',
-       alignSelf: 'flex-start'
     },
-    text: {
-        height: 50,
-        marginBottom: 25,
-        borderRadius: 15,
-        color: '#b8bec1',
-        paddingHorizontal: 10,
+    addActivityText: {
+      fontSize: 12,
+      color: '#2661B2',
+      fontFamily: 'circular-std-book'
     },
-    redirect: {
-        height: 50,
-        marginBottom: 25,
-        borderRadius: 15,
-        color: '#ED7248',
-        paddingHorizontal: 10,
-    }
-});
-
-const stylesTextBlueCenter = StyleSheet.create({
-    formStyle: {
-       padding: 35,
-       flex: 1,
-       flexDirection: 'row',
-       alignSelf: 'flex-start'
+    viewCommentsText: {
+      fontSize: 10,
+      color: '#B0CAED',
+      fontFamily: 'circular-std-book'
     },
-    text: {
-        height: 50,
-        marginBottom: 25,
-        borderRadius: 15,
-        color: '#2661B2',
-        paddingHorizontal: 10,
-    },
-    redirect: {
-        height: 50,
-        marginBottom: 25,
-        borderRadius: 15,
-        color: '#ED7248',
-        paddingHorizontal: 10,
-    }
-});
-
-const containerStyle = StyleSheet.create({
-  container: {
-    padding: 8,
-    backgroundColor: "#ffffff",
-  },
-  rowContainer: {
-    flexDirection: 'row'
-  }
-});
-
-const stylesActivityCard = StyleSheet.create({
-    formStyle: {
-       padding: 35,
-       flex: 1,
-       flexDirection: 'row',
-       alignSelf: 'center'
-    },
-    buttonContainer: {
-       backgroundColor: '#F0F3F7',
-       paddingVertical: 20,
-       paddingHorizontal: 20,
-       borderRadius: 30,
-       width: 330,
-    },
-    text: {
-        height: 50,
-        marginBottom: 25,
-        borderRadius: 15,
-        color: '#2661B2',
-        paddingHorizontal: 10,
-    },
-    redirect: {
-        height: 50,
-        marginBottom: 25,
-        borderRadius: 15,
-        color: '#F0F3F7',
-        paddingHorizontal: 10,
-    }
-});
-
-const stylesTextBlueStart = StyleSheet.create({
-    formStyle: {
-       padding: 35,
-       flex: 1,
-       flexDirection: 'row',
-       alignSelf: 'flex-start'
-    },
-    text: {
-        height: 50,
-        marginBottom: 25,
-        borderRadius: 15,
-        color: '#2661B2',
-        paddingHorizontal: 10,
-    },
-    redirect: {
-        height: 50,
-        marginBottom: 25,
-        borderRadius: 15,
-        color: '#ED7248',
-        paddingHorizontal: 10,
-    }
 });

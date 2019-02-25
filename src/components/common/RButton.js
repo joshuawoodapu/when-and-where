@@ -29,7 +29,7 @@ const styles = {
         color: '#ffffff',
         fontSize: 10,
         fontWeight: 'bold',
-        height: 10
+        height: 11
     },
     viewStyle: {
         paddingHorizontal: 20,
