@@ -27,7 +27,7 @@ export default class NewPlanScreen extends Component {
     super(props);
     monthNames = ["January", "February", "March", "April", "May","June","July", "August", "September", "October", "November","December"];
     this.state = {
-      isSwitch1On: false, 
+      isSwitch1On: false,
       chosenDate: new Date(),
       isModalVisible: false
         };
@@ -38,7 +38,8 @@ export default class NewPlanScreen extends Component {
     openDatePicker() {
         try {
             const {action, year, month, day} = DatePickerAndroid.open({
-              date: new Date()
+              date: new Date(),
+              mode: "spinner"
             });
             if (action !== DatePickerAndroid.dismissedAction) {
 
@@ -48,39 +49,23 @@ export default class NewPlanScreen extends Component {
           }
     }
 
-    openTimePicker() {
-      try {
-          const {action, year, month, day} = TimePickerAndroid.open({
-            hour: 0,
-            minute: 0,
-            mode: 'spinner',
-            is24Hour: false,
-          });
-          if (action !== TimePickerAndroid.dismissedAction) {
-
-          }
-        } catch ({code, message}) {
-          console.warn('Cannot open time picker', message);
-        }
-    }
-
     renderDatePicker(){
         if (Platform.OS === 'ios')
             return (
+              <View flex={1} paddingHorizontal={30}>
                 <DatePickerIOS
+                  mode="date"
                   date={this.state.chosenDate}
                   onDateChange={this.setDate}
                 />
+              </View>
             )
         else
             return (
-              <View flex={1} flexDirection="row">
-                <View flex={1} paddingRight={10}>
-                  <RButton onPress={()=>this.openDatePicker()}>START DATE</RButton>
-                </View>
-                <View flex={1}>
-                  <RButton onPress={()=>this.openTimePicker()}>START TIME</RButton>
-                </View>
+              <View flex={1} paddingHorizontal={30} alignItems='center'>
+                <TouchableOpacity onPress={()=>this.openDatePicker()} style={styles.dateContainer}>
+                    <Text style={styles.buttonText}>Select a Start Date</Text>
+                </TouchableOpacity>
               </View>
             )
     }
@@ -93,19 +78,8 @@ export default class NewPlanScreen extends Component {
         this._toggleModal();
         var displayDate = monthNames[this.state.chosenDate.getMonth()] + " "
         + this.state.chosenDate.getDate() + ", " + this.state.chosenDate.getFullYear();
-        var lHours = this.state.chosenDate.getHours();
-        var ampm = "AM"
-
-        if (lHours > 12) {
-          lHours = lHours-12;
-          ampm = "PM";
-        }
-
-        var displayTime = lHours + ":" + this.state.chosenDate.getMinutes() + " " + ampm;
-        this.setState()
 
         console.log(displayDate);
-        console.log(displayTime);
     }
 
     _toggleModal = () =>
@@ -188,13 +162,10 @@ export default class NewPlanScreen extends Component {
 
               <View paddingHorizontal={24} paddingBottom={24}>
                 <Text style={styles.textLabel}>WHEN?</Text>
-                <View style={styles.dateStyle}>
-                  {this.renderDatePicker()}
-                </View>
+                {this.renderDatePicker()}
               </View>
 
-{/*Privacy*/}
-
+              {/*Privacy*/}
               <View paddingHorizontal={24}>
                 <Text style={styles.textLabel}>PRIVACY</Text>
                 <View style={styles.toggleContainer}>
@@ -218,7 +189,7 @@ export default class NewPlanScreen extends Component {
 
               <Modal isVisible={this.state.isModalVisible}>
 
-{/* Modal Starts */}
+              {/* Modal Starts */}
               <View style={{ flex: 1, paddingTop: 100, paddingBottom: 100 }}>
 
               <View style={styles.modalContainer}>
@@ -235,8 +206,7 @@ export default class NewPlanScreen extends Component {
                           <Text style={styles.toggleLabel}>Sample Name</Text>
                         </View>
 
-            {/*Avatars*/}
-
+                        {/*Avatars*/}
                         <View paddingHorizontal={24}>
                           <Text style={styles.textLabel}>WHOS GOING?</Text>
                         </View>
@@ -259,7 +229,7 @@ export default class NewPlanScreen extends Component {
                             />
                           </View>
 
-          {/*plus button*/}
+                          {/*plus button*/}
                           <View flex={1} justifyContent="center" alignItems="center">
                             <TouchableOpacity>
                                 <Icon
@@ -413,9 +383,6 @@ const styles = StyleSheet.create({
       alignItems: "center",
       paddingBottom: 43
     },
-    dateStyle: {
-      fontSize: 10
-    },
     buttonContainer: {
         backgroundColor: '#Ed7248',
         borderRadius: 30,
@@ -426,10 +393,22 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     buttonText: {
+        fontFamily: 'circular-std-medium',
         textAlign: 'center',
         color: '#ffffff',
-        fontSize: 11,
-        fontWeight: 'bold',
+        fontSize: 13,
+        height: 14
+    },
+    dateContainer: {
+       backgroundColor: '#0E91D6',
+       borderRadius: 10,
+       shadowColor: '#000',
+       shadowOffset: { width: 0, height: 3 },
+       shadowOpacity: 0.2,
+       shadowRadius: 2,
+       height: 48,
+       width: 140,
+       justifyContent: 'center',
     },
     ////////////////////////Header////////////////////
     headerTextStyle: {
