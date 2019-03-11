@@ -3,6 +3,8 @@ import {StyleSheet,Text,View,TextInput,TouchableOpacity,ScrollView,
     DatePickerIOS,DatePickerAndroid,Platform,TimePickerAndroid,
     FlatList} from 'react-native';
 import firebase from 'firebase';
+import { connect } from 'react-redux';
+import * as actions from '../redux/actions';
 import SwitchToggle from "../components/common/Switch.js";
 import RHeader from "../components/common/RHeader.js";
 import RButton from "../components/common/RButton.js";
@@ -14,7 +16,7 @@ import FlipToggle from 'react-native-flip-toggle-button';
 import Modal from "react-native-modal";
 
 
-export default class NewPlanScreen extends Component {
+class NewPlanScreen extends Component {
     static navigationOptions = {
         title: 'NEW PLAN',
         headerTitleStyle: {
@@ -168,11 +170,15 @@ export default class NewPlanScreen extends Component {
     confirmPlan = async () => {
 
       let user = await firebase.auth().currentUser;
-      await firebase.database().ref('plans/').push({
+      let newPlanId = await firebase.database().ref('plans/').push({
         owner: user.uid,
         planName: this.state.planName,
-        startDate: this.state.chosenDate.getUTCDate()
-      });
+        startDate: this.state.chosenDate.toLocaleDateString(),
+        privacy: this.state.privacySetting ? "Private" : "Public"
+      }).getKey();
+      console.log(newPlanId);
+      this.props.planSet(newPlanId);
+      this._toggleModal();
 
     }
 
@@ -520,3 +526,9 @@ const containerStyle = StyleSheet.create({
     paddingRight: 30
   }
 });
+
+const mapStateToProps = state => {
+  return { plan: state.plan };
+}
+
+export default connect(mapStateToProps, actions)(NewPlanScreen);
