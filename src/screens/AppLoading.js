@@ -6,6 +6,8 @@ import firebase from 'firebase';
 import * as actions from '../redux/actions';
 
 class AppLoading extends Component {
+
+
     state = {fontLoaded: false}
 
     async componentDidMount() {
@@ -21,20 +23,40 @@ class AppLoading extends Component {
 
           });
         this.setState({ fontLoaded:true })
-        let user = await firebase.auth().currentUser;
-        const logged = (user !== null);
 
-        const onBoarded = await AsyncStorage.getItem('onBoarded');
+        // Change to false once you have left development!
+        const development = true;
 
-        if (logged) 
-          this.props.userLoad(user);
 
-        if (logged && onBoarded)
+        if (development)
+        {
+            await firebase.auth().signInWithEmailAndPassword("plantest@test.com", "plantest")
+                .catch((error) => {
+                    this.setState({ error: error, loading: false });
+            });
+            let user = await firebase.auth().currentUser;
+            await this.props.userLoad(user);
             this.props.navigation.navigate('App');
-        else if (onBoarded)
-            this.props.navigation.navigate('Login');
-        else 
-            this.props.navigation.navigate(logged ? 'App' : 'Auth');
+
+        }
+
+        else {
+            let user = await firebase.auth().currentUser;
+            const logged = (user !== null);
+
+            const onBoarded = await AsyncStorage.getItem('onBoarded');
+
+            if (logged) 
+                this.props.userLoad(user);
+  
+            if (logged && onBoarded)
+                this.props.navigation.navigate('App');
+            else if (onBoarded)
+                this.props.navigation.navigate('Login');
+            else 
+                this.props.navigation.navigate(logged ? 'App' : 'Auth');
+
+        }
 
       }
     render() {
