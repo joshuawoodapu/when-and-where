@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import { connect } from 'react-redux';
+import * as actions from '../redux/actions';
 import VPActivityCard from '../components/VPActivityCard';
 import SwitchToggle from "../components/common/Switch.js";
 import RHeader from "../components/common/RHeader.js";
 import { Icon } from 'react-native-elements'
 
-export default class ViewPlanScreen extends Component {
+class ViewPlanScreen extends Component {
   static navigationOptions = ({navigation}) => ({
         headerTitle: 'VIEW PLAN',
         headerTitleStyle: {
@@ -56,7 +58,7 @@ export default class ViewPlanScreen extends Component {
         return (
             <ScrollView flex={1} showsVerticalScrollIndicator={false}>
               <View flexDirection="row" padding={15} alignItems="center">
-                <RHeader>Halloween Night</RHeader>
+                <RHeader>{this.props.plan.planName}</RHeader>
                 <Icon
                   name="share"
                   size={30}
@@ -149,3 +151,9 @@ const styles = StyleSheet.create({
       fontFamily: 'circular-std-book'
     },
 });
+
+const mapStateToProps = state => {
+  return { user: state.user, plan: state.plan };
+}
+
+export default connect(mapStateToProps, actions)(ViewPlanScreen);

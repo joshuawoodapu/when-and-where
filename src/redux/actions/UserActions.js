@@ -5,7 +5,7 @@ import {
 
 export const userLoad = (user) => {
     return (dispatch) => {
-        dispatch({ type: USER_LOAD });
+        //dispatch({ type: USER_LOAD });
         firebase.database().ref('users/' + user.uid).once('value')
           .then(snapshot => userDataSuccess(dispatch, snapshot))
           .catch((error) => {

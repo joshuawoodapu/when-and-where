@@ -179,7 +179,7 @@ class NewPlanScreen extends Component {
       console.log(newPlanId);
       this.props.planSet(newPlanId);
       this._toggleModal();
-
+      this.props.navigation.navigate('PlanView');
     }
 
     render() {
@@ -204,7 +204,7 @@ class NewPlanScreen extends Component {
               <View paddingHorizontal={24} paddingTop={17} paddingBottom={27}>
                 <Text style={styles.textLabel}>PLAN NAME</Text>
                 <DynamicInput placeholderList={[
-                    {placeholder: 'Write a name for your plan here!',
+                    {placeholder: 'Write a title for your plan here!',
                       inputContainerStyle: 'createNewPlanInput',
                       autoCapitalize: "words",
                       stateLabel: "planName",

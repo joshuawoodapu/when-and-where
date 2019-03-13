@@ -5,7 +5,8 @@ import {
 
 export const planSet = (planID) => {
     return (dispatch) => {
-        dispatch({ type: PLAN_SET });
+        //dispatch({ type: PLAN_SET });
+        console.log('plans/' + planID)
         firebase.database().ref('plans/' + planID).once('value')
           .then(snapshot => planDataSuccess(dispatch, snapshot))
           .catch((error) => {
@@ -15,7 +16,7 @@ export const planSet = (planID) => {
 };
 
 const planDataSuccess = (dispatch, snapshot) => {
-    console.log(snapshot.val().planName);
+    console.log(snapshot.val());
     dispatch({
         type: PLAN_SET,
         payload: snapshot.val()
