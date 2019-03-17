@@ -3,11 +3,25 @@ import { StyleSheet, Text, View, TouchableHighlight, ScrollView, Dimensions, Fla
 import ActivityCard from './ActivityCard';
 import PlanCard from './PlanCard';
 
-
 export default class Tabs extends Component {
-    state = {
-        activeTab: 'activities'
-    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            activeTab: 'activities',
+        }
+    }
+
+    componentWillUpdate() {
+        let test = this.props.activityList[0];
+        
+        if (typeof test !== 'undefined'){
+            for ( var act in this.props.activityList ){
+                console.log(this.props.activityList[act]); 
+            }
+        }
+        console.log("----------------------------------------------");
+    }
 
     renderTabs() {
         if (this.state.activeTab === 'activities') {
@@ -72,23 +86,45 @@ export default class Tabs extends Component {
         }
 
     };
+
     renderContent() {
         if (this.state.activeTab === 'activities') {
-            return (
-                <View style={styles.contentContainer}>
-                    <FlatList
-                        data={[
-                            {key: 'Aloha Sushi'},
-                            {key: 'Amoeba Records'},
-                            {key: 'Hanger 18'}
-                        ]}
-                        showsVerticalScrollIndicator={false}
-                        renderItem={({item}) =>
-                                <ActivityCard onCardPress={this.onActivityCardPress.bind(this)} text={item.key}/>
-                        }
-                    />
-                </View>
-            );
+            let test = this.props.activityList[0];
+            if (typeof test !== 'undefined'){
+                return (
+                    <View style={styles.contentContainer}>
+                        <FlatList
+                            data={this.props.activityList}
+                            showsVerticalScrollIndicator={false}
+                            renderItem={({item}) =>
+                                    <ActivityCard 
+                                        onCardPress={this.onActivityCardPress.bind(this)} 
+                                        title={item.structured_formatting.main_text}
+                                        address={item.structured_formatting.secondary_text}    
+                                    />
+                            }
+                        />
+                    </View>
+                );
+            }
+            else {
+                return (
+                    <View style={styles.contentContainer}>
+                        <FlatList
+                            data={[
+                                {key: 'Aloha Sushi'},
+                                {key: 'Amoeba Records'},
+                                {key: 'Hanger 18'}
+                            ]}
+                            showsVerticalScrollIndicator={false}
+                            renderItem={({item}) =>
+                                    <ActivityCard onCardPress={this.onActivityCardPress.bind(this)} text={item.key}/>
+                            }
+                        />
+                    </View>
+                );
+            }
+            
         }
         else if (this.state.activeTab === 'plans') {
             return (

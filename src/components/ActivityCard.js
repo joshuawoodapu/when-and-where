@@ -10,7 +10,7 @@ export default class ActivityCard extends Component {
                         <View style={styles.topRow}>
                             <View style={styles.topLeft}>
                                 <Text style={styles.titleText}>
-                                    {this.props.text}
+                                    {this.props.title}
                                 </Text>
                             </View>
                             <View style={styles.topRight}>
@@ -23,7 +23,7 @@ export default class ActivityCard extends Component {
                         </View>
                         <View style={styles.middleRow}>
                             <Text style={styles.addressText}>
-                                425 E. Foothill Blvd, Azusa, CA
+                                {this.props.address}
                             </Text>
                         </View>
                         <View style={styles.bottomRow}>

@@ -44,14 +44,15 @@ class DiscoveryScreen extends Component {
         this.setState({search: typedText}, () => {
           console.log(typedText);
         });
-        const apiURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${global.apiKey}&input=${this.state.search}&location=${this.state.searchLat},${this.state.searchLng}&radius=60000`;
+        const apiURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${global.apiKey}&input=${this.state.search}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000`; 
         
         try {
             let result = await fetch(apiURL);
-            let json = await result.json();
-            this.setState({ locationPredictions: json['predictions'] });
-            console.log(this.state.locationPredictions)
-            console.log("----------------------------------------------")
+            let results_json = await result.json();
+            // let results_json = await JSON.parse(result)
+            this.setState({ locationPredictions: results_json['predictions'] });
+            // console.log(this.state.locationPredictions)
+            // console.log("----------------------------------------------")
         } catch (err){
             console.error(err)
         }
@@ -92,7 +93,7 @@ class DiscoveryScreen extends Component {
                         ]}
                     />
                 </View>
-                <Tabs navigation={this.props.navigation}/>
+                <Tabs navigation={this.props.navigation} activityList={this.state.locationPredictions} />
             </View>
         )
     }
