@@ -13,16 +13,16 @@ export default class Tabs extends Component {
         this.onActivityCardPress = this.onActivityCardPress.bind(this);
     }
 
-    componentWillUpdate() {
-        let test = this.props.activityList[0];
+    // componentWillUpdate() {
+    //     let test = this.props.activityList[0];
         
-        if (typeof test !== 'undefined'){
-            for ( var act in this.props.activityList ){
-                console.log(this.props.activityList[act]); 
-            }
-        }
-        console.log("----------------------------------------------");
-    }
+    //     if (typeof test !== 'undefined'){
+    //         for ( var act in this.props.activityList ){
+    //             console.log(this.props.activityList[act]); 
+    //         }
+    //     }
+    //     console.log("----------------------------------------------");
+    // }
 
     renderTabs() {
         if (this.state.activeTab === 'activities') {
@@ -159,12 +159,13 @@ export default class Tabs extends Component {
             let result = await fetch(api_url);
             let activity_details = await result.json();
             activity_details =  activity_details.result;
-            activity_details.opening_hours.weekday_text = activity_details.opening_hours.weekday_text.join('\n');
+            console.log(activity_details);
 
+            let activity_hours = activity_details.opening_hours ? activity_details.opening_hours.weekday_text.join('\n') : "Sorry! These hours are currently not available online.";
             this.props.navigation.navigate('Activity', {
                 activity_name: activity_details.name,
                 phone_number: activity_details.formatted_phone_number,
-                hours: activity_details.opening_hours.weekday_text,
+                hours: activity_hours,
                 address: activity_details.formatted_address,
                 rating: activity_details.rating,
                 coordinates: activity_details.geometry.location
