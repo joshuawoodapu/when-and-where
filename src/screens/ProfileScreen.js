@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import firebase from 'firebase';
 import { connect } from 'react-redux';
 import * as actions from '../redux/actions';
 import RHeader from '../components/common/RHeader';
@@ -27,27 +28,69 @@ class ProfileScreen extends Component {
     });
 
     state = {
-        fullName: ''
+        fullName: '',
+        description: 'Hello friends, this is my description',
+        location: 'Azusa, CA',
+        editProfile: false,
+        planData: {}
     };
+
+    async componentWillMount() {
+        let ref = firebase.database().ref('plans');
+        this.setState({description: 'hahah'})
+
+        await ref.on("value", function(snapshot) {
+            this.setState({ planData: snapshot.val() });
+        }.bind(this), function (errorObject) {
+            console.log("The read failed: " + errorObject.code);
+        });        
+    }
+
+    componentDidMount() {
+        var tess = Object.entries(this.props.user.plans);
+        //console.log(Object.entries(this.props.user.plans))
+        for (item in tess) {
+            console.log(item)
+        }
+        console.log(Object.keys(this.props.user.plans));
+    }
 
     onPressProfile() {
         this.props.navigation.navigate('Settings');
     }
 
+    renderDescription() {
+        if (this.state.editProfile) {
+            
+        }
+        else {
+            return (
+                <ProfileDescription
+                    description="Hello friends, this is my description"
+                    planCount='250'
+                />
+            )
+        }
+    }
+    
     render() {
         return (
             <View style={styles.topViewContainer}>
                 <View style={styles.rowContainer}>
-                        <ProfileBanner name={this.props.user.fullName} />
+                        <ProfileBanner 
+                            name={this.props.user.fullName}
+                            location={this.state.location}
+                        />
                 </View>
 
                 <View style={styles.descriptionContainer}>
-                <ProfileDescription
-                description="Hello friends, this is my description"
-                planCount='250'
-                />
+                {this.renderDescription()}
                 </View>
-                <Tabs navigation={this.props.navigation} style={styles.Tabs}/>
+                <Tabs
+                    navigation={this.props.navigation}
+                    style={styles.Tabs}
+                    planData={this.props.user.plans}
+                />
             </View>
         )
     }
@@ -70,8 +113,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignContent: 'center',
-        // borderColor: 'purple'        // borderWidth: 5,
-
     },
     Tabs: {
         flex: 1
@@ -79,7 +120,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-    return { user: state.user };
+    return { user: state.user, plan: state.plan };
 }
 
 export default connect(mapStateToProps, actions)(ProfileScreen);

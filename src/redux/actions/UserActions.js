@@ -1,6 +1,7 @@
 import firebase from 'firebase';
 import {
-    USER_LOAD
+    USER_LOAD,
+    PLANS_LOAD
 } from './types';
 
 export const userLoad = (user) => {
@@ -14,10 +15,28 @@ export const userLoad = (user) => {
     };
 };
 
+export const plansLoad = (user) => {
+    return (dispatch) => {
+        firebase.database().ref('plans/').once('value')
+        .then(snapshot => plansDataSuccess(dispatch, snapshot))
+        .catch((error) => {
+            console.log(error)
+        })
+    }
+}
+
 const userDataSuccess = (dispatch, snapshot) => {
     var fullName = (snapshot.val() && snapshot.val().fullName) || 'Jane Doe';
     dispatch({
         type: USER_LOAD,
         payload: fullName
+    })
+}
+
+const plansDataSuccess = (dispatch, snapshot) => {
+    var plansData = snapshot.val();
+    dispatch({
+        type: PLANS_LOAD,
+        payload: plansData
     })
 }

@@ -94,11 +94,17 @@ export default class Tabs extends Component {
             return (
                 <View style={styles.contentContainer}>
                     <FlatList
+                        /*
                         data={[
                             {key: 'Janet\'s Birthday'},
                             {key: 'Halloween Party'},
                             {key: 'Galentine\'s Day'}
                         ]}
+                        */
+                        data={Object.entries(this.props.planData)}
+                        keyExtractor= {(item) => {
+                            return item[0];
+                        }}
                         showsVerticalScrollIndicator={false}
                         renderItem={({item}) =>
                                 <PlanCard onCardPress={this.onPlansCardPress.bind(this)} text={item.key}/>

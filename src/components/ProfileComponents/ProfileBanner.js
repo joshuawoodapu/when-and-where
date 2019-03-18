@@ -12,9 +12,7 @@ class ProfileBanner extends Component {
 
                 <View style={styles.secondaryTextContainer}>
                     <Text style={styles.profileName}>{this.props.name}</Text>
-                    <Text style={styles.locationText}>
-                        Los Angeles, CA
-                    </Text>
+                    <Text style={styles.locationText}>{this.props.location}</Text>
                 </View>
 
             </View>
