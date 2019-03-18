@@ -103,7 +103,7 @@ class ActivityScreen extends Component {
                     </View>
                     <View style={styles.subSectionTextView}>
                         <Text style={styles.subSectionText}>
-                            {this.props.navigation.state.params.phone_number}
+                            {this.props.navigation.state.params.phone_number ? this.props.navigation.state.params.phone_number : 'N/A'}
                         </Text>
                     </View>
                     <View style={styles.subSectionTitleView}>

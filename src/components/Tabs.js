@@ -91,8 +91,6 @@ class Tabs extends Component {
     renderContent() {
         if (this.state.activeTab === 'activities') {
             let test = this.props.activityList[0];
-            console.log("first of results:");
-            console.log(test);
             if (typeof test !== 'undefined'){
                 return (
                     <View style={styles.contentContainer}>
@@ -109,6 +107,28 @@ class Tabs extends Component {
                         />
                     </View>
                 );
+        } else {
+            return (
+                <View style={styles.contentContainer}>
+                    <FlatList
+                        data={[
+                            {name: 'Aloha Sushi'},
+                            {name: 'AMC Covina 17'},
+                            {name: 'Rockin Jump'},
+                            {name: 'Amoeba Records'},
+                            {name: 'Hanger 18'}
+                        ]}
+                        showsVerticalScrollIndicator={false}
+                        renderItem={({item}) =>
+                                <ActivityCard 
+                                    onCardPress={this.onActivityCardPress.bind(this)} 
+                                    title={item.name}
+                                    address={'701 E Alosta Ave, Azusa, CA 91702'}
+                                />
+                        }
+                    />
+                </View>
+            );
         }
     }
         else if (this.state.activeTab === 'plans') {
@@ -149,7 +169,6 @@ class Tabs extends Component {
             let result = await fetch(api_url);
             let activity_details = await result.json();
             activity_details =  activity_details.result;
-            console.log(activity_details);
 
             let activity_hours = activity_details.opening_hours ? activity_details.opening_hours.weekday_text.join('\n') : "Sorry! These hours are currently not available online.";
             this.props.navigation.navigate('Activity', {

@@ -54,9 +54,7 @@ class DiscoveryScreen extends Component {
     }
 
     handleSearchChange = async (typedText) => {
-        this.setState({search: typedText}, () => {
-            console.log(typedText);
-        });
+        this.setState({ search: typedText });
 
         const apiURL = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${this.state.search}&key=${global.apiKey}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000`;
         try {
