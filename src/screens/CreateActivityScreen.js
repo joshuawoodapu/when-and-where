@@ -14,7 +14,7 @@ class CreateActivityScreen extends Component {
         headerVisible: true,
     };
 
-    state = { name: '', email: '', password: '', password_confirm: '', error: '', loading: false };
+    state = { activityName: 'Extreme Skateboarding', address: '952 Death Street', phoneNumber: '760221000', activityType: 'Active', private: 'False', loading: false };
 
     onButtonPress() {
         const { name, email, password_confirm, password } = this.state;
@@ -26,28 +26,45 @@ class CreateActivityScreen extends Component {
         this.setState({ error: 'Failed to create activity.', loading: false });
     }
 
-    onRegisterSuccess() {
-        this.setState({
-            name: '',
-            email: '',
-            password: '',
-            password_confirm: '',
-            loading: false,
-            error: ''
-        });
+    // onRegisterSuccess() {
+    //     this.setState({
+    //         ActivityName: '',
+    //         email: '',
+    //         password: '',
+    //         password_confirm: '',
+    //         loading: false,
+    //         error: ''
+    //     });
 
-        this.props.navigation.navigate('AppNav');
-    }
+    //     this.props.navigation.navigate('AppNav');
+    // }
 
     renderButton(){
         if (this.state.loading) {
             return <Spinner size="small" />; }
 
         return (
-            <RButton flex={1} onPress={this.onButtonPress.bind(this)}>
+            <RButton flex={1} onPress={this.onSaveActivityPress.bind(this)}>
                 SAVE ACTIVITY
             </RButton>
         );
+    }
+
+
+    onSaveActivityPress = async () => {
+        let user = await firebase.auth().currentUser;
+        console.log("Inside the func");
+        let newActivityId = await firebase.database().ref('/activities').push({
+          activityName: this.state.name,
+          activityAddress: this.state.address,
+          phoneNumber: this.state.phoneNumber,
+          activityType: this.state.activityType,
+          privateBool: this.state.private
+        }).getKey()
+        .catch((error) => {
+          console.log(error)
+      });
+        this.props.navigation('ActivityScreen');
     }
 
     render() {
@@ -116,6 +133,8 @@ class CreateActivityScreen extends Component {
         )
     }
 }
+
+
 
 const form = StyleSheet.create({
     formStyle: {
