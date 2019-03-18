@@ -99,7 +99,6 @@ export default class Tabs extends Component {
                             showsVerticalScrollIndicator={false}
                             renderItem={({item}) =>
                                 <ActivityCard 
-                                    // onCardPress={this.onActivityCardPress(item.place_id).bind(this)}
                                     onCardPress={() => this.onActivityCardPress(item.place_id)} 
                                     title={item.structured_formatting.main_text}
                                     address={item.structured_formatting.secondary_text}    
@@ -153,14 +152,12 @@ export default class Tabs extends Component {
 
     onActivityCardPress = async (place_id) => {
         // make api call to get details on activity
-        console.log("in onActivityCardPress()");
         const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&fields=name,rating,formatted_phone_number,formatted_address,type,opening_hours,geometry&key=${global.apiKey}`
         try {
             let result = await fetch(api_url);
             let activity_details = await result.json();
             activity_details =  activity_details.result;
             activity_details.opening_hours.weekday_text = activity_details.opening_hours.weekday_text.join('\n');
-            activity_details.geometry = activity_details.geometry.location;
 
             this.props.navigation.navigate('Activity', {
                 activity_name: activity_details.name,
@@ -168,7 +165,7 @@ export default class Tabs extends Component {
                 hours: activity_details.opening_hours.weekday_text,
                 address: activity_details.formatted_address,
                 rating: activity_details.rating,
-                coordinates: activity_details.geometry
+                coordinates: activity_details.geometry.location
             });
 
         } catch (err){

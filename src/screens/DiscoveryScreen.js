@@ -23,17 +23,13 @@ class DiscoveryScreen extends Component {
     }
 
     componentWillMount(){
-        // TODO: fix setState to actually work
         // gets current location and set initial region to this
         navigator.geolocation.getCurrentPosition(
             position => {                
                 this.setState({
                     searchLat: position.coords.latitude,
                     searchLng: position.coords.longitude
-                }, () => {
-                    console.log("current loc: " + this.state.searchLat + ", " + this.state.searchLng);
-                }
-                );
+                });
             }, 
             error => this.setState({ error: error.message }),
             { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
@@ -44,12 +40,12 @@ class DiscoveryScreen extends Component {
         this.setState({search: typedText}, () => {
           console.log(typedText);
         });
-        const apiURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${global.apiKey}&input=${this.state.search}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000`; 
         
+        const apiURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${global.apiKey}&input=${this.state.search}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000`; 
         try {
             let result = await fetch(apiURL);
             let results_json = await result.json();
-            // let results_json = await JSON.parse(result)
+            
             this.setState({ locationPredictions: results_json['predictions'] });
             // console.log(this.state.locationPredictions)
             // console.log("----------------------------------------------")
