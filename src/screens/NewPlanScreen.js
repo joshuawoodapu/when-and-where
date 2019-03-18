@@ -198,7 +198,7 @@ class NewPlanScreen extends Component {
               </View>
 
               <View paddingHorizontal={24}>
-                <Text style={styles.textLabel}>WHO'S GOING?</Text>
+                <Text style={styles.textLabel}>WHOS GOING?</Text>
               </View>
               <View flexDirection="row" flex={1} paddingBottom={21} paddingHorizontal={35}>
                 <View flex={6}>

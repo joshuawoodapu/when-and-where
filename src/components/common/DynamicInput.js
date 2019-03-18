@@ -125,6 +125,14 @@ const styles = StyleSheet.create(
     color: "#2661B2",
     paddingLeft: 10,
   },
+  descriptionInput: {
+    height: 150,
+    borderWidth: 1,
+    borderColor: '#B8BeC1',
+    borderRadius: 20,
+    paddingLeft: 10,
+    paddingVertical: 11,
+  },
 });
 
 export default DynamicInput;

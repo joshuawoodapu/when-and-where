@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import firebase from 'firebase';
+import {StyleSheet,Text,View,TextInput,TouchableOpacity,ScrollView,
+    DatePickerIOS,DatePickerAndroid,Platform,TimePickerAndroid,
+    FlatList} from 'react-native';
 import { connect } from 'react-redux';
 import * as actions from '../redux/actions';
 import RHeader from '../components/common/RHeader';
@@ -8,6 +10,7 @@ import Tabs from '../components/Tabs';
 import ProfileBanner from '../components/ProfileComponents/ProfileBanner';
 import ProfileDescription from '../components/ProfileComponents/ProfileDescription';
 import { Icon } from 'react-native-elements';
+import Modal from "react-native-modal";
 
 class ProfileScreen extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -38,7 +41,8 @@ class ProfileScreen extends Component {
         searchLng: 0.0,
         error: '',
         locationPredictions: [],
-        filter_by_type: 'museum'
+        filter_by_type: 'museum',
+        isModalVisible: false
     };
 
     componentWillMount = async () => {
@@ -95,6 +99,8 @@ class ProfileScreen extends Component {
     render() {
         return (
             <View style={styles.topViewContainer}>
+
+
                 <View style={styles.rowContainer}>
                         <ProfileBanner 
                             name={this.props.user.fullName}
