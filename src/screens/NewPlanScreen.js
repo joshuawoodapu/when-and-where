@@ -34,57 +34,43 @@ class NewPlanScreen extends Component {
       privacySetting: false, 
       chosenDate: new Date(),
       isModalVisible: false
-        };
+    };
 
     this.setDate = this.setDate.bind(this);
   }
 
-    openDatePicker() {
-        try {
-            const {action, year, month, day} = DatePickerAndroid.open({
-              date: new Date()
-            });
-            if (action !== DatePickerAndroid.dismissedAction) {
-
-            }
-          } catch ({code, message}) {
-            console.warn('Cannot open date picker', message);
-          }
-    }
-
-    openTimePicker() {
+  openDatePicker() {
       try {
-          const {action, year, month, day} = TimePickerAndroid.open({
-            hour: 0,
-            minute: 0,
-            mode: 'spinner',
-            is24Hour: false,
-          });
-          if (action !== TimePickerAndroid.dismissedAction) {
-
+        DatePickerAndroid.open({
+          date: new Date(),
+          mode: "spinner"
+        }).then(date => {
+          if (date.action !== DatePickerAndroid.dismissedAction) {
+            this.setDate(date);
           }
-        } catch ({code, message}) {
-          console.warn('Cannot open time picker', message);
-        }
+        });
+      } catch ({ code, message }) {
+        console.warn('Cannot open date picker', message);
+      }
     }
 
     renderDatePicker(){
         if (Platform.OS === 'ios')
             return (
+              <View flex={1} paddingHorizontal={30}>
                 <DatePickerIOS
+                  mode="date"
                   date={this.state.chosenDate}
                   onDateChange={this.setDate}
                 />
+              </View>
             )
         else
             return (
-              <View flex={1} flexDirection="row">
-                <View flex={1} paddingRight={10}>
-                  <RButton onPress={()=>this.openDatePicker()}>START DATE</RButton>
-                </View>
-                <View flex={1}>
-                  <RButton onPress={()=>this.openTimePicker()}>START TIME</RButton>
-                </View>
+              <View flex={1} paddingHorizontal={30} alignItems='center'>
+                <TouchableOpacity onPress={()=>this.openDatePicker()} style={styles.dateContainer}>
+                  <Text style={styles.buttonText}>Select a Start Date</Text>
+                </TouchableOpacity>
               </View>
             )
     }
@@ -98,22 +84,18 @@ class NewPlanScreen extends Component {
     }
 
     onContinuePress() {
+      if (Platform.OS === 'ios') {
+        // Returns 'January 1, 2020' formatted date string
+        // use console.log(this.state.chosenDate); to just return the date object
         this._toggleModal();
         var displayDate = monthNames[this.state.chosenDate.getMonth()] + " "
         + this.state.chosenDate.getDate() + ", " + this.state.chosenDate.getFullYear();
-        var lHours = this.state.chosenDate.getHours();
-        var ampm = "AM"
-
-        if (lHours > 12) {
-          lHours = lHours-12;
-          ampm = "PM";
-        }
-
-        var displayTime = lHours + ":" + this.state.chosenDate.getMinutes() + " " + ampm;
-        this.setState()
 
         console.log(displayDate);
-        console.log(displayTime);
+      }
+      else {
+        console.log(this.state.chosenDate);
+      }
     }
 
     _toggleModal = () =>
@@ -250,13 +232,10 @@ class NewPlanScreen extends Component {
 
               <View paddingHorizontal={24} paddingBottom={24}>
                 <Text style={styles.textLabel}>WHEN?</Text>
-                <View style={styles.dateStyle}>
-                  {this.renderDatePicker()}
-                </View>
+                {this.renderDatePicker()}
               </View>
 
-{/*Privacy*/}
-
+              {/*Privacy*/}
               <View paddingHorizontal={24}>
                 <Text style={styles.textLabel}>PRIVACY</Text>
                 <View style={styles.toggleContainer}>
@@ -275,12 +254,12 @@ class NewPlanScreen extends Component {
               <View style={{ flex: 1 }}>
 
               <TouchableOpacity onPress={this._toggleModal}>
-              {this.renderButton()}
+                {this.renderButton()}
               </TouchableOpacity>
 
               <Modal isVisible={this.state.isModalVisible}>
 
-{/* Modal Starts */}
+              {/* Modal Starts */}
               <View style={{ flex: 1, paddingTop: 100, paddingBottom: 100 }}>
 
               <View style={styles.modalContainer}>
@@ -297,8 +276,7 @@ class NewPlanScreen extends Component {
                           <Text style={styles.toggleLabel}>{this.state.planName}</Text>
                         </View>
 
-            {/*Avatars*/}
-
+                        {/*Avatars*/}
                         <View paddingHorizontal={24}>
                           <Text style={styles.textLabel}>WHOS GOING?</Text>
                         </View>
@@ -321,14 +299,10 @@ class NewPlanScreen extends Component {
                             />
                           </View>
 
-          {/*plus button*/}
+                          {/*plus button*/}
                           <View flex={1} justifyContent="center" alignItems="center">
                             <TouchableOpacity>
-                                <Icon
-                                    name="add-circle"
-                                    color="#0E91D6"
-                                    size={35}
-                                />
+                              <Icon name="add-circle" color="#0E91D6" size={35}/>
                             </TouchableOpacity>
                           </View>
                         </View>
@@ -347,10 +321,7 @@ class NewPlanScreen extends Component {
 
                           <View style={containerStyle.exButton}>
                           <TouchableOpacity onPress={this._toggleModal}>
-                          <Icon
-                          raised
-                          name='clear'
-                          color='#2699FB' />
+                            <Icon raised name='clear' color='#2699FB' />
                           </TouchableOpacity>
                           </View>
 
@@ -390,47 +361,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1
     },
-    modalContent: {
-        backgroundColor: "white",
-        padding: 18,
-        borderRadius: 20,
-        borderColor: "rgba(0, 0, 0, 0.1)"
-    },
-    centered: {
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    closeButton: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end'
-    },
     header: {
         fontSize: 30,
         color: '#413C77',
         fontWeight: 'bold',
         marginBottom: 20
-    },
-    actName: {
-        fontSize: 15,
-        fontWeight: '600',
-        color: '#2661B2',
-    },
-    keyContainer: {
-        flexDirection: 'row',
-        paddingVertical: 8
-    },
-    votingLegendContainer: {
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        flexDirection: 'row',
-        flexWrap: 'wrap'
-    },
-    headerStyle: {
-        backgroundColor: '#ffffff',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: 60,
-        paddingTop: 25,
     },
     headerTextStyle: {
         fontSize: 30,
@@ -444,17 +379,6 @@ const styles = StyleSheet.create({
       paddingLeft: 11,
       paddingVertical: 6
     },
-    formStyle: {
-      flex: 4,
-      paddingHorizontal: 24,
-      justifyContent: 'space-around'
-    },
-    errorTextStyle: {
-        fontSize: 12,
-        alignSelf: 'center',
-        color: '#E23737',
-        marginTop: 10
-    },
     toggleLabel: {
       fontSize: 14,
       color: "#2661B2",
@@ -467,23 +391,23 @@ const styles = StyleSheet.create({
       alignItems: "center",
       paddingBottom: 43
     },
-    dateStyle: {
-      fontSize: 10
-    },
-    buttonContainer: {
-        backgroundColor: '#Ed7248',
-        borderRadius: 30,
-        width: 270,
-        height: 60,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 20
-    },
     buttonText: {
+        fontFamily: 'circular-std-medium',
         textAlign: 'center',
         color: '#ffffff',
-        fontSize: 11,
-        fontWeight: 'bold',
+        fontSize: 13,
+        height: 14
+    },
+    dateContainer: {
+       backgroundColor: '#0E91D6',
+       borderRadius: 10,
+       shadowColor: '#000',
+       shadowOffset: { width: 0, height: 3 },
+       shadowOpacity: 0.2,
+       shadowRadius: 2,
+       height: 48,
+       width: 140,
+       justifyContent: 'center',
     },
     ////////////////////////Header////////////////////
     headerTextStyle: {

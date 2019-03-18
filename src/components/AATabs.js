@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableHighlight, ScrollView, Dimensions, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, TouchableOpacity,
+  ScrollView, Dimensions, FlatList } from 'react-native';
+import { Icon } from 'react-native-elements';
 import AAActivityCard from './AAActivityCard';
 import DynamicInput from '../components/common/DynamicInput';
 
@@ -21,9 +23,9 @@ export default class AATabs extends Component {
                             underlayColor="#F0F3F7"
                             activeOpacity={1}
                         >
-                                <Text style={styles.activeTabText}>
-                                    Search
-                                </Text>
+                            <Text style={styles.activeTabText}>
+                                Search
+                            </Text>
                         </TouchableHighlight>
                     </View>
                     <View style={[styles.inactiveRight, styles.inactiveTab]}>
@@ -49,9 +51,9 @@ export default class AATabs extends Component {
                             onPress={this.onActivitiesTabPress.bind(this)}
                             key={"search-inactive"}
                         >
-                            <Text style={styles.inactiveTabText}>
-                                Search
-                            </Text>
+                          <Text style={styles.inactiveTabText}>
+                              Search
+                          </Text>
                         </TouchableHighlight>
                     </View>
                     <View style={[styles.activeRight, styles.activeTab]}>
@@ -62,9 +64,9 @@ export default class AATabs extends Component {
                             underlayColor="#F0F3F7"
                             activeOpacity={1}
                         >
-                            <Text style={styles.activeTabText}>
-                                My Activities
-                            </Text>
+                          <Text style={styles.activeTabText}>
+                              My Activities
+                          </Text>
                         </TouchableHighlight>
                     </View>
                 </View>
@@ -173,6 +175,10 @@ export default class AATabs extends Component {
             this.setState({activeTab: 'myactivities'})
     };
 
+    onCantFind() {
+        this.props.navigation.navigate('CreateActivity');
+    }
+
     render() {
         return (
             <View style={styles.parentView}>
@@ -180,6 +186,36 @@ export default class AATabs extends Component {
                 <View style={styles.contentContainer}>
                   {this.renderContentHeader()}
                   {this.renderContentFooter()}
+                  <View style={styles.createActivityContainer}>
+                    <TouchableHighlight
+                        onPress={() => this.props.navigation.navigate('CreateActivity')}
+                        key={"createactivitylink"}
+                        underlayColor="#F0F3F7"
+                        activeOpacity={1}
+                    >
+                      <View flexDirection="row">
+                        <Icon
+                            name="add-circle"
+                            color="#0E91D6"
+                            size={25}
+                        />
+                        <View paddingLeft={10} flexDirection="column">
+                          <Text flex={1}
+                            style={{fontFamily: 'circular-std-bold',
+                              fontSize: 11,
+                              color: "#2661B2"}}>
+                            Can’t find what you’re looking for?
+                          </Text>
+                          <Text flex={1}
+                            style={{fontFamily: 'circular-std-book',
+                              fontSize: 10,
+                              color: "#2661B2"}}>
+                            Add a New Activity
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableHighlight>
+                  </View>
                 </View>
             </View>
         );
@@ -216,7 +252,7 @@ styles = StyleSheet.create({
       borderTopLeftRadius: 10,
     },
     activeTab: {
-        backgroundColor: '#F0F3F7',
+      backgroundColor: '#F0F3F7',
     },
     inactiveRight: {
       flex: 1,
@@ -249,10 +285,21 @@ styles = StyleSheet.create({
     },
     contentContainer: {
         backgroundColor: '#F0F3F7',
-        flex: 1
+        flex: 1,
+    },
+    createActivityContainer: {
+        backgroundColor: '#e8ebef',
+        flex: 0.75,
+        flexDirection: "row",
+        alignItems: 'center',
+        justifyContent: 'center',
+        shadowColor: '#000',
+        shadowOffset: {width: 5, height: 0},
+        shadowOpacity: .1,
+        shadowRadius: 10
     },
     tabsInputs:{
-      flex: 1,
+      flex: 1.5,
       justifyContent: "space-around",
       paddingVertical: 10,
       paddingHorizontal: 20

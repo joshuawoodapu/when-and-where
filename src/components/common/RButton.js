@@ -28,7 +28,7 @@ const styles = {
         textAlign: 'center',
         color: '#ffffff',
         fontSize: 10,
-        fontWeight: 'bold',
+        fontFamily: 'circular-std-bold',
         height: 11
     },
     viewStyle: {

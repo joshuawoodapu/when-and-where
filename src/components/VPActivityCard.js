@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
-import { Card, Icon } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 import PieChart from 'react-native-pie-chart';
 import Modal from "react-native-modal";
+import CardStack, { Card } from 'react-native-card-stack-swiper';
 
 
 export default class VPActivityCard extends Component {
@@ -203,7 +204,7 @@ export default class VPActivityCard extends Component {
     return (
       <View flex={1} flexDirection="row">
         <View style={styles.timeView}>
-          <Text style={styles.timeText}>{this.props.startTime}</Text>
+          <Text style={styles.timeText}>12:30AM</Text>
         </View>
 
         <View flex={1} alignItems='center' justifyContent='center'>
@@ -223,33 +224,21 @@ export default class VPActivityCard extends Component {
         </View>
 
         <View style={styles.cardSectionStyle}>
-          <Card containerStyle={styles.cardStyle}>
-            <View flex={5} flexDirection="row">
-              <View flex={1}>
-                <TouchableOpacity onPress={this.props.onCardPress.bind(this)}>
-                  <View style={styles.parentView}>
-                    {this.renderInfo()}
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.voteContainer}>
-                <View flex={1}>
-                  <TouchableOpacity onPress={this.onYesPress.bind(this)}>
-                    <View style={styles.yesView}>
-                      {this.renderYes(this.props.yesVote)}
-                    </View>
-                  </TouchableOpacity>
-                </View>
-                <View flex={1}>
-                  <TouchableOpacity onPress={this.onNoPress.bind(this)}>
-                    <View style={styles.noView}>
-                      {this.renderNo(this.props.noVote)}
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </Card>
+          <CardStack
+            style={styles.content}
+            loop={true}
+            ref={swiper => {
+              this.swiper = swiper
+            }}
+            verticalThreshold={8}
+            horizontalThreshold={8}
+          >
+            <Card style={styles.cardStyle}><Text>First Choice</Text></Card>
+            <Card style={styles.cardStyle}><Text>Second Choice</Text></Card>
+            <Card style={styles.cardStyle}><Text>Third Choice</Text></Card>
+            <Card style={styles.cardStyle}><Text>Fourth Choice</Text></Card>
+            <Card style={styles.cardStyle}><Text>Fifth Choice</Text></Card>
+          </CardStack>
         </View>
 
         <Modal isVisible={this.state.visibleVotingModal} backdropOpacity={0.5}>
@@ -310,6 +299,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   cardStyle: {
+    // Temp - Sprint 5
+    width: 175,
+    height: 15,
+    // ^ Temp - Sprint 5
     borderWidth: 0,
     borderRadius: 20,
     shadowColor: '#000000',
@@ -319,7 +312,11 @@ const styles = StyleSheet.create({
     elevation: 1,
     backgroundColor: '#F0F3F7'
   },
-
+  content:{
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
 const votingModalStyles = StyleSheet.create({
