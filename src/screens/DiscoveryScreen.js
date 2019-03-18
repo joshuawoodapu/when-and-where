@@ -23,7 +23,7 @@ class DiscoveryScreen extends Component {
         filter_by_type: 'museum'
     }
 
-    componentDidMount = async () => {
+    componentWillMount = async () => {
         // gets current location and set initial region to this
         navigator.geolocation.getCurrentPosition(
             position => {                
@@ -35,10 +35,10 @@ class DiscoveryScreen extends Component {
             error => this.setState({ error: error.message }),
             { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
         );
-        this.renderBrowseActivities();
+        this.browseActivityList();
     }
 
-    renderBrowseActivities = async () => {
+    browseActivityList = async () => {
         // a sort of "browse" since search bar is empty 
         const apiURL = `https://maps.googleapis.com/maps/api/place/search/json?types=${this.state.filter_by_type}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000&sensor=true&key=${global.apiKey}`
         try {
@@ -46,7 +46,6 @@ class DiscoveryScreen extends Component {
             let results_json = await result.json();
             
             this.setState({ locationPredictions: results_json.results });
-            console.log("in compWillMount()");
         } catch (err){
             console.error(err)
         }
@@ -68,7 +67,7 @@ class DiscoveryScreen extends Component {
         }
 
         if(this.state.search === ""){
-            this.renderBrowseActivities();
+            this.browseActivityList();
         }
     }
 
