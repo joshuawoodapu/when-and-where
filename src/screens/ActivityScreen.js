@@ -3,10 +3,14 @@ import {View, Text, ScrollView, StyleSheet} from 'react-native';
 import { MapView} from 'expo';
 import {Icon} from 'react-native-elements';
 
-
 class ActivityScreen extends Component {
+    constructor(props){
+        super(props);
+        let activity_title = this.props.navigation.state.params.activity_name;
+    }
+    
     static navigationOptions = {
-        title: 'AMOEBA RECORDS',
+        title: this.activity_title,
         headerTitleStyle: {
             color: '#2661B2',
             fontSize: 14,
@@ -20,20 +24,22 @@ class ActivityScreen extends Component {
                 <MapView 
                     style={{height: 225}}
                     initialRegion={{
-                        latitude: 34.097205,
-                        longitude: -118.329103,
+                        latitude: this.props.navigation.state.params.coordinates.lat,
+                        longitude: this.props.navigation.state.params.coordinates.lng,
                         latitudeDelta: 0.02,
                         longitudeDelta: 0.0066,
                     }}
                 >
                     <MapView.Marker 
-                        coordinate={{latitude:34.097205, longitude:-118.329103}}
+                        coordinate={{
+                            latitude: this.props.navigation.state.params.coordinates.lat, 
+                            longitude: this.props.navigation.state.params.coordinates.lng}}
                     />
                 </MapView>
                 <ScrollView contentContainerStyle={styles.activityDescView}>
                     <View style={styles.titleView}>
                         <Text style={styles.titleText}>
-                            Amoeba Records
+                            {this.props.navigation.state.params.activity_name}
                         </Text>
                         <Icon 
                             containerStyle={styles.favoriteIconStyle}
@@ -82,22 +88,12 @@ class ActivityScreen extends Component {
                     </View>
                     <View style={styles.subSectionTitleView}>
                         <Text style={styles.subSectionTitleText}>
-                            DESCRIPTION
-                        </Text>
-                    </View>
-                    <View style={styles.subSectionTextView}>
-                        <Text style={styles.subSectionText}>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et.
-                        </Text>
-                    </View>
-                    <View style={styles.subSectionTitleView}>
-                        <Text style={styles.subSectionTitleText}>
                             ADDRESS
                         </Text>
                     </View>
                     <View style={styles.subSectionTextView}>
                         <Text style={styles.subSectionText}>
-                            123 Address Rd. Azusa, CA 91702
+                            {this.props.navigation.state.params.address}
                         </Text>
                     </View>
                     <View style={styles.subSectionTitleView}>
@@ -107,7 +103,7 @@ class ActivityScreen extends Component {
                     </View>
                     <View style={styles.subSectionTextView}>
                         <Text style={styles.subSectionText}>
-                            (555) 555 - 5555
+                            {this.props.navigation.state.params.phone_number}
                         </Text>
                     </View>
                     <View style={styles.subSectionTitleView}>
@@ -117,7 +113,7 @@ class ActivityScreen extends Component {
                     </View>
                     <View style={styles.subSectionTextView}>
                         <Text style={styles.subSectionText}>
-                            10AM - 5PM Mon - Fri
+                            {this.props.navigation.state.params.hours}
                         </Text>
                     </View>
                 </ScrollView>
