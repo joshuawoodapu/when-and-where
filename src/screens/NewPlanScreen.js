@@ -27,7 +27,7 @@ export default class NewPlanScreen extends Component {
     super(props);
     monthNames = ["January", "February", "March", "April", "May","June","July", "August", "September", "October", "November","December"];
     this.state = {
-      isSwitch1On: false, 
+      isSwitch1On: false,
       chosenDate: new Date(),
       isModalVisible: false
         };
@@ -154,7 +154,7 @@ export default class NewPlanScreen extends Component {
               </View>
 
               <View paddingHorizontal={24}>
-                <Text style={styles.textLabel}>WHO'S GOING?</Text>
+                <Text style={styles.textLabel}>WHOS GOING?</Text>
               </View>
               <View flexDirection="row" flex={1} paddingBottom={21} paddingHorizontal={35}>
                 <View flex={6}>

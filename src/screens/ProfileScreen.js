@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {StyleSheet,Text,View,TextInput,TouchableOpacity,ScrollView,
+    DatePickerIOS,DatePickerAndroid,Platform,TimePickerAndroid,
+    FlatList} from 'react-native';
 import { connect } from 'react-redux';
 import * as actions from '../redux/actions';
 import RHeader from '../components/common/RHeader';
@@ -7,6 +9,7 @@ import Tabs from '../components/Tabs';
 import ProfileBanner from '../components/ProfileComponents/ProfileBanner';
 import ProfileDescription from '../components/ProfileComponents/ProfileDescription';
 import { Icon } from 'react-native-elements';
+import Modal from "react-native-modal";
 
 class ProfileScreen extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -27,7 +30,8 @@ class ProfileScreen extends Component {
     });
 
     state = {
-        fullName: ''
+        fullName: '',
+        isModalVisible: false
     };
 
     onPressProfile() {
@@ -37,17 +41,22 @@ class ProfileScreen extends Component {
     render() {
         return (
             <View style={styles.topViewContainer}>
+
+
                 <View style={styles.rowContainer}>
-                        <ProfileBanner name={this.props.user.fullName} />
+                  <ProfileBanner name={this.props.user.fullName} />
                 </View>
 
-                <View style={styles.descriptionContainer}>
-                <ProfileDescription
-                description="Hello friends, this is my description"
-                planCount='250'
-                />
-                </View>
+
+                  <View style={styles.descriptionContainer}>
+                  <ProfileDescription
+                  description="Hello friends, this is my description"
+                  planCount='250'
+                  />
+                  </View>
+
                 <Tabs navigation={this.props.navigation} style={styles.Tabs}/>
+
             </View>
         )
     }
