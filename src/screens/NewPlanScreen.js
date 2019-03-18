@@ -12,7 +12,6 @@ import { Icon } from 'react-native-elements';
 import FlipToggle from 'react-native-flip-toggle-button';
 import Modal from "react-native-modal";
 
-
 export default class NewPlanScreen extends Component {
     static navigationOptions = {
         title: 'NEW PLAN',
@@ -30,23 +29,24 @@ export default class NewPlanScreen extends Component {
       isSwitch1On: false,
       chosenDate: new Date(),
       isModalVisible: false
-        };
+    };
 
     this.setDate = this.setDate.bind(this);
   }
 
-    openDatePicker() {
-        try {
-            const {action, year, month, day} = DatePickerAndroid.open({
-              date: new Date(),
-              mode: "spinner"
-            });
-            if (action !== DatePickerAndroid.dismissedAction) {
-
-            }
-          } catch ({code, message}) {
-            console.warn('Cannot open date picker', message);
+  openDatePicker() {
+      try {
+        DatePickerAndroid.open({
+          date: new Date(),
+          mode: "spinner"
+        }).then(date => {
+          if (date.action !== DatePickerAndroid.dismissedAction) {
+            this.setDate(date);
           }
+        });
+      } catch ({ code, message }) {
+        console.warn('Cannot open date picker', message);
+      }
     }
 
     renderDatePicker(){
@@ -64,7 +64,7 @@ export default class NewPlanScreen extends Component {
             return (
               <View flex={1} paddingHorizontal={30} alignItems='center'>
                 <TouchableOpacity onPress={()=>this.openDatePicker()} style={styles.dateContainer}>
-                    <Text style={styles.buttonText}>Select a Start Date</Text>
+                  <Text style={styles.buttonText}>Select a Start Date</Text>
                 </TouchableOpacity>
               </View>
             )
@@ -75,11 +75,18 @@ export default class NewPlanScreen extends Component {
     }
 
     onContinuePress() {
+      if (Platform.OS === 'ios') {
+        // Returns 'January 1, 2020' formatted date string
+        // use console.log(this.state.chosenDate); to just return the date object
         this._toggleModal();
         var displayDate = monthNames[this.state.chosenDate.getMonth()] + " "
         + this.state.chosenDate.getDate() + ", " + this.state.chosenDate.getFullYear();
 
         console.log(displayDate);
+      }
+      else {
+        console.log(this.state.chosenDate);
+      }
     }
 
     _toggleModal = () =>
@@ -184,7 +191,7 @@ export default class NewPlanScreen extends Component {
               <View style={{ flex: 1 }}>
 
               <TouchableOpacity onPress={this._toggleModal}>
-              {this.renderButton()}
+                {this.renderButton()}
               </TouchableOpacity>
 
               <Modal isVisible={this.state.isModalVisible}>
@@ -232,11 +239,7 @@ export default class NewPlanScreen extends Component {
                           {/*plus button*/}
                           <View flex={1} justifyContent="center" alignItems="center">
                             <TouchableOpacity>
-                                <Icon
-                                    name="add-circle"
-                                    color="#0E91D6"
-                                    size={35}
-                                />
+                              <Icon name="add-circle" color="#0E91D6" size={35}/>
                             </TouchableOpacity>
                           </View>
                         </View>
@@ -250,31 +253,22 @@ export default class NewPlanScreen extends Component {
                           <Text style={styles.textLabel}>PRIVACY</Text>
 
                           <View style={containerStyle.rowContainer}>
-                          <Icon
-
-                          name='lock'
-                          color='#2661B2' />
-                          <View style={containerStyle.textContainer}>
-                          <Text style={styles.toggleLabel}> Private </Text>
-                          </View>
+                            <Icon name='lock' color='#2661B2' />
+                            <View style={containerStyle.textContainer}>
+                              <Text style={styles.toggleLabel}> Private </Text>
+                            </View>
                           </View>
 
                           <View style={containerStyle.checkContainer}>
 
                           <View style={containerStyle.exButton}>
                           <TouchableOpacity onPress={this._toggleModal}>
-                          <Icon
-                          raised
-                          name='clear'
-                          color='#2699FB' />
+                            <Icon raised name='clear' color='#2699FB' />
                           </TouchableOpacity>
                           </View>
 
                           <TouchableOpacity onPress={this._toggleModal}>
-                          <Icon
-                          raised
-                          name='done'
-                          color='#2699FB' />
+                            <Icon raised name='done' color='#2699FB' />
                           </TouchableOpacity>
 
                           </View>
@@ -306,47 +300,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1
     },
-    modalContent: {
-        backgroundColor: "white",
-        padding: 18,
-        borderRadius: 20,
-        borderColor: "rgba(0, 0, 0, 0.1)"
-    },
-    centered: {
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    closeButton: {
-        flexDirection: 'row',
-        justifyContent: 'flex-end'
-    },
     header: {
         fontSize: 30,
         color: '#413C77',
         fontWeight: 'bold',
         marginBottom: 20
-    },
-    actName: {
-        fontSize: 15,
-        fontWeight: '600',
-        color: '#2661B2',
-    },
-    keyContainer: {
-        flexDirection: 'row',
-        paddingVertical: 8
-    },
-    votingLegendContainer: {
-        justifyContent: 'center',
-        alignItems: 'flex-start',
-        flexDirection: 'row',
-        flexWrap: 'wrap'
-    },
-    headerStyle: {
-        backgroundColor: '#ffffff',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: 60,
-        paddingTop: 25,
     },
     headerTextStyle: {
         fontSize: 30,
@@ -360,17 +318,6 @@ const styles = StyleSheet.create({
       paddingLeft: 11,
       paddingVertical: 6
     },
-    formStyle: {
-      flex: 4,
-      paddingHorizontal: 24,
-      justifyContent: 'space-around'
-    },
-    errorTextStyle: {
-        fontSize: 12,
-        alignSelf: 'center',
-        color: '#E23737',
-        marginTop: 10
-    },
     toggleLabel: {
       fontSize: 14,
       color: "#2661B2",
@@ -382,15 +329,6 @@ const styles = StyleSheet.create({
       flexDirection: "row",
       alignItems: "center",
       paddingBottom: 43
-    },
-    buttonContainer: {
-        backgroundColor: '#Ed7248',
-        borderRadius: 30,
-        width: 270,
-        height: 60,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 20
     },
     buttonText: {
         fontFamily: 'circular-std-medium',

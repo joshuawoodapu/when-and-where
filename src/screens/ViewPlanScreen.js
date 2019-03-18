@@ -44,14 +44,47 @@ export default class ViewPlanScreen extends Component {
         this.props.navigation.navigate('Activity');
     };
 
+    iterate(aList) {
+      var arrayLength = aList.length;
+
+      for (var i = 0; i < arrayLength; i++) {
+        return (
+          <View flex={1}>
+            <FlatList
+              data={aList[i]}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item, index}) =>
+                <VPActivityCard
+                  key={item.id}
+                  onCardPress={this.onRActivityCardPress.bind(this)}
+                  title={item.title}
+                  text={item.title}
+                  address={item.address}
+                  yesVote={item.yVote}
+                  noVote={item.nVote}
+                  startTime={item.startTime}
+                  index={index}
+                  totalSlots={arrayLength-1}
+                />
+              }
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </View>
+        )
+      }
+    };
+
+
     render() {
-      var activities = [{tempColor: "#000", title: 'Molino Metro', address: '1016 N El Molino Ave, Pasadena, CA 91104', yVote: true, startTime: '12:30PM'},
-        {tempColor: "#ddd", title: 'Azusa Pacific University', address: '701 E. Foothill Blvd, Azusa, CA 91702', startTime: '2:00PM'},
-        {title: 'Popeyes Chicken', address: '994 E Alosta Ave, Azusa, CA 91702', nVote: true, startTime: '5:00PM'},
-        {title: 'Joseph\'s House', address: '2310 N Cherry St, Pasadena, CA 91820', yVote: true, startTime: '7:30PM'},
-        {title: 'Halloween Horror Nights', address: '100 Universal City Plaza, Universal City, CA 91608', startTime: '9:00PM'},
-        {title: 'Cold Stone Creamery', address: '3730 S Figueroa St, Los Angeles, CA 90007', nVote: true, startTime: '11:30PM'},];
-      var numSlots = activities.length-1;
+      var activities = [[{title: 'Molino Metro', address: '1016 N El Molino Ave, Pasadena, CA 91104', yVote: true},
+          {title: 'Azusa Pacific University', address: '701 E. Foothill Blvd, Azusa, CA 91702'},
+          {title: 'Popeyes Chicken', address: '994 E Alosta Ave, Azusa, CA 91702', nVote: true},
+          {title: 'Joseph\'s House', address: '2310 N Cherry St, Pasadena, CA 91820', yVote: true},
+        ],
+        [
+          {title: 'Halloween Horror Nights', address: '100 Universal City Plaza, Universal City, CA 91608'},
+          {title: 'Cold Stone Creamery', address: '3730 S Figueroa St, Los Angeles, CA 90007', nVote: true},
+        ]];
 
         return (
             <ScrollView flex={1} showsVerticalScrollIndicator={false}>
@@ -67,25 +100,7 @@ export default class ViewPlanScreen extends Component {
 
               <View flex={1} paddingRight={20}>
                   <View flex={1}>
-                    <FlatList
-                        data={activities}
-                        showsVerticalScrollIndicator={false}
-                        renderItem={({item, index}) =>
-                          <VPActivityCard
-                            key={item.id}
-                            onCardPress={this.onRActivityCardPress.bind(this)}
-                            title={item.title}
-                            text={item.title}
-                            address={item.address}
-                            yesVote={item.yVote}
-                            noVote={item.nVote}
-                            startTime={item.startTime}
-                            index={index}
-                            totalSlots={numSlots}
-                          />
-                        }
-                        keyExtractor={(item, index) => index.toString()}
-                    />
+                    {this.iterate(activities)}
                   </View>
 
                   <View flex={1}>
@@ -119,7 +134,6 @@ export default class ViewPlanScreen extends Component {
                   </View>
               </View>
             </ScrollView>
-
         )
     }
 }
