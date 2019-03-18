@@ -97,7 +97,7 @@ class DiscoveryScreen extends Component {
                 <Tabs 
                     navigation={this.props.navigation}
                     planData={this.props.user.plans}
-                    />
+                />
             </View>
         )
     }

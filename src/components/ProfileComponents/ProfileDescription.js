@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontFamily: 'circular-std-bold',
         justifyContent: 'center',
-        alignContent: 'center'
+        alignContent: 'center',
+        textAlign: 'center'
 
     },
     bigPlan:{
@@ -55,8 +56,6 @@ const styles = StyleSheet.create({
     planCountBox:{
         alignContent: 'center',
         alignSelf: 'center',
-        // borderWidth: 5,
-        // borderColor: 'green'
     }
 });
 

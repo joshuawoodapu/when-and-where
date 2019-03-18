@@ -35,6 +35,11 @@ class ProfileScreen extends Component {
         planData: {}
     };
 
+    componentDidMount() {
+        console.log(this.props.user.plans);
+        console.log(Object.keys(this.props.user.plans).length);
+    }
+
     onPressProfile() {
         this.props.navigation.navigate('Settings');
     }
@@ -47,7 +52,7 @@ class ProfileScreen extends Component {
             return (
                 <ProfileDescription
                     description="Hello friends, this is my description"
-                    planCount='250'
+                    planCount={Object.keys(this.props.user.plans).length}
                 />
             )
         }

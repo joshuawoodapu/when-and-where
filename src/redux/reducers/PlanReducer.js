@@ -7,7 +7,7 @@ const INITIAL_STATE = {
     planName: 'NO PLAN SELECTED',
     privacy: 'Private',
     startDate: '01/01/0001',
-    activities: []
+    activitySlots: []
 };
 
 export default (state = INITIAL_STATE, action) => {

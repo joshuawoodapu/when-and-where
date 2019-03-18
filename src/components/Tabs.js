@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import * as actions from '../redux/actions';
 import ActivityCard from './ActivityCard';
 import PlanCard from './PlanCard';
+import Spinner from './common/Spinner';
 
 
 class Tabs extends Component {
@@ -87,21 +88,29 @@ class Tabs extends Component {
     }
     renderContent() {
         if (this.state.activeTab === 'activities') {
-            return (
-                <View style={styles.contentContainer}>
-                    <FlatList
-                        data={[
-                            {key: 'Aloha Sushi'},
-                            {key: 'Amoeba Records'},
-                            {key: 'Hanger 18'}
-                        ]}
-                        showsVerticalScrollIndicator={false}
-                        renderItem={({item}) =>
-                                <ActivityCard  onCardPress={this.onActivityCardPress.bind(this)} text={item.key}/>
-                        }
-                    />
-                </View>
-            );
+            if (this.props.loadingActivities)
+            {
+                return (
+                    <Spinner/>
+                )
+            }
+            else {
+                return (
+                    <View style={styles.contentContainer}>
+                        <FlatList
+                            data={[
+                                {key: 'Aloha Sushi'},
+                                {key: 'Amoeba Records'},
+                                {key: 'Hanger 18'}
+                            ]}
+                            showsVerticalScrollIndicator={false}
+                            renderItem={({item}) =>
+                                    <ActivityCard  onCardPress={this.onActivityCardPress.bind(this)} text={item.key}/>
+                            }
+                        />
+                    </View>
+                );
+            }
         }
         else if (this.state.activeTab === 'plans') {
             return (

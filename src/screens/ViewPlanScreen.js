@@ -46,15 +46,40 @@ class ViewPlanScreen extends Component {
         this.props.navigation.navigate('Activity');
     };
 
-    render() {
+    renderActivitySlots() {
       var activities = [{tempColor: "#000", title: 'Molino Metro', address: '1016 N El Molino Ave, Pasadena, CA 91104', yVote: true, startTime: '12:30PM'},
-        {tempColor: "#ddd", title: 'Azusa Pacific University', address: '701 E. Foothill Blvd, Azusa, CA 91702', startTime: '2:00PM'},
-        {title: 'Popeyes Chicken', address: '994 E Alosta Ave, Azusa, CA 91702', nVote: true, startTime: '5:00PM'},
-        {title: 'Joseph\'s House', address: '2310 N Cherry St, Pasadena, CA 91820', yVote: true, startTime: '7:30PM'},
-        {title: 'Halloween Horror Nights', address: '100 Universal City Plaza, Universal City, CA 91608', startTime: '9:00PM'},
-        {title: 'Cold Stone Creamery', address: '3730 S Figueroa St, Los Angeles, CA 90007', nVote: true, startTime: '11:30PM'},];
+      {tempColor: "#ddd", title: 'Azusa Pacific University', address: '701 E. Foothill Blvd, Azusa, CA 91702', startTime: '2:00PM'},
+      {title: 'Popeyes Chicken', address: '994 E Alosta Ave, Azusa, CA 91702', nVote: true, startTime: '5:00PM'},
+      {title: 'Joseph\'s House', address: '2310 N Cherry St, Pasadena, CA 91820', yVote: true, startTime: '7:30PM'},
+      {title: 'Halloween Horror Nights', address: '100 Universal City Plaza, Universal City, CA 91608', startTime: '9:00PM'},
+      {title: 'Cold Stone Creamery', address: '3730 S Figueroa St, Los Angeles, CA 90007', nVote: true, startTime: '11:30PM'},];
       var numSlots = activities.length-1;
+      return (
+          <View flex={1}>
+            <FlatList
+              data={activities}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item, index}) =>
+                <VPActivityCard
+                  key={item.id}
+                  onCardPress={this.onRActivityCardPress.bind(this)}
+                  title={item.title}
+                  text={item.title}
+                  address={item.address}
+                  yesVote={item.yVote}
+                  noVote={item.nVote}
+                  startTime={item.startTime}
+                  index={index}
+                  totalSlots={numSlots}
+                />
+              }
+              keyExtractor={(item, index) => index.toString()}
+          />
+        </View>
+      )
+    }
 
+    render() {
         return (
             <ScrollView flex={1} showsVerticalScrollIndicator={false}>
               <View flexDirection="row" padding={15} alignItems="center">
@@ -66,59 +91,36 @@ class ViewPlanScreen extends Component {
                   onPress={this.onSharePress.bind(this)}
                 />
               </View>
-
               <View flex={1} paddingRight={20}>
-                  <View flex={1}>
-                    <FlatList
-                        data={activities}
-                        showsVerticalScrollIndicator={false}
-                        renderItem={({item, index}) =>
-                          <VPActivityCard
-                            key={item.id}
-                            onCardPress={this.onRActivityCardPress.bind(this)}
-                            title={item.title}
-                            text={item.title}
-                            address={item.address}
-                            yesVote={item.yVote}
-                            noVote={item.nVote}
-                            startTime={item.startTime}
-                            index={index}
-                            totalSlots={numSlots}
-                          />
-                        }
-                        keyExtractor={(item, index) => index.toString()}
-                    />
-                  </View>
-
-                  <View flex={1}>
-                    <TouchableOpacity onPress={this.onPressViewComments.bind(this)}>
-                      <View paddingLeft={145} flexDirection='row' alignItems='center'>
-                        <Icon
-                          name='chat-bubble'
-                          color='#B0CAED'
-                          size={16}
-                        />
-                        <View paddingLeft={6}>
-                          <Text style={styles.viewCommentsText}>View Comments…</Text>
-                        </View>
+              {this.renderActivitySlots()}
+              <View flex={1}>
+                  <TouchableOpacity onPress={this.onPressViewComments.bind(this)}>
+                    <View paddingLeft={145} flexDirection='row' alignItems='center'>
+                      <Icon
+                        name='chat-bubble'
+                        color='#B0CAED'
+                        size={16}
+                      />
+                      <View paddingLeft={6}>
+                        <Text style={styles.viewCommentsText}>View Comments…</Text>
                       </View>
-                    </TouchableOpacity>
-                  </View>
-
-                  <View flex={1} paddingTop={38}>
-                    <TouchableOpacity onPress={this.onAddPress.bind(this)}>
-                      <View paddingLeft={80} flexDirection='row' alignItems='center'>
-                        <Icon
-                          name='add-circle'
-                          color='#0E91D6'
-                          size={31}
-                        />
-                        <View paddingLeft={35}>
-                          <Text style={styles.addActivityText}>Add a New Activity</Text>
-                        </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                <View flex={1} paddingTop={38}>
+                  <TouchableOpacity onPress={this.onAddPress.bind(this)}>
+                    <View paddingLeft={80} flexDirection='row' alignItems='center'>
+                      <Icon
+                        name='add-circle'
+                        color='#0E91D6'
+                        size={31}
+                      />
+                      <View paddingLeft={35}>
+                        <Text style={styles.addActivityText}>Add a New Activity</Text>
                       </View>
-                    </TouchableOpacity>
-                  </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
               </View>
             </ScrollView>
 
