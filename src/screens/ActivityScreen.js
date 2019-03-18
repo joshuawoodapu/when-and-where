@@ -3,10 +3,9 @@ import {View, Text, ScrollView, StyleSheet} from 'react-native';
 import { MapView} from 'expo';
 import {Icon} from 'react-native-elements';
 
-
 class ActivityScreen extends Component {
     static navigationOptions = {
-        title: 'AMOEBA RECORDS',
+        title: this.props.navigation.state.params.activity_name,
         headerTitleStyle: {
             color: '#2661B2',
             fontSize: 14,
@@ -33,7 +32,7 @@ class ActivityScreen extends Component {
                 <ScrollView contentContainerStyle={styles.activityDescView}>
                     <View style={styles.titleView}>
                         <Text style={styles.titleText}>
-                            Amoeba Records
+                            {this.props.navigation.state.params.activity_name}
                         </Text>
                         <Icon 
                             containerStyle={styles.favoriteIconStyle}
@@ -97,7 +96,7 @@ class ActivityScreen extends Component {
                     </View>
                     <View style={styles.subSectionTextView}>
                         <Text style={styles.subSectionText}>
-                            123 Address Rd. Azusa, CA 91702
+                            {this.props.navigation.state.params.address}
                         </Text>
                     </View>
                     <View style={styles.subSectionTitleView}>
@@ -107,7 +106,7 @@ class ActivityScreen extends Component {
                     </View>
                     <View style={styles.subSectionTextView}>
                         <Text style={styles.subSectionText}>
-                            (555) 555 - 5555
+                            {this.props.navigation.state.params.phone_number}
                         </Text>
                     </View>
                     <View style={styles.subSectionTitleView}>
@@ -117,7 +116,7 @@ class ActivityScreen extends Component {
                     </View>
                     <View style={styles.subSectionTextView}>
                         <Text style={styles.subSectionText}>
-                            10AM - 5PM Mon - Fri
+                            {this.props.navigation.state.params.hours}
                         </Text>
                     </View>
                 </ScrollView>

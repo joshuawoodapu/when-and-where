@@ -10,6 +10,7 @@ export default class Tabs extends Component {
         this.state = {
             activeTab: 'activities',
         }
+        this.onActivityCardPress = this.onActivityCardPress.bind(this);
     }
 
     componentWillUpdate() {
@@ -97,11 +98,12 @@ export default class Tabs extends Component {
                             data={this.props.activityList}
                             showsVerticalScrollIndicator={false}
                             renderItem={({item}) =>
-                                    <ActivityCard 
-                                        onCardPress={this.onActivityCardPress.bind(this)} 
-                                        title={item.structured_formatting.main_text}
-                                        address={item.structured_formatting.secondary_text}    
-                                    />
+                                <ActivityCard 
+                                    // onCardPress={this.onActivityCardPress(item.place_id).bind(this)}
+                                    onCardPress={() => this.onActivityCardPress(item.place_id)} 
+                                    title={item.structured_formatting.main_text}
+                                    address={item.structured_formatting.secondary_text}    
+                                />
                             }
                         />
                     </View>
@@ -118,7 +120,10 @@ export default class Tabs extends Component {
                             ]}
                             showsVerticalScrollIndicator={false}
                             renderItem={({item}) =>
-                                    <ActivityCard onCardPress={this.onActivityCardPress.bind(this)} text={item.key}/>
+                                    <ActivityCard 
+                                        onCardPress={this.onActivityCardPress.bind(this)} 
+                                        text={item.key}
+                                    />
                             }
                         />
                     </View>
@@ -146,18 +151,38 @@ export default class Tabs extends Component {
 
     };
 
-    onActivitiesTabPress() {
-        if (this.state.activeTab !== 'activities')
-            this.setState({activeTab: 'activities'})
-    };
+    onActivityCardPress = async (place_id) => {
+        // make api call to get details on activity
+        console.log("in onActivityCardPress()");
+        const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&fields=name,rating,formatted_phone_number,formatted_address,type,opening_hours&key=${global.apiKey}`
+        try {
+            let result = await fetch(api_url);
+            let activity_details = await result.json();
+            activity_details =  activity_details.result;
+            activity_details.opening_hours.weekday_text = activity_details.opening_hours.weekday_text.join('\n');
+            
+            this.props.navigation.navigate('Activity', {
+                activity_name: activity_details.name,
+                phone_number: activity_details.formatted_phone_number,
+                hours: activity_details.opening_hours.weekday_text,
+                address: activity_details.formatted_address,
+                rating: activity_details.rating
+            });
 
-    onActivityCardPress() {
-        this.props.navigation.navigate('Activity');
+        } catch (err){
+            console.log(err)
+        }
+        
     };
 
     onPlansTabPress() {
         if (this.state.activeTab !== 'plans')
             this.setState({activeTab: 'plans'})
+    };
+
+    onActivitiesTabPress() {
+        if (this.state.activeTab !== 'activities')
+            this.setState({activeTab: 'activities'})
     };
 
     onPlansCardPress() {
