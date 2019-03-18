@@ -1,0 +1,11 @@
+{
+    "activityID":"$ACT_ID",
+    "activityName":"$ACTIVITY_NAME",
+    "address":"$ADDRESS",
+    "PhoneNumber":"$PHONE_NUMBER",
+    "ActivityType":"$ACTIVITY_TYPE",
+    "description":"$DESCRIPTION",
+    "hoursOpen":"$HOURS",
+    "likesNumber":"$LIKES",
+    "reviews":"$REVIEW"
+}
