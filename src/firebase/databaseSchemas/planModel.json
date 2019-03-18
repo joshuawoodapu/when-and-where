@@ -1,0 +1,16 @@
+{
+    "owner":"$USER_UID",
+    "planName":"New York Day Trip!",
+    "startDate":"$START_DATE",
+    "privacy": "$PRIVACY_BOOLEAN",
+    "activitySlots":[
+        {
+            "activity":{},
+            "next": "$NEXT_SLOT_REFERENCE"
+        },
+        {
+            "activity":{},
+            "next": "$NEXT_SLOT_REFERENCE"
+        }
+    ]
+}

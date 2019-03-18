@@ -11,7 +11,7 @@ export default class PlanCard extends Component {
                         <View style={styles.topRow}>
                             <View style={styles.topLeft}>
                                 <Text style={styles.titleText}>
-                                    {this.props.text}
+                                    {this.props.planName}
                                 </Text>
                             </View>
                         </View>
@@ -70,10 +70,10 @@ export default class PlanCard extends Component {
                             </View>
                             <View style={styles.bottomRight}>
                                 <Text style={styles.favoriteNumberText}>
-                                    205
+                                    {this.props.favorites}
                                 </Text>
                                 <Icon
-                                    name='favorite'
+                                    name='favorite-border'
                                     color='#F387B8'
                                     size={18}
                                 />

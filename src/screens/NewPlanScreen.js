@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import {StyleSheet,Text,View,TextInput,TouchableOpacity,ScrollView,
     DatePickerIOS,DatePickerAndroid,Platform,TimePickerAndroid,
     FlatList} from 'react-native';
+import firebase from 'firebase';
+import { connect } from 'react-redux';
+import * as actions from '../redux/actions';
 import SwitchToggle from "../components/common/Switch.js";
 import RHeader from "../components/common/RHeader.js";
 import RButton from "../components/common/RButton.js";
@@ -13,7 +16,7 @@ import FlipToggle from 'react-native-flip-toggle-button';
 import Modal from "react-native-modal";
 
 
-export default class NewPlanScreen extends Component {
+class NewPlanScreen extends Component {
     static navigationOptions = {
         title: 'NEW PLAN',
         headerTitleStyle: {
@@ -27,7 +30,8 @@ export default class NewPlanScreen extends Component {
     super(props);
     monthNames = ["January", "February", "March", "April", "May","June","July", "August", "September", "October", "November","December"];
     this.state = {
-      isSwitch1On: false, 
+      planName: "",
+      privacySetting: false, 
       chosenDate: new Date(),
       isModalVisible: false
         };
@@ -89,6 +93,10 @@ export default class NewPlanScreen extends Component {
       this.setState({chosenDate: newDate});
     }
 
+    handlePlanNameChange = (typedText) => {
+      this.setState({planName:typedText});
+    }
+
     onContinuePress() {
         this._toggleModal();
         var displayDate = monthNames[this.state.chosenDate.getMonth()] + " "
@@ -111,7 +119,7 @@ export default class NewPlanScreen extends Component {
     _toggleModal = () =>
     this.setState({ isModalVisible: !this.state.isModalVisible });
 
-    renderButton(){
+    renderButton() {
         if (this.state.loading) {
             return <Spinner size="small" />; }
         return (
@@ -121,6 +129,59 @@ export default class NewPlanScreen extends Component {
             </RButton>
           </View>
         );
+    }
+
+    chosenDateToString() {
+      return (this.state.chosenDate.toDateString())
+
+    }
+
+    renderPrivacySetting() {
+      if (this.state.privacySetting)
+      {
+        return (
+          <View style={containerStyle.rowContainer}>
+          <Icon
+  
+          name='lock'
+          color='#2661B2' />
+          <View style={containerStyle.textContainer}>
+          <Text style={styles.toggleLabel}> Private </Text>
+          </View>
+          </View>
+        )
+      }
+      else 
+      {
+        return (
+          <View style={containerStyle.rowContainer}>
+          <Icon
+  
+          name='lock-open'
+          color='#2661B2' />
+          <View style={containerStyle.textContainer}>
+          <Text style={styles.toggleLabel}> Public </Text>
+          </View>
+          </View>
+        )
+      }
+    }
+ 
+    confirmPlan = async () => {
+
+      let user = await firebase.auth().currentUser;
+      let newPlanId = await firebase.database().ref('plans/').push({
+        owner: user.uid,
+        planName: this.state.planName,
+        startDate: this.state.chosenDate.toLocaleDateString(),
+        privacy: this.state.privacySetting ? "Private" : "Public",
+        favorites: 0
+      }).getKey();
+      console.log(newPlanId);
+      this.props.planSet(newPlanId);
+      this.props.plansLoad(user);
+      this._toggleModal();
+      this.props.navigation.navigate('PlanView');
     }
 
     render() {
@@ -145,10 +206,11 @@ export default class NewPlanScreen extends Component {
               <View paddingHorizontal={24} paddingTop={17} paddingBottom={27}>
                 <Text style={styles.textLabel}>PLAN NAME</Text>
                 <DynamicInput placeholderList={[
-                    {placeholder: 'Typing',
+                    {placeholder: 'Write a title for your plan here!',
                       inputContainerStyle: 'createNewPlanInput',
                       autoCapitalize: "words",
-                      stateLabel: "typing"},
+                      stateLabel: "planName",
+                      onChange: this.handlePlanNameChange},
                     ]}
                 />
               </View>
@@ -232,7 +294,7 @@ export default class NewPlanScreen extends Component {
 
                         <View paddingHorizontal={24} paddingTop={17} paddingBottom={27}>
                           <Text style={styles.textLabel}>PLAN NAME</Text>
-                          <Text style={styles.toggleLabel}>Sample Name</Text>
+                          <Text style={styles.toggleLabel}>{this.state.planName}</Text>
                         </View>
 
             {/*Avatars*/}
@@ -273,21 +335,13 @@ export default class NewPlanScreen extends Component {
 
                         <View paddingHorizontal={24} paddingBottom={24}>
                           <Text style={styles.textLabel}>WHEN?</Text>
-                          <Text style={styles.toggleLabel}> Wednesday, October 31 at 3:00 PM </Text>
+                          <Text style={styles.toggleLabel}>{this.chosenDateToString()}</Text>
                         </View>
 
                         <View paddingHorizontal={24}>
                           <Text style={styles.textLabel}>PRIVACY</Text>
 
-                          <View style={containerStyle.rowContainer}>
-                          <Icon
-
-                          name='lock'
-                          color='#2661B2' />
-                          <View style={containerStyle.textContainer}>
-                          <Text style={styles.toggleLabel}> Private </Text>
-                          </View>
-                          </View>
+                          {this.renderPrivacySetting()}
 
                           <View style={containerStyle.checkContainer}>
 
@@ -300,7 +354,7 @@ export default class NewPlanScreen extends Component {
                           </TouchableOpacity>
                           </View>
 
-                          <TouchableOpacity onPress={this._toggleModal}>
+                          <TouchableOpacity onPress={this.confirmPlan.bind(this)}>
                           <Icon
                           raised
                           name='done'
@@ -474,3 +528,9 @@ const containerStyle = StyleSheet.create({
     paddingRight: 30
   }
 });
+
+const mapStateToProps = state => {
+  return { plan: state.plan };
+}
+
+export default connect(mapStateToProps, actions)(NewPlanScreen);

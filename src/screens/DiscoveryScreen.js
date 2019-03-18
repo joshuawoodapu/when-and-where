@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
+import {connect} from 'react-redux';
+import * as actions from '../redux/actions';
 import Tabs from '../components/Tabs';
 import DynamicInput from '../components/common/DynamicInput';
 
@@ -106,7 +108,11 @@ class DiscoveryScreen extends Component {
                         ]}
                     />
                 </View>
-                <Tabs navigation={this.props.navigation} activityList={this.state.locationPredictions} />
+                <Tabs 
+                    navigation={this.props.navigation}
+                    planData={this.props.user.plans}
+                    activityList={this.state.locationPredictions}
+                />
             </View>
         )
     }
@@ -148,4 +154,8 @@ const styles = StyleSheet.create({
 
 });
 
-export default DiscoveryScreen;
+const mapStateToProps = state => {
+    return { user: state.user, plan: state.plan };
+}
+
+export default connect(mapStateToProps, actions)(DiscoveryScreen);

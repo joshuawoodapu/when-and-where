@@ -1,28 +1,16 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, ScrollView, Dimensions, FlatList } from 'react-native';
+import {connect} from 'react-redux';
+import * as actions from '../redux/actions';
 import ActivityCard from './ActivityCard';
 import PlanCard from './PlanCard';
+import Spinner from './common/Spinner';
 
-export default class Tabs extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            activeTab: 'activities',
-        }
-        this.onActivityCardPress = this.onActivityCardPress.bind(this);
-    }
-
-    // componentWillUpdate() {
-    //     let test = this.props.activityList[0];
-        
-    //     if (typeof test !== 'undefined'){
-    //         for ( var act in this.props.activityList ){
-    //             console.log(this.props.activityList[act]); 
-    //         }
-    //     }
-    //     console.log("----------------------------------------------");
-    // }
+class Tabs extends Component {
+    state = {
+        activeTab: 'activities'
+    };
 
     renderTabs() {
         if (this.state.activeTab === 'activities') {
@@ -88,6 +76,18 @@ export default class Tabs extends Component {
 
     };
 
+    getPlanData() {
+        const result = [];
+        for (var key in this.props.planData) {
+            // skiping if prototype
+            if (!this.props.planData.hasOwnProperty(key)) continue;
+
+            var obj = this.props.planData[key];
+            result.push({planId:key, ...obj})
+        }
+        return result;
+    }
+
     renderContent() {
         if (this.state.activeTab === 'activities') {
             let test = this.props.activityList[0];
@@ -109,41 +109,31 @@ export default class Tabs extends Component {
                         />
                     </View>
                 );
-            }
-            else {
-                return (
-                    <View style={styles.contentContainer}>
-                        <FlatList
-                            data={[
-                                {key: 'Aloha Sushi'},
-                                {key: 'Amoeba Records'},
-                                {key: 'Hanger 18'}
-                            ]}
-                            showsVerticalScrollIndicator={false}
-                            renderItem={({item}) =>
-                                    <ActivityCard 
-                                        onCardPress={this.onActivityCardPress.bind(this)} 
-                                        text={item.key}
-                                    />
-                            }
-                        />
-                    </View>
-                );
-            }
-            
         }
+    }
         else if (this.state.activeTab === 'plans') {
             return (
                 <View style={styles.contentContainer}>
                     <FlatList
+                        /*
                         data={[
                             {key: 'Janet\'s Birthday'},
                             {key: 'Halloween Party'},
                             {key: 'Galentine\'s Day'}
                         ]}
+                        */
+                        data={this.getPlanData()}
+                        keyExtractor= {(item) => {
+                            return item.planId
+                        }}
                         showsVerticalScrollIndicator={false}
                         renderItem={({item}) =>
-                                <PlanCard onCardPress={this.onPlansCardPress.bind(this)} text={item.key}/>
+                                <PlanCard
+                                    planId={item.planId} 
+                                    onCardPress={this.onPlansCardPress.bind(this,item.planId)}
+                                    favorites={item.favorites}
+                                    planName={item.planName}
+                                />
                         }
                     />
                 </View>
@@ -187,7 +177,8 @@ export default class Tabs extends Component {
             this.setState({activeTab: 'activities'})
     };
 
-    onPlansCardPress() {
+    onPlansCardPress = async (planId) => {
+        await this.props.planSet(planId);
         this.props.navigation.navigate('PlanView');
     };
 
@@ -253,3 +244,9 @@ styles = StyleSheet.create({
         flex: 1
     }
 })
+
+const mapStateToProps = state => {
+    return { plan: state.plan };
+}
+
+export default connect(mapStateToProps, actions)(Tabs);
