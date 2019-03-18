@@ -91,6 +91,8 @@ export default class Tabs extends Component {
     renderContent() {
         if (this.state.activeTab === 'activities') {
             let test = this.props.activityList[0];
+            console.log("first of results:");
+            console.log(test);
             if (typeof test !== 'undefined'){
                 return (
                     <View style={styles.contentContainer}>
@@ -100,8 +102,8 @@ export default class Tabs extends Component {
                             renderItem={({item}) =>
                                 <ActivityCard 
                                     onCardPress={() => this.onActivityCardPress(item.place_id)} 
-                                    title={item.structured_formatting.main_text}
-                                    address={item.structured_formatting.secondary_text}    
+                                    title={item.name}
+                                    address={item.vicinity ? item.vicinity : item.formatted_address}    
                                 />
                             }
                         />

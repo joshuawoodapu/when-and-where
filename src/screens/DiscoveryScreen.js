@@ -19,10 +19,11 @@ class DiscoveryScreen extends Component {
         searchLat: 0.0,
         searchLng: 0.0,
         error: '',
-        locationPredictions: []
+        locationPredictions: [],
+        filter_by_type: 'museum'
     }
 
-    componentWillMount(){
+    componentWillMount = async () => {
         // gets current location and set initial region to this
         navigator.geolocation.getCurrentPosition(
             position => {                
@@ -34,23 +35,40 @@ class DiscoveryScreen extends Component {
             error => this.setState({ error: error.message }),
             { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
         );
+        this.renderBrowseActivities();
     }
 
-    handleSearchChange = async (typedText) => {
-        this.setState({search: typedText}, () => {
-          console.log(typedText);
-        });
-        
-        const apiURL = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${global.apiKey}&input=${this.state.search}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000`; 
+    renderBrowseActivities = async () => {
+        // a sort of "browse" since search bar is empty
+        const apiURL = `https://maps.googleapis.com/maps/api/place/search/json?types=${this.state.filter_by_type}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000&sensor=true&key=${global.apiKey}`
         try {
             let result = await fetch(apiURL);
             let results_json = await result.json();
             
-            this.setState({ locationPredictions: results_json['predictions'] });
-            // console.log(this.state.locationPredictions)
-            // console.log("----------------------------------------------")
+            this.setState({ locationPredictions: results_json.results });
+            console.log("in compWillMount()");
         } catch (err){
             console.error(err)
+        }
+    }
+
+    handleSearchChange = async (typedText) => {
+        this.setState({search: typedText}, () => {
+            console.log(typedText);
+        });
+
+        const apiURL = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${this.state.search}&key=${global.apiKey}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000`;
+        try {
+            let result = await fetch(apiURL);
+            let results_json = await result.json();
+            
+            this.setState({ locationPredictions: results_json.results });
+        } catch (err){
+            console.error(err)
+        }
+
+        if(this.state.search === ""){
+            this.renderBrowseActivities();
         }
     }
 
