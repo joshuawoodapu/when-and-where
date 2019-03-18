@@ -35,26 +35,6 @@ class ProfileScreen extends Component {
         planData: {}
     };
 
-    async componentWillMount() {
-        let ref = firebase.database().ref('plans');
-        this.setState({description: 'hahah'})
-
-        await ref.on("value", function(snapshot) {
-            this.setState({ planData: snapshot.val() });
-        }.bind(this), function (errorObject) {
-            console.log("The read failed: " + errorObject.code);
-        });        
-    }
-
-    componentDidMount() {
-        var tess = Object.entries(this.props.user.plans);
-        //console.log(Object.entries(this.props.user.plans))
-        for (item in tess) {
-            console.log(item)
-        }
-        console.log(Object.keys(this.props.user.plans));
-    }
-
     onPressProfile() {
         this.props.navigation.navigate('Settings');
     }

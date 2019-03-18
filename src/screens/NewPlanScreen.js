@@ -174,10 +174,12 @@ class NewPlanScreen extends Component {
         owner: user.uid,
         planName: this.state.planName,
         startDate: this.state.chosenDate.toLocaleDateString(),
-        privacy: this.state.privacySetting ? "Private" : "Public"
+        privacy: this.state.privacySetting ? "Private" : "Public",
+        favorites: 0
       }).getKey();
       console.log(newPlanId);
       this.props.planSet(newPlanId);
+      this.props.plansLoad(user);
       this._toggleModal();
       this.props.navigation.navigate('PlanView');
     }

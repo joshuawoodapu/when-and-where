@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, ScrollView, Dimensions, FlatList } from 'react-native';
+import {connect} from 'react-redux';
+import * as actions from '../redux/actions';
 import ActivityCard from './ActivityCard';
 import PlanCard from './PlanCard';
 
 
-export default class Tabs extends Component {
+class Tabs extends Component {
     state = {
         activeTab: 'activities'
     };
@@ -72,6 +74,17 @@ export default class Tabs extends Component {
         }
 
     };
+    getPlanData() {
+        const result = [];
+        for (var key in this.props.planData) {
+            // skiping if prototype
+            if (!this.props.planData.hasOwnProperty(key)) continue;
+
+            var obj = this.props.planData[key];
+            result.push({planId:key, ...obj})
+        }
+        return result;
+    }
     renderContent() {
         if (this.state.activeTab === 'activities') {
             return (
@@ -84,7 +97,7 @@ export default class Tabs extends Component {
                         ]}
                         showsVerticalScrollIndicator={false}
                         renderItem={({item}) =>
-                                <ActivityCard onCardPress={this.onActivityCardPress.bind(this)} text={item.key}/>
+                                <ActivityCard  onCardPress={this.onActivityCardPress.bind(this)} text={item.key}/>
                         }
                     />
                 </View>
@@ -101,13 +114,18 @@ export default class Tabs extends Component {
                             {key: 'Galentine\'s Day'}
                         ]}
                         */
-                        data={Object.entries(this.props.planData)}
+                        data={this.getPlanData()}
                         keyExtractor= {(item) => {
-                            return item[0];
+                            return item.planId
                         }}
                         showsVerticalScrollIndicator={false}
                         renderItem={({item}) =>
-                                <PlanCard onCardPress={this.onPlansCardPress.bind(this)} text={item.key}/>
+                                <PlanCard
+                                    planId={item.planId} 
+                                    onCardPress={this.onPlansCardPress.bind(this,item.planId)}
+                                    favorites={item.favorites}
+                                    planName={item.planName}
+                                />
                         }
                     />
                 </View>
@@ -130,7 +148,8 @@ export default class Tabs extends Component {
             this.setState({activeTab: 'plans'})
     };
 
-    onPlansCardPress() {
+    onPlansCardPress = async (planId) => {
+        await this.props.planSet(planId);
         this.props.navigation.navigate('PlanView');
     };
 
@@ -196,3 +215,9 @@ styles = StyleSheet.create({
         flex: 1
     }
 })
+
+const mapStateToProps = state => {
+    return { plan: state.plan };
+}
+
+export default connect(mapStateToProps, actions)(Tabs);
