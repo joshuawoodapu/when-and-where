@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, FlatList, Share } from 'react-native';
 import { connect } from 'react-redux';
 import * as actions from '../redux/actions';
 import VPActivityCard from '../components/VPActivityCard';
 import SwitchToggle from "../components/common/Switch.js";
 import RHeader from "../components/common/RHeader.js";
-import { Icon } from 'react-native-elements'
+import { Icon } from 'react-native-elements';
+import Modal from "react-native-modal";
 
 class ViewPlanScreen extends Component {
   static navigationOptions = ({navigation}) => ({
@@ -25,6 +26,29 @@ class ViewPlanScreen extends Component {
         )
     });
 
+    constructor(props) {
+      super(props);
+      this.state = {
+          isSwitch1On: false,
+          visibleSharePlanModal: false,
+      };
+      this.shareMessage = this.shareMessage.bind(this);
+      this.showResult = this.showResult.bind(this);
+      this.state = { result: '' };
+  };
+
+    showResult(result) {
+      this.setState({result})
+    }
+
+    shareMessage() {
+      Share.share({ 
+        message: 'You have been invited to collaborate on a plan! Join your friends on When&Where!' 
+      }).then(this.showResult);
+    }
+
+  toggleSharePlanModal = () => this.setState({ visibleSharePlanModal: !this.state.visibleSharePlanModal });
+
     onAddPress() {
         this.props.navigation.navigate('AddActivity');
     }
@@ -37,14 +61,14 @@ class ViewPlanScreen extends Component {
         this.props.navigation.navigate('VotingView')
     }
 
-    onSharePress() {
-        /* Right now, leads to dead-end sharing modal lol */
-        this.props.navigation.navigate('PlanShare')
-    }
-
     onRActivityCardPress() {
         this.props.navigation.navigate('Activity');
     };
+
+    onCollabPress() {
+      this.setState({ visibleSharePlanModal: !this.state.visibleSharePlanModal });
+      this.props.navigation.navigate('CollabInvite');
+  }
 
     renderActivitySlots() {
       var activities = [{tempColor: "#000", title: 'Molino Metro', address: '1016 N El Molino Ave, Pasadena, CA 91104', yVote: true, startTime: '12:30PM'},
@@ -81,6 +105,7 @@ class ViewPlanScreen extends Component {
 
     render() {
         return (
+          
             <ScrollView flex={1} showsVerticalScrollIndicator={false}>
               <View flexDirection="row" padding={15} alignItems="center">
                 <RHeader>{this.props.plan.planName}</RHeader>
@@ -88,9 +113,28 @@ class ViewPlanScreen extends Component {
                   name="share"
                   size={30}
                   color="#B8BEC1"
-                  onPress={this.onSharePress.bind(this)}
+                  onPress={this.toggleSharePlanModal}
                 />
               </View>
+
+              <Modal isVisible={this.state.visibleSharePlanModal} backdropOpacity={0.5}>
+                <View style={modalStyles.modalContainer}>
+                  <Text style={modalStyles.headerTextStyle}>Share Plan</Text>
+
+                <TouchableOpacity style={modalStyles.buttonContainer} onPress={this.onCollabPress.bind(this)}>
+                 <Text style={modalStyles.buttonText}>Manage Collaborators</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={modalStyles.buttonContainer} onPress={this.shareMessage}>
+                  <Text style={modalStyles.buttonText}>Export Plan</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={modalStyles.cancelButton} onPress={this.toggleSharePlanModal}>
+                  <Text style={modalStyles.cancelButtonText}>Cancel</Text>
+                </TouchableOpacity>
+                </View>
+            </Modal>
+
               <View flex={1} paddingRight={20}>
               {this.renderActivitySlots()}
               <View flex={1}>
@@ -124,6 +168,7 @@ class ViewPlanScreen extends Component {
               </View>
             </ScrollView>
 
+          
         )
     }
 }
@@ -152,6 +197,54 @@ const styles = StyleSheet.create({
       color: '#B0CAED',
       fontFamily: 'circular-std-book'
     },
+});
+const modalStyles = StyleSheet.create({
+  /////////////////////Button/////////////////////
+  buttonContainer: {
+      backgroundColor: '#Ed7248',
+      borderRadius: 30,
+      width: 270,
+      height: 60,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 20
+  },
+  buttonText: {
+      textAlign: 'center',
+      color: '#ffffff',
+      fontSize: 11,
+      fontWeight: 'bold',
+  },
+  ////////////////////////Header////////////////////
+  headerTextStyle: {
+      fontSize: 30,
+      color: '#605985',
+      fontWeight: 'bold',
+      marginTop: 20,
+      marginBottom: 20
+  },
+  //////////////////////Modal Container//////////////////
+  modalContainer: {
+      backgroundColor: '#fff',
+      borderRadius: 15,
+      justifyContent: 'center',
+      alignItems: 'center',
+  },
+  cancelButton: {
+    backgroundColor: '#E23737',
+      borderRadius: 30,
+      width: 130,
+      height: 40,
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 20
+  },
+  cancelButtonText: {
+    textAlign: 'center',
+      color: '#ffffff',
+      fontSize: 11,
+      fontWeight: 'bold',
+  }
 });
 
 const mapStateToProps = state => {

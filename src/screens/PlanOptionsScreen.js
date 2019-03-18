@@ -31,6 +31,7 @@ export default class PlanOptionsScreen extends Component {
 
     toggleNotificationModal = () => this.setState({ visibleNotificationModal: !this.state.visibleNotificationModal });
     toggleDatesModal = () => this.setState({ visibleDatesModal: !this.state.visibleDatesModal });
+    toggleDeletePlanModal = () => this.setState({ visibleDeletePlanModal: !this.state.visibleDeletePlanModal });
 
     render() {
 
@@ -96,7 +97,7 @@ export default class PlanOptionsScreen extends Component {
                 </TouchableOpacity>
 
                 <View style={styles.deletePlanView}>
-                    <TouchableOpacity style={styles.deletePlanContainer}>
+                    <TouchableOpacity style={styles.deletePlanContainer} onPress={this.toggleDeletePlanModal}>
                         <Text style={styles.deletePlanText}>DELETE PLAN</Text>
                     </TouchableOpacity>
                 </View>
@@ -126,6 +127,27 @@ export default class PlanOptionsScreen extends Component {
                         <TouchableOpacity style={modalstyles.buttonContainer} onPress={this.toggleDatesModal}>
                             <Text style={modalstyles.buttonText}>Okay</Text>
                         </TouchableOpacity>
+                    </View>
+                </Modal>
+
+                <Modal isVisible={this.state.visibleDeletePlanModal} backdropOpacity={0.5}>
+                    <View style={modalstyles.modalContainer}>
+                        <Text style={modalstyles.headerTextStyle}>Delete Plan</Text>
+
+                        <View style={modalstyles.deletePlanModalTextContainer}>
+                        <Text style={modalstyles.deletePlanModalText}>Are you sure you want to delete plan?</Text>
+                        </View>
+
+                        <View style={modalstyles.deletePlanContainer}>
+                            <TouchableOpacity style={modalstyles.deletePlanButtonContainer} onPress={this.toggleDeletePlanModal}>
+                                <Text style={modalstyles.buttonText}>Yes</Text>
+                            </TouchableOpacity>
+                            <View style={modalstyles.noButton}>
+                            <TouchableOpacity style={modalstyles.deletePlanButtonContainer} onPress={this.toggleDeletePlanModal}>
+                                <Text style={modalstyles.buttonText}>No</Text>
+                            </TouchableOpacity>
+                            </View>
+                        </View>
                     </View>
                 </Modal>
 
@@ -245,5 +267,33 @@ const modalstyles = StyleSheet.create({
     ////////////////////Drop Down/////////////////////////
     dropDownStyle: {
         width: 250,
+    },
+    ////////////////////Delete Plan Modal Buttons/////////////////
+    deletePlanButtonContainer: {
+        backgroundColor: '#Ed7248',
+        borderRadius: 30,
+        width: 270,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20
+    },
+    deletePlanContainer: {
+        flexDirection: 'column',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+    },
+    deletePlanModalText: {
+        fontSize: 15,
+        color: '#2661B2',
+        fontWeight: 'bold',
+    },
+    deletePlanModalTextContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    noButton: {
+        marginBottom: 20
     }
 });
