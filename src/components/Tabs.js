@@ -104,6 +104,9 @@ class Tabs extends Component {
                                     address={item.vicinity ? item.vicinity : item.formatted_address}    
                                 />
                             }
+                            keyExtractor= {(item) => {
+                                return item.place_id
+                            }}
                         />
                     </View>
                 );
@@ -126,6 +129,9 @@ class Tabs extends Component {
                                     address={'701 E Alosta Ave, Azusa, CA 91702'}
                                 />
                         }
+                        keyExtractor= {(item) => {
+                            return item.name
+                        }}
                     />
                 </View>
             );
