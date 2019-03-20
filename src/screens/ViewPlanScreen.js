@@ -42,8 +42,12 @@ class ViewPlanScreen extends Component {
     }
 
     shareMessage() {
+      msg = "You have been invited to collaborate on '";
+      msg += this.props.plan.planName;
+      msg += "'! Join your friends on When&Where! https://tinyurl.com/yxeozq2t";
+
       Share.share({ 
-        message: 'You have been invited to collaborate on a plan! Join your friends on When&Where!' 
+        message: msg
       }).then(this.showResult);
     }
 
