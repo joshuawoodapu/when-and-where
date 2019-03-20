@@ -26,8 +26,8 @@ class ActivityScreen extends Component {
                     initialRegion={{
                         latitude: this.props.navigation.state.params.coordinates.lat,
                         longitude: this.props.navigation.state.params.coordinates.lng,
-                        latitudeDelta: 0.02,
-                        longitudeDelta: 0.0066,
+                        latitudeDelta: 0.0278,
+                        longitudeDelta: 0.0096,
                     }}
                 >
                     <MapView.Marker 
