@@ -82,6 +82,9 @@ export default class App extends React.Component {
     );
     const AppNavigator = createBottomTabNavigator(
       {
+        Create: {
+          screen: CreateActivityScreen
+        },
         SearchStack: {
             screen: SearchStackNav,
             path: '/',

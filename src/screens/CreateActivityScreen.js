@@ -14,30 +14,11 @@ class CreateActivityScreen extends Component {
         headerVisible: true,
     };
 
-    state = { activityName: 'Extreme Skateboarding', address: '952 Death Street', phoneNumber: '760221000', activityType: 'Active', private: 'False', loading: false };
-
-    onButtonPress() {
-        const { name, email, password_confirm, password } = this.state;
-        this.setState({ error: '', loading: true });
-
-    }
+    state = { name: '', address: '', phone: '', activityType: 'A Rumble', private: 'True', loading: ''};
 
     onRegisterFail() {
         this.setState({ error: 'Failed to create activity.', loading: false });
     }
-
-    // onRegisterSuccess() {
-    //     this.setState({
-    //         ActivityName: '',
-    //         email: '',
-    //         password: '',
-    //         password_confirm: '',
-    //         loading: false,
-    //         error: ''
-    //     });
-
-    //     this.props.navigation.navigate('AppNav');
-    // }
 
     renderButton(){
         if (this.state.loading) {
@@ -50,21 +31,44 @@ class CreateActivityScreen extends Component {
         );
     }
 
+    handleNameChange = (typedText) => {
+      this.setState({name:typedText});
+  }
+
+  handlePhoneChange = (typedText) => {
+      this.setState({phone:typedText});
+  }
+
+  handleAddressChange = (typedText) => {
+      this.setState({address:typedText});
+  }
+
+  handlePasswordConfirmChange = (typedText) => {
+      this.setState({password_confirm:typedText});
+  }
+
+  onCreateFail() {
+    this.setState({ error: 'Activity creation failed.', loading: false });
+}
+
 
     onSaveActivityPress = async () => {
         let user = await firebase.auth().currentUser;
         console.log("Inside the func");
         let newActivityId = await firebase.database().ref('/activities').push({
+
           activityName: this.state.name,
           activityAddress: this.state.address,
-          phoneNumber: this.state.phoneNumber,
+          phoneNumber: this.state.phone,
           activityType: this.state.activityType,
-          privateBool: this.state.private
-        }).getKey()
+          privateBool: 'True'
+        }).getKey().then(this.props.navigation('App'))
         .catch((error) => {
           console.log(error)
+          this.onCreateFail.bind(this)
       });
-        this.props.navigation('ActivityScreen');
+        this.props.navigation('DiscoveryScreen');
+        console.log("nav should have happened");
     }
 
     render() {
@@ -79,17 +83,20 @@ class CreateActivityScreen extends Component {
                     {placeholder: 'Activity Name',
                       inputContainerStyle: 'defaultInput',
                       autoCapitalize: "words",
-                      stateLabel: "name"},
+                      stateLabel: "name",
+                      onChange: this.handleNameChange},
                     {placeholder: 'Address',
                       inputContainerStyle: 'defaultInput',
                       stateLabel: "address",
                       autoCorrect: false,
-                      autoCapitalize: "words"},
+                      autoCapitalize: "words",
+                      onChange: this.handleAddressChange},
                     {placeholder: 'Phone Number',
                       inputContainerStyle: 'defaultInput',
                       returnKeyType: 'done',
                       autoCorrect: false,
-                      stateLabel: "phone"},
+                      stateLabel: "phone",
+                      onChange: this.handlePhoneChange},
                     ]}
                 />
                 <Dropdown choices={[
@@ -97,7 +104,8 @@ class CreateActivityScreen extends Component {
                     {label: 'Food', value: 'food'},
                     {label: 'Entertainment', value: 'entertainment'},
                     {label: 'Free', value: 'free'},
-                    {label: 'Nature', value: 'nature'}
+                    {label: 'Nature', value: 'nature'},
+                    
                 ]}/>
               </View>
 
