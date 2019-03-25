@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
+import { Rating } from 'react-native-ratings';
+
 export default class ActivityCard extends Component {
     render() {
         return (
@@ -28,30 +30,10 @@ export default class ActivityCard extends Component {
                         </View>
                         <View style={styles.bottomRow}>
                             <View style={styles.bottomLeft}>
-                                <Icon
-                                    name='star'
-                                    color='#FDAF17'
-                                    size={14}
-                                />
-                                <Icon
-                                    name='star'
-                                    color='#FDAF17'
-                                    size={14}
-                                />
-                                <Icon
-                                    name='star'
-                                    color='#FDAF17'
-                                    size={14}
-                                />
-                                <Icon
-                                    name='star'
-                                    color='#FDAF17'
-                                    size={14}
-                                />
-                                <Icon
-                                    name='star'
-                                    color='#B8BEC1'
-                                    size={14}
+                                <Rating
+                                    imageSize={18}
+                                    readonly
+                                    startingValue={this.props.rating}
                                 />
                             </View>
                             <View style={styles.bottomRight}>

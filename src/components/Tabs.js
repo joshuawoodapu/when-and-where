@@ -101,7 +101,8 @@ class Tabs extends Component {
                                 <ActivityCard 
                                     onCardPress={() => this.onActivityCardPress(item.place_id)} 
                                     title={item.name}
-                                    address={item.vicinity ? item.vicinity : item.formatted_address}    
+                                    address={item.vicinity ? item.vicinity : item.formatted_address}  
+                                    rating={item.rating}  
                                 />
                             }
                             keyExtractor= {(item) => {
