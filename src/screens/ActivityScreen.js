@@ -51,7 +51,7 @@ class ActivityScreen extends Component {
                     </View>
                     <View style={styles.subTitleView}>
                         <Text style={styles.subTitleText}>
-                            ACTIVITY TYPE
+                            {this.props.navigation.state.params.activity_type}
                         </Text>
                     </View>
                     <View style={styles.subIconsView}>

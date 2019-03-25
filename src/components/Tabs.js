@@ -184,7 +184,8 @@ class Tabs extends Component {
                 hours: activity_hours,
                 address: activity_details.formatted_address,
                 rating: activity_details.rating,
-                coordinates: activity_details.geometry.location
+                coordinates: activity_details.geometry.location,
+                activity_type: activity_details.types[0]
             });
 
         } catch (err){
