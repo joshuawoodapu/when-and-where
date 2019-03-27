@@ -5,12 +5,56 @@
     "privacy": "$PRIVACY_BOOLEAN",
     "activitySlots":[
         {
-            "activity":{},
-            "next": "$NEXT_SLOT_REFERENCE"
+            "activities":[
+                {
+                    "custom": false,
+                    "activityID":"$ACT_ID",
+                    "yesVotes": [
+                        "$UID",
+                        "$UID"
+                    ],
+                    "noVotes": [
+                        "$UID"
+                    ]
+                },
+                {
+                    "custom": false,
+                    "activityID":"$ACT_ID",
+                    "yesVotes": [
+                        "$UID",
+                        "$UID"
+                    ],
+                    "noVotes": []
+                }
+            ],
+            "startTime": "12/1/1901 12:30AM",
+            "index": 0
         },
         {
-            "activity":{},
-            "next": "$NEXT_SLOT_REFERENCE"
+            "activities":[
+                {
+                    "custom": false,
+                    "activityID":"$ACT_ID",
+                    "yesVotes": [
+                        "$UID",
+                        "$UID"
+                    ],
+                    "noVotes": [
+                        "$UID"
+                    ]
+                },
+                {
+                    "custom": false,
+                    "activityID":"$ACT_ID",
+                    "yesVotes": [
+                        "$UID",
+                        "$UID"
+                    ],
+                    "noVotes": []
+                }
+            ],
+            "startTime": "12/1/1901 1:30AM",
+            "index": 1
         }
     ]
 }
