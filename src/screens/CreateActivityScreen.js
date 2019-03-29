@@ -95,13 +95,14 @@ class CreateActivityScreen extends Component {
             activityAddress: this.state.address,
             phoneNumber: this.state.phone,
             activityType: this.state.activityType,
-            privateBool: this.state.privateBool
+            privateBool: this.state.privateBool,
+            owner: user.uid
           }).getKey()}
           catch{(error) => {
             console.log(error);
             this.onCreateFail.bind(this);
         }}
-        this.props.navigation.navigate('Discovery');
+        this.props.navigation.navigate('TestCustom');
        } // End if, name validation
     }
 

@@ -6,6 +6,7 @@ import { createAppContainer, createBottomTabNavigator, createStackNavigator, cre
 import { Provider } from 'react-redux';
 import { store } from './src/redux/store';
 import OnBoardingScreens from './src/screens/OnBoardingScreens';
+import TestCustomActivityScreen from './src/screens/TestCustomActivityScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import RegistrationScreen from './src/screens/RegistrationScreen';
 import DiscoveryScreen from './src/screens/DiscoveryScreen';
@@ -65,7 +66,8 @@ export default class App extends React.Component {
       {
         NewPlan: NewPlanScreen,
         NewPlan1: NewPlan1Screen,
-        CreateActivity: CreateActivityScreen
+        CreateActivity: CreateActivityScreen,
+        TestCustom: TestCustomActivityScreen,
       }
     );
     const NotificationsStackNav = createStackNavigator(
