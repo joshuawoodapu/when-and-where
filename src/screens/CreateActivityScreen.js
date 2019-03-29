@@ -73,7 +73,7 @@ class CreateActivityScreen extends Component {
         return false; // Name was empty
       }
       else{
-        this.setState({ error: '', loading: true });
+        this.setState({ error: '', loading: false });
         return true; // Otherwise, return true
       }
   }
@@ -88,22 +88,21 @@ class CreateActivityScreen extends Component {
     onSaveActivityPress = async () => {
         let user = await firebase.auth().currentUser;
         console.log("Inside the func");
+
         if(this.validateName()){ // If name is not empty, push to DB
-          let newActivityId = await firebase.database().ref('/activities').push({
+          try{newActivityId = await firebase.database().ref('/activities').push({
             activityName: this.state.name,
             activityAddress: this.state.address,
             phoneNumber: this.state.phone,
             activityType: this.state.activityType,
             privateBool: this.state.privateBool
-          }).getKey()
-          .catch((error) => {
-            console.log(error)
-            this.onCreateFail.bind(this)
-        });
-
+          }).getKey()}
+          catch{(error) => {
+            console.log(error);
+            this.onCreateFail.bind(this);
+        }}
+        this.props.navigation.navigate('Discovery');
        } // End if, name validation
-                 this.props.navigation.navigate('App');
-          console.log("nav should have happened");
     }
 
     render() {
