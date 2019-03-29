@@ -4,12 +4,6 @@ import { Card, Icon } from 'react-native-elements';
 
 export default class AAActivityCard extends Component {
     renderInfo() {
-      if (this.props.address.includes(",")) {
-        var index = this.props.address.indexOf(",");
-        var streetAddress = this.props.address.substr(0, index + 1);
-        var cityStateAddress = this.props.address.substr(index + 2);
-      }
-
       return(
         <View>
           <View style={styles.topRow}>
@@ -25,10 +19,7 @@ export default class AAActivityCard extends Component {
 
           <View style={styles.middleRow}>
             <Text style={styles.addressText}>
-              {streetAddress}
-            </Text>
-            <Text style={styles.addressText}>
-              {cityStateAddress}
+              {this.props.address ? this.props.address : "Address Unavailable"}
             </Text>
           </View>
         </View>
