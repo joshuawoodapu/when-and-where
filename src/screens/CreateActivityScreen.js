@@ -14,7 +14,7 @@ class CreateActivityScreen extends Component {
         headerVisible: true,
     };
 
-    state = { name: '', address: '', phone: '', activityType: 'A Rumble', private: 'True', loading: ''};
+    state = { name: '', address: '', phone: '', activityType: '', privateBool: '', loading: '', error: ''};
 
     onRegisterFail() {
         this.setState({ error: 'Failed to create activity.', loading: false });
@@ -31,6 +31,17 @@ class CreateActivityScreen extends Component {
         );
     }
 
+    renderError(){
+      if (this.state.error.trim() != ""){
+        console.log("Inside renderError");
+        return(
+          <Text style={styles.errorTextStyle}>
+            {this.state.error}
+          </Text>
+        )
+      }
+    }
+
     handleNameChange = (typedText) => {
       this.setState({name:typedText});
   }
@@ -43,32 +54,56 @@ class CreateActivityScreen extends Component {
       this.setState({address:typedText});
   }
 
-  handlePasswordConfirmChange = (typedText) => {
-      this.setState({password_confirm:typedText});
+  handleTypeChange = (data) => {
+    this.setState({activityType:data});
+}
+
+  handlePrivacyChange = (value) => {
+      console.log("Inside privacy change function");
+      this.setState({privateBool:value});
   }
 
   onCreateFail() {
     this.setState({ error: 'Activity creation failed.', loading: false });
 }
 
+  validateName(){
+      if(this.state.name.trim() == ""){
+        this.setState({ error: "Activity name cannot be empty.", loading: false });
+        return false; // Name was empty
+      }
+      else{
+        this.setState({ error: '', loading: true });
+        return true; // Otherwise, return true
+      }
+  }
+  validateAddress(address){
+
+  }
+  validatePhone(phone){
+
+  }
+
 
     onSaveActivityPress = async () => {
         let user = await firebase.auth().currentUser;
         console.log("Inside the func");
-        let newActivityId = await firebase.database().ref('/activities').push({
+        if(this.validateName()){ // If name is not empty, push to DB
+          let newActivityId = await firebase.database().ref('/activities').push({
+            activityName: this.state.name,
+            activityAddress: this.state.address,
+            phoneNumber: this.state.phone,
+            activityType: this.state.activityType,
+            privateBool: this.state.privateBool
+          }).getKey()
+          .catch((error) => {
+            console.log(error)
+            this.onCreateFail.bind(this)
+        });
 
-          activityName: this.state.name,
-          activityAddress: this.state.address,
-          phoneNumber: this.state.phone,
-          activityType: this.state.activityType,
-          privateBool: 'True'
-        }).getKey().then(this.props.navigation('App'))
-        .catch((error) => {
-          console.log(error)
-          this.onCreateFail.bind(this)
-      });
-        this.props.navigation('DiscoveryScreen');
-        console.log("nav should have happened");
+       } // End if, name validation
+                 this.props.navigation.navigate('App');
+          console.log("nav should have happened");
     }
 
     render() {
@@ -99,23 +134,24 @@ class CreateActivityScreen extends Component {
                       onChange: this.handlePhoneChange},
                     ]}
                 />
-                <Dropdown choices={[
-                    {label: 'Active', value: 'active'},
+                <Dropdown
+                  choices={[
+                    {label: 'Active', value: 'active', },
                     {label: 'Food', value: 'food'},
                     {label: 'Entertainment', value: 'entertainment'},
                     {label: 'Free', value: 'free'},
                     {label: 'Nature', value: 'nature'},
-                    
-                ]}/>
+                ]} onValueChange = {(value) => 
+                  {
+                     this.setState(activityType = value);
+                     console.log("INSIDE value change in dropdown");
+                  }}
+                  />
               </View>
-
-              <Text style={form.errorTextStyle}>
-                  {this.state.error}
-              </Text>
-
               <View flex={3} paddingHorizontal={40} justifyContent="flex-start">
                 <View flexDirection="row" alignItems="center" paddingBottom={27}>
-                  <Toggle style={styles.createActivityToggle}
+                  <Toggle 
+                    style={styles.createActivityToggle}
                     buttonOffColor={'#727e83'}
                     sliderOffColor={'#fff'}
                     buttonOnColor={'#B0CAED'}
@@ -129,11 +165,14 @@ class CreateActivityScreen extends Component {
                     sliderOffColor={'#fff'}
                     buttonOnColor={'#B0CAED'}
                     sliderOnColor={'#2661B2'}
+
                   />
                   <Text style={form.toggleLabel}>Save to My Activities</Text>
                 </View>
               </View>
-
+              <Text style={form.errorTextStyle}>
+                  {this.state.error}
+              </Text>
               {this.renderButton()}
 
           </View>
