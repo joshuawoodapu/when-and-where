@@ -207,7 +207,6 @@ export default class AATabs extends Component {
                             renderItem={({item}) =>
                                 <AAActivityCard
                                     key={item.id}
-                                    onCardPress={this.onRActivityCardPress.bind(this)}
                                     title={item.title}
                                     add={item.add}
                                     text={item.title}
@@ -256,8 +255,28 @@ export default class AATabs extends Component {
             this.setState({activeTab: 'search'})
     };
 
-    onRActivityCardPress() {
-        this.props.navigation.navigate('Search');
+    onRActivityCardPress = async (place_id) => {
+        // make api call to get details on activity
+        const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&fields=name,rating,formatted_phone_number,formatted_address,type,opening_hours,geometry&key=${global.apiKey}`
+        try {
+            let result = await fetch(api_url);
+            let activity_details = await result.json();
+            activity_details =  activity_details.result;
+
+            let activity_hours = activity_details.opening_hours ? activity_details.opening_hours.weekday_text.join('\n') : "Sorry! These hours are currently not available online.";
+            this.props.navigation.navigate('Activity', {
+                activity_name: activity_details.name,
+                phone_number: activity_details.formatted_phone_number,
+                hours: activity_hours,
+                address: activity_details.formatted_address,
+                rating: activity_details.rating,
+                coordinates: activity_details.geometry.location,
+                activity_type: activity_details.types[0]
+            });
+
+        } catch (err){
+            console.log(err)
+        }
     };
 
     onPlansTabPress() {
