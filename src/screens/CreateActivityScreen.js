@@ -78,6 +78,10 @@ class CreateActivityScreen extends Component {
         this.setState({ error: "Activity name cannot be empty.", loading: false });
         return false; // Name was empty
       }
+      if(this.state.name.trim().length > 50){
+        this.setState({error: "Activity name must be less than 50 characters.", loading: false})
+        return false; // Name was too long
+      }
       else{
         this.setState({ error: '', loading: false });
         return true; // Otherwise, return true
