@@ -8,6 +8,10 @@ import Dropdown from '../components/common/Dropdown';
 import Spinner from "../components/common/Spinner";
 import Toggle from '../components/common/Toggle';
 import firebase from 'firebase';
+import RNPickerSelect from 'react-native-picker-select';
+import FlipToggle from 'react-native-flip-toggle-button';
+
+
 
 class CreateActivityScreen extends Component {
     static navigationOptions = {
@@ -55,6 +59,8 @@ class CreateActivityScreen extends Component {
   }
 
   handleTypeChange = (data) => {
+    console.log("Entered handle type change function");
+    console.log(data)
     this.setState({activityType:data});
 }
 
@@ -95,7 +101,8 @@ class CreateActivityScreen extends Component {
             activityAddress: this.state.address,
             phoneNumber: this.state.phone,
             activityType: this.state.activityType,
-            privateBool: this.state.privateBool,
+            // Commenting out sending privacy bool since public custom activities are not part of MVP
+            // privateBool: this.state.privateBool,
             owner: user.uid
           }).getKey()}
           catch{(error) => {
@@ -134,30 +141,43 @@ class CreateActivityScreen extends Component {
                       onChange: this.handlePhoneChange},
                     ]}
                 />
-                <Dropdown
-                  choices={[
-                    {label: 'Active', value: 'active', },
-                    {label: 'Food', value: 'food'},
-                    {label: 'Entertainment', value: 'entertainment'},
-                    {label: 'Free', value: 'free'},
-                    {label: 'Nature', value: 'nature'},
-                ]} onValueChange = {(value) => 
-                  {
-                     this.setState(activityType = value);
-                     console.log("INSIDE value change in dropdown");
-                  }}
-                  />
+                <View style={form.pickerContainer}>
+                  <RNPickerSelect
+                    placeholder={{
+                      label: 'Type',
+                      value: null,
+                    }}
+                    items={[
+                      {label: 'Active', value: 'active', },
+                      {label: 'Food', value: 'food'},
+                      {label: 'Entertainment', value: 'entertainment'},
+                      {label: 'Free', value: 'free'},
+                      {label: 'Nature', value: 'nature'},
+                      ]}
+                      onValueChange={value => {
+                        this.setState({
+                          activityType: value,
+                        });
+                      }}
+                      style={{ ...pickerSelectStyles }}
+                      // ref={el => {
+                      //   this.inputRefs.activityType = el;
+                      // }}
+                
+                    />
+                  </View>
               </View>
               <View flex={3} paddingHorizontal={40} justifyContent="flex-start">
                 <View flexDirection="row" alignItems="center" paddingBottom={27}>
-                  <Toggle 
-                    style={styles.createActivityToggle}
+                {/* COMMENTED OUT THIS TOGGLE BECAUSE PUBLIC CUSTOM ACTIVITES ARE NOT PART OF MVP */}
+                    {/* <Toggle
                     buttonOffColor={'#727e83'}
                     sliderOffColor={'#fff'}
                     buttonOnColor={'#B0CAED'}
                     sliderOnColor={'#2661B2'}
+                    onToggle={(value) => {this.setState({ privateBool: value });}}
                   />
-                  <Text style={form.toggleLabel}>Make Activity Private</Text>
+                  <Text style={form.toggleLabel}>Make Activity Private</Text> */}
                 </View>
                 <View flexDirection="row" alignItems="center">
                   <Toggle
@@ -165,7 +185,6 @@ class CreateActivityScreen extends Component {
                     sliderOffColor={'#fff'}
                     buttonOnColor={'#B0CAED'}
                     sliderOnColor={'#2661B2'}
-
                   />
                   <Text style={form.toggleLabel}>Save to My Activities</Text>
                 </View>
@@ -199,7 +218,33 @@ const form = StyleSheet.create({
       fontSize: 14,
       color: "#2661B2",
       paddingLeft: 10
+    },
+    pickerContainer: {
+      paddingHorizontal: 10,
     }
+
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+      height: 40,
+      fontSize: 14,
+      paddingTop: 13,
+      paddingLeft: 17,
+      paddingVertical: 11,
+      borderWidth: 1,
+      borderColor: '#B8BeC1',
+      borderRadius: 15,
+      color: 'black',
+  },
+  inputAndroid: {
+      paddingHorizontal: 10,
+      borderWidth: 1,
+      borderColor: '#B8BeC1',
+      borderRadius: 15,
+      backgroundColor: 'white',
+      color: 'black',
+  },
 });
 
 const DismissKeyboard = ({children}) => (
