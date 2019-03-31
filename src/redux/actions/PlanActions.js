@@ -24,17 +24,33 @@ export const addActivitySlot = (planId, activityId, custom) => {
         planRef.transaction(function(currentData) {
             console.log(currentData);
             if (currentData === null) {
-                return { slot0 : { activities: { activity0: { custom: custom, activityId: activityId } } } };
+                return { slot0: { activities: { activity0: { custom: custom, activityId: activityId } } } };
             }
             else {
-                console.log(currentData)
-                return;
+                // Get an array of strings correlating to the names of each slot
+                var slotsArray = Object.keys(currentData);
+                // Get the last slot
+                var lastSlot = slotsArray[slotsArray.length - 1];
+                // Get the number of that last slot
+                var lastSlotNum = Number(lastSlot.slice(4));
+                // Only 5 slots are supported
+                if (lastSlotNum < 5) {
+                    // Now we will push to database, the next slot
+                    var nextSlot = "slot" + String(lastSlotNum + 1);
+                    return {...currentData, [nextSlot]: { activities: { activity0: { custom: custom, activityId: activityId } } } };
+                }
+                else {
+                    console.log("Plans with more than 5 activity slots are not supported at this time!!");
+                    // #TODO: Show something to the user to explain why the slot doesn't add
+                    return;
+                }
+                
             }
         },  function(error, committed, snapshot) {
             if (error) {
-              console.log('Transaction failed abnormally!', error);
+              console.log("Transaction failed abnormally!", error);
             } else {
-              console.log('Slot pushed');
+              console.log("Slot pushed");
               addActivitySlotSuccess(dispatch, snapshot)
             }
         });          
@@ -42,7 +58,6 @@ export const addActivitySlot = (planId, activityId, custom) => {
 };
 
 const planDataSuccess = (dispatch, snapshot, planId) => {
-    console.log(snapshot.val());
     planData = {...snapshot.val(), planId: planId}
     dispatch({
         type: PLAN_SET,
@@ -51,7 +66,6 @@ const planDataSuccess = (dispatch, snapshot, planId) => {
 }
 
 const addActivitySlotSuccess = (dispatch, snapshot) => {
-    console.log(snapshot.val());
     dispatch({
         type: NEW_ACTIVITY_SLOT,
         payload: snapshot.val()
