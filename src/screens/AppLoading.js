@@ -25,7 +25,7 @@ class AppLoading extends Component {
         this.setState({ fontLoaded:true })
 
         // Change to false once you have left development!
-        const development = true;
+        const development = false;
 
 
         if (development)

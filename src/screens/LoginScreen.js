@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, Text, TextInput, StyleSheet, TouchableWithoutFeedback, Keyboard, AsyncStorage } from 'react-native';
+import { View, Image, Text, TextInput, StyleSheet, TouchableWithoutFeedback, Keyboard, AsyncStorage, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 import firebase from 'firebase';
 import * as actions from '../redux/actions';
@@ -51,8 +51,8 @@ class LoginScreen extends Component {
         console.log(user);
         if (user !== null)
             this.props.userLoad(user);
-        //await AsyncStorage.setItem('accessToken', user.accessToken);
-        //await AsyncStorage.setItem('refreshToken', user.refreshToken);
+        // await AsyncStorage.setItem('accessToken', user.accessToken);
+        // await AsyncStorage.setItem('refreshToken', user.refreshToken);
 
         this.props.navigation.navigate('App');
     }
@@ -70,9 +70,10 @@ class LoginScreen extends Component {
 
     render() {
         return (
+            <KeyboardAvoidingView behavior='position'>
             <DismissKeyboard style={styles.toplevel}>
                 <View style={styles.mainContainer}>
-                    <Image style={styles.logo}
+                <Image style={styles.logo}
                     source={require('../components/images/whenwherelogo.png')}/>
 
                     <View style={styles.formStyle}>
@@ -103,6 +104,7 @@ class LoginScreen extends Component {
                               onChange: this.handlePasswordChange},
                             ]}
                         />
+                        
                     </View>
 
                     <Text style={styles.errorTextStyle}>
@@ -110,11 +112,11 @@ class LoginScreen extends Component {
                     </Text>
                     <LoginRedirect navigation={this.props.navigation} style={styles.redirect}/>
 
-
-                    {this.renderButton()}
+                    {this.renderButton()} 
 
                 </View>
             </DismissKeyboard>
+            </KeyboardAvoidingView>
         )
     }
 }

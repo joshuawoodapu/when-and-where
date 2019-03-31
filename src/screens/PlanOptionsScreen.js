@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, DatePickerIOS,DatePickerAndroid,Platform,TimePickerAndroid,
+    FlatList } from 'react-native';
 import { Icon } from 'react-native-elements';
 import FlipToggle from 'react-native-flip-toggle-button';
 import Modal from "react-native-modal";
@@ -18,12 +19,80 @@ export default class PlanOptionsScreen extends Component {
 
     constructor(props) {
         super(props);
+        monthNames = ["January", "February", "March", "April", "May","June","July", "August", "September", "October", "November","December"];
         this.state = {
             isSwitch1On: false,
             visibleNotificationModal: false,
             visibleDatesModal: false,
+            chosenDate: new Date(),
         }
+        this.setDate = this.setDate.bind(this);
     };
+    /////////////////////////////////////////////////////////
+    openDatePicker() {
+        try {
+          DatePickerAndroid.open({
+            date: new Date(),
+            mode: "spinner"
+          }).then(date => {
+            if (date.action !== DatePickerAndroid.dismissedAction) {
+              this.setDate(date);
+            }
+          });
+        } catch ({ code, message }) {
+          console.warn('Cannot open date picker', message);
+        }
+      }
+  
+      renderDatePicker(){
+          if (Platform.OS === 'ios')
+              return (
+                <View>
+                  <DatePickerIOS
+                    mode="date"
+                    date={this.state.chosenDate}
+                    onDateChange={this.setDate}
+                  />
+                </View>
+              )
+          else
+              return (
+                <View>
+                  <TouchableOpacity onPress={()=>this.openDatePicker()} style={styles.dateContainer}>
+                    <Text style={styles.buttonText}>Select a Start Date</Text>
+                  </TouchableOpacity>
+                </View>
+              )
+      }
+  
+      setDate(newDate) {
+        this.setState({chosenDate: newDate});
+      }
+  
+      handlePlanNameChange = (typedText) => {
+        this.setState({planName:typedText});
+      }
+  /*
+      onContinuePress() {
+        if (Platform.OS === 'ios') {
+          // Returns 'January 1, 2020' formatted date string
+          // use console.log(this.state.chosenDate); to just return the date object
+          //this._toggleModal();
+          var displayDate = monthNames[this.state.chosenDate.getMonth()] + " "
+          + this.state.chosenDate.getDate() + ", " + this.state.chosenDate.getFullYear();
+  
+          console.log(displayDate);
+        }
+        else {
+          console.log(this.state.chosenDate);
+        }
+      }
+*/
+      //chosenDateToString() {
+        //return (this.state.chosenDate.toDateString())
+  
+     // }
+    /////////////////////////////////////////////////////////
 
     onCollabPress() {
         this.props.navigation.navigate('CollabInvite');
@@ -92,7 +161,7 @@ export default class PlanOptionsScreen extends Component {
                             size={20}
                             color='#605985'
                         />
-                        <Text style={styles.buttonText}>Date(s) of Trip</Text>
+                        <Text style={styles.buttonText}>Date of Trip</Text>
                     </View>
                 </TouchableOpacity>
 
@@ -121,12 +190,16 @@ export default class PlanOptionsScreen extends Component {
                 </Modal>
 
                 <Modal isVisible={this.state.visibleDatesModal} backdropOpacity={0.5}>
-                    <View style={modalstyles.modalContainer}>
-                        <Text style={modalstyles.headerTextStyle}>Date(s) of Trip</Text>
-
-                        <TouchableOpacity style={modalstyles.buttonContainer} onPress={this.toggleDatesModal}>
-                            <Text style={modalstyles.buttonText}>Okay</Text>
-                        </TouchableOpacity>
+                    <View style={styles.datePickerStyle}>
+                        <View style={modalstyles.dateOfTrip}>
+                            <Text style={modalstyles.headerTextStyle}>Date of Trip</Text>
+                        </View>
+                        {this.renderDatePicker()}
+                        <View style={modalstyles.dateOfTrip}>
+                            <TouchableOpacity style={modalstyles.buttonContainer} onPress={this.toggleDatesModal}>
+                                <Text style={modalstyles.buttonText}>Okay</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </Modal>
 
@@ -202,6 +275,10 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: 'bold',
         marginLeft: 30
+    },
+    datePickerStyle: {
+        backgroundColor: '#fff',
+        borderRadius: 15,
     },
     //////////////Delete Plan Component/////////////
     deletePlanContainer: {
@@ -295,5 +372,9 @@ const modalstyles = StyleSheet.create({
     },
     noButton: {
         marginBottom: 20
+    },
+    dateOfTrip: {
+        justifyContent: 'center',
+        alignItems: 'center'
     }
 });
