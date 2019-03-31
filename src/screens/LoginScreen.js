@@ -30,8 +30,8 @@ class LoginScreen extends Component {
         firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
             firebase.auth().signInWithEmailAndPassword(email, password)
                 .then(this.onLoginSuccess.bind(this))
-                .catch((error) => {
-                    this.setState({ error: error, loading: false });
+                .catch(() => {
+                    this.setState({ error: "Login attempt failed.", loading: false });
                 });
         });
     }
