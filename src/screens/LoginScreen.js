@@ -50,7 +50,12 @@ class LoginScreen extends Component {
         const user = await firebase.auth().currentUser;
         console.log(user);
         if (user !== null)
-            this.props.userLoad(user);
+        {
+            await this.props.userLoad(user);
+            await this.props.plansLoad(user);
+            await this.props.customActivitiesLoad(user);
+        }
+            
         //await AsyncStorage.setItem('accessToken', user.accessToken);
         //await AsyncStorage.setItem('refreshToken', user.refreshToken);
 

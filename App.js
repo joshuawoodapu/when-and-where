@@ -84,9 +84,6 @@ export default class App extends React.Component {
     );
     const AppNavigator = createBottomTabNavigator(
       {
-        Create: {
-          screen: CreateActivityScreen
-        },
         SearchStack: {
             screen: SearchStackNav,
             path: '/',
@@ -108,13 +105,13 @@ export default class App extends React.Component {
               },
           },
         },
-        NotificationsStack: {
-            screen: NotificationsStackNav,
+        NewActivityStack: {
+            screen: CreateActivityScreen,
             path: '/',
             navigationOptions: {
               tabBarIcon: ({ focused, tintColor  }) => {
                   const iconName = `ios-information-circle${focused ? '' : '-outline'}`;
-                  return <Icon name="notifications" size={35} color={tintColor}/>;
+                  return <Icon name="nature-people" size={35} color={tintColor}/>;
               },
           },
         },

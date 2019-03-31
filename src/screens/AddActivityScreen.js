@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import {View, TextInput, StyleSheet} from 'react-native';
+import {connect} from 'react-redux';
+import * as actions from '../redux/actions';
 import AATabs from '../components/AATabs';
 
 class AddActivityScreen extends Component {
@@ -32,10 +34,15 @@ class AddActivityScreen extends Component {
                 navigation={this.props.navigation}
                 handleSearch={this.handleSearchChange}
                 handleLocation={this.handleLocationChange}
+                customActivityData={this.props.user.customActivities}
                 />
             </View>
         )
     }
 }
 
-export default AddActivityScreen;
+const mapStateToProps = state => {
+    return { user: state.user, plan: state.plan };
+}
+
+export default connect(mapStateToProps, actions)(AddActivityScreen);

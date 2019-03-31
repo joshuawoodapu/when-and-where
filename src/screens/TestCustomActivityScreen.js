@@ -43,7 +43,7 @@ const form = StyleSheet.create({
     errorTextStyle: {
         fontSize: 14,
         alignSelf: 'center',
-        color: "Red",
+        color: "red",
         marginTop: 10
     },
 });

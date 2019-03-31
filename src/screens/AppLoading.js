@@ -37,6 +37,7 @@ class AppLoading extends Component {
             let user = await firebase.auth().currentUser;
             await this.props.userLoad(user);
             await this.props.plansLoad(user);
+            await this.props.customActivitiesLoad(user);
             this.props.navigation.navigate('App');
 
         }

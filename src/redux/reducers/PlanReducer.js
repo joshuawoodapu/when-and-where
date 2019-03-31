@@ -3,6 +3,7 @@ import {
 } from '../actions/types'
 
 const INITIAL_STATE = {
+    planId: '',
     owner: 'N/A',
     planName: 'NO PLAN SELECTED',
     privacy: 'Private',
@@ -13,11 +14,12 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case PLAN_SET:
-            return {...state, 
-                owner: action.payload.owner, 
-                planName: action.payload.planName, 
-                privacy: action.payload.privacy, 
-                startDate: action.payload.startDate }
+            return {...state,
+                planId: action.payload.planId,
+                owner: action.payload.owner,
+                planName: action.payload.planName,
+                privacy: action.payload.privacy,
+                startDate: action.payload.startDate}
         default:
             return state;
     }

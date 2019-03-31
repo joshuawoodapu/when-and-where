@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, TouchableOpacity,
   ScrollView, Dimensions, FlatList } from 'react-native';
+import {connect} from 'react-redux';
+import * as actions from '../redux/actions';
 import { Icon } from 'react-native-elements';
 import AAActivityCard from './AAActivityCard';
 import DynamicInput from '../components/common/DynamicInput';
 
-
-export default class AATabs extends Component {
+class AATabs extends Component {
     state = {
         activeTab: 'search'
     };
@@ -18,7 +19,7 @@ export default class AATabs extends Component {
                     <View style={[styles.activeLeft, styles.activeTab]}>
                         <TouchableHighlight
                             style={styles.activeLeft}
-                            onPress={this.onActivitiesTabPress.bind(this)}
+                            onPress={this.onSearchTabPress.bind(this)}
                             key={"search-active"}
                             underlayColor="#F0F3F7"
                             activeOpacity={1}
@@ -31,7 +32,7 @@ export default class AATabs extends Component {
                     <View style={[styles.inactiveRight, styles.inactiveTab]}>
                         <TouchableHighlight
                             style={styles.inactiveRight}
-                            onPress={this.onPlansTabPress.bind(this)}
+                            onPress={this.onMyActivitiesTabPress.bind(this)}
                             key={"myactivities-inactive"}
                         >
                             <Text style={styles.inactiveTabText}>
@@ -48,7 +49,7 @@ export default class AATabs extends Component {
                     <View style={[styles.inactiveLeft, styles.inactiveTab]}>
                         <TouchableHighlight
                             style={styles.inactiveLeft}
-                            onPress={this.onActivitiesTabPress.bind(this)}
+                            onPress={this.onSearchTabPress.bind(this)}
                             key={"search-inactive"}
                         >
                           <Text style={styles.inactiveTabText}>
@@ -59,7 +60,7 @@ export default class AATabs extends Component {
                     <View style={[styles.activeRight, styles.activeTab]}>
                         <TouchableHighlight
                             style={styles.activeRight}
-                            onPress={this.onPlansTabPress.bind(this)}
+                            onPress={this.onMyActivitiesTabPress.bind(this)}
                             key={"myactivities-active"}
                             underlayColor="#F0F3F7"
                             activeOpacity={1}
@@ -119,7 +120,7 @@ export default class AATabs extends Component {
                     renderItem={({item}) =>
                       <AAActivityCard
                         key={item.id}
-                        onCardPress={this.onRActivityCardPress.bind(this)}
+                        onCardPress={this.onActivityCardPress.bind(this, item.id)}
                         title={item.title}
                         add={item.add}
                         text={item.title}
@@ -134,24 +135,21 @@ export default class AATabs extends Component {
           );
         }
         else if (this.state.activeTab === 'myactivities') {
-          var activities = [{title: 'Aloha Sushi', add: true, address: '3030 Freedom Lane, Merced, CA 95340', stars: 5, favorited: true},
-            {title: 'Primedia', add: true, address: '3903 Turnley Ave, Oakland, CA, 94605', stars: 4, favorited: true},];
-
           return (
               <View flex={6} paddingHorizontal={15}>
                 <FlatList
-                    data={activities}
+                    data={this.getCustomActivityData()}
                     showsVerticalScrollIndicator={false}
                     renderItem={({item}) =>
                       <AAActivityCard
-                        key={item.id}
-                        onCardPress={this.onRActivityCardPress.bind(this)}
-                        title={item.title}
-                        add={item.add}
-                        text={item.title}
-                        address={item.address}
+                        key={item.activityId}
+                        onCardPress={this.onCustomActivityCardPress.bind(this, item.activityId)}
+                        title={item.activityName}
+                        add={false}
+                        text={item.phoneNumber}
+                        address={item.activityAddress}
                         stars={item.stars}
-                        favorited={item.favorited}
+                        favorited={false}
                       />
                     }
                     keyExtractor={(item, index) => index.toString()}
@@ -161,16 +159,25 @@ export default class AATabs extends Component {
         }
     };
 
-    onActivitiesTabPress() {
+    onSearchTabPress() {
         if (this.state.activeTab !== 'search')
             this.setState({activeTab: 'search'})
     };
 
-    onRActivityCardPress() {
-        this.props.navigation.navigate('Search');
+    onActivityCardPress = (activityId) => {
+      console.log(activityId);
     };
 
-    onPlansTabPress() {
+    onCustomActivityCardPress = (activityId) => {
+      console.log(activityId);
+      // Sending an action to add an activity slot!
+      // Current plan
+      // Chosen activity
+      // True, as in this is a custom activity!
+      this.props.addActivitySlot(this.props.plan.planId, activityId, true)
+    };
+
+    onMyActivitiesTabPress() {
         if (this.state.activeTab !== 'myactivities')
             this.setState({activeTab: 'myactivities'})
     };
@@ -178,6 +185,20 @@ export default class AATabs extends Component {
     onCantFind() {
         this.props.navigation.navigate('CreateActivity');
     }
+
+    getCustomActivityData() {
+      const result = [];
+      for (var key in this.props.customActivityData) {
+          // skiping if prototype
+          if (!this.props.customActivityData.hasOwnProperty(key)) continue;
+
+          var obj = this.props.customActivityData[key];
+          result.push({activityId:key, ...obj})
+      }
+      console.log("Custom Activities")
+      console.log(result);
+      return result;
+  }
 
     render() {
         return (
@@ -305,3 +326,10 @@ styles = StyleSheet.create({
       paddingHorizontal: 20
     },
 })
+
+
+const mapStateToProps = state => {
+  return { plan: state.plan };
+}
+
+export default connect(mapStateToProps, actions)(AATabs);
