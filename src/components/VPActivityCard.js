@@ -4,9 +4,11 @@ import { Icon } from 'react-native-elements';
 import PieChart from 'react-native-pie-chart';
 import Modal from "react-native-modal";
 import CardStack, { Card } from 'react-native-card-stack-swiper';
+import {connect} from 'react-redux';
+import * as actions from '../redux/actions';
 
 
-export default class VPActivityCard extends Component {
+class VPActivityCard extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -381,3 +383,9 @@ let activityGroup1 = [
     numVotes: 1
   }
 ];
+
+const mapStateToProps = state => {
+  return { plan: state.plan };
+}
+
+export default connect(mapStateToProps, actions)(VPActivityCard);

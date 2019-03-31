@@ -8,7 +8,7 @@ const INITIAL_STATE = {
     planName: 'NO PLAN SELECTED',
     privacy: 'Private',
     startDate: '01/01/0001',
-    activitySlots: []
+    activitySlots: {}
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -19,7 +19,8 @@ export default (state = INITIAL_STATE, action) => {
                 owner: action.payload.owner,
                 planName: action.payload.planName,
                 privacy: action.payload.privacy,
-                startDate: action.payload.startDate}
+                startDate: action.payload.startDate,
+                activitySlots: action.payload.activitySlots}
         default:
             return state;
     }

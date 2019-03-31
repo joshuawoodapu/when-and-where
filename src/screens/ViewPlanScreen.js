@@ -76,36 +76,32 @@ class ViewPlanScreen extends Component {
       this.props.navigation.navigate('CollabInvite');
   }
 
-    iterate(aList) {
-      var arrayLength = aList.length;
-
-      for (var i = 0; i < arrayLength; i++) {
-        return (
-          <View flex={1}>
+    iterate(activitySlotsObject) {
+      var activitySlotsArray = Object.values(activitySlotsObject);
+      var arrayLength = activitySlotsArray.length;
+      console.log(arrayLength);
+      console.log(activitySlotsArray);
+      return (
+        <View flex={1}>
+          {activitySlotsArray.map((activitySlot, index) => (
             <FlatList
-              data={aList[i]}
-              showsVerticalScrollIndicator={false}
-              renderItem={({item, index}) =>
-                <VPActivityCard
-                  key={item.id}
-                  onCardPress={this.onRActivityCardPress.bind(this)}
-                  title={item.title}
-                  text={item.title}
-                  address={item.address}
-                  yesVote={item.yVote}
-                  noVote={item.nVote}
-                  startTime={item.startTime}
-                  index={index}
-                  totalSlots={arrayLength-1}
-                />
-              }
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </View>
-        )
-      }
+            data={Object.values(activitySlot.activities)}
+            showsVerticalScrollIndicator={false}
+            renderItem={({item, index}) =>
+              <VPActivityCard
+                key={item.activityId}
+                custom={item.custom}
+                onCardPress={this.onRActivityCardPress.bind(this)}
+                index={index}
+                totalSlots={arrayLength-1}
+              />
+            }
+            keyExtractor={(item, index) => index.toString()}
+          />
+          ))}
+        </View>
+      );
     };
-
 
     render() {
       var activities = [[{title: 'Molino Metro', address: '1016 N El Molino Ave, Pasadena, CA 91104', yVote: true},
@@ -149,7 +145,7 @@ class ViewPlanScreen extends Component {
               </Modal>
               <View flex={1} paddingRight={20}>
                   <View flex={1}>
-                    {this.iterate(activities)}
+                    {this.iterate(this.props.plan.activitySlots)}
                   </View>
                   <View flex={1}>
                     <TouchableOpacity onPress={this.onPressViewComments.bind(this)}>
@@ -181,8 +177,6 @@ class ViewPlanScreen extends Component {
                   </TouchableOpacity>
                 </View>
             </ScrollView>
-
-          
         )
     }
 }
