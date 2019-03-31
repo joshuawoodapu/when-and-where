@@ -146,7 +146,7 @@ class ViewPlanScreen extends Component {
                   <Text style={modalStyles.cancelButtonText}>Cancel</Text>
                 </TouchableOpacity>
                 </View>
-            </Modal>
+              </Modal>
               <View flex={1} paddingRight={20}>
                   <View flex={1}>
                     {this.iterate(activities)}
@@ -186,7 +186,6 @@ class ViewPlanScreen extends Component {
         )
     }
 }
-
 
 const styles = StyleSheet.create({
     headerStyle: {
