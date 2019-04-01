@@ -48,14 +48,14 @@ class AppLoading extends Component {
 
             const onBoarded = await AsyncStorage.getItem('onBoarded');
 
-            if (logged) 
+            if (logged)
                 this.props.userLoad(user);
-  
+
             if (logged && onBoarded)
                 this.props.navigation.navigate('App');
             else if (onBoarded)
                 this.props.navigation.navigate('Login');
-            else 
+            else
                 this.props.navigation.navigate(logged ? 'App' : 'Auth');
 
         }

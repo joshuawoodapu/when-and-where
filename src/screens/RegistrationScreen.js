@@ -16,11 +16,36 @@ class RegistrationScreen extends Component {
 
     state = { name: '', email: '', password: '', password_confirm: '', error: '', loading: false };
 
+    /*
+    //const { email, password } = this.state;
+    isEnabled = email.length > 0 && password.length > 0;
+    errors = validate(this.state.email, this.state.password);
+    isEnabled = !Object.keys(errors).some(x => errors[x]);
+
+    function validate(email, password) {
+  // true means invalid, so our conditions got reversed
+  return (
+    email: email.length === 0,
+    password: password.length === 0
+  );
+  */
+
+
     onButtonPress() {
         const { name, email, password_confirm, password } = this.state;
         this.setState({ error: '', loading: true });
 
-        if( password === password_confirm ){
+        if ( password_confirm === null || email === null || name === null) {
+          Vibration.vibrate(1000)
+          this.setState({ error: "Blank Fields", loading: false });
+        }
+
+        else if (!email.includes('@')) {
+          Vibration.vibrate(1000)
+          this.setState({ error: "Incorrect Email Format", loading: false });
+        }
+
+        else if( password === password_confirm ){
             console.log(email + password)
             firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
               firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -35,6 +60,8 @@ class RegistrationScreen extends Component {
             this.setState({ error: "Passwords do not match", loading: false });
         }
     }
+    // will be looking at doing catches for onButtonPress for each error such as email, matching passwords,
+    // and any other check
 
     onRegisterFail() {
         this.setState({ error: 'Registration failed.', loading: false });
@@ -42,7 +69,6 @@ class RegistrationScreen extends Component {
 
     onRegisterSuccess = async () => {
         const user = await firebase.auth().currentUser;
-        
 
         await firebase.database().ref('users/' + user.uid).set({
           fullName: this.state.name
@@ -53,7 +79,6 @@ class RegistrationScreen extends Component {
 
         if (user !== null)
             this.props.userLoad(user);
-
 
         this.setState({
           name: '',
@@ -111,27 +136,31 @@ class RegistrationScreen extends Component {
                         autoCorrect: false,
                         autoCapitalize: "words",
                         stateLabel: "name",
-                        onChange: this.handleNameChange},
+                        onChange: this.handleNameChange,
+                        isRequired: true},
                       {placeholder: 'Email',
                         inputContainerStyle: 'regScreenInput',
                         autoCorrect: false,
                         autoCapitalize: "none",
                         stateLabel: "email",
                         spellcheck: false,
-                        onChange: this.handleEmailChange},
+                        onChange: this.handleEmailChange,
+                        isRequired: true,},
                       {placeholder: 'Password',
                         inputContainerStyle: 'regScreenInput',
                         secureTextEntry: true,
                         autoCorrect: false,
                         stateLabel: "password",
-                        onChange: this.handlePasswordChange},
+                        onChange: this.handlePasswordChange,
+                        isRequired: true,},
                       {placeholder: 'Confirm Password',
                         inputContainerStyle: 'regScreenInput',
                         secureTextEntry: true,
                         returnKeyType: 'done',
                         autoCorrect: false,
                         stateLabel: "password_confirm",
-                        onChange: this.handlePasswordConfirmChange},
+                        onChange: this.handlePasswordConfirmChange,
+                        isRequired: true,},
                       ]}
                   />
                 </View>
@@ -168,12 +197,14 @@ const form = StyleSheet.create({
     }
 });
 
+
+
 const DismissKeyboard = ({children}) => (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         {children}
     </TouchableWithoutFeedback>
-);
 
+);
 const mapStateToProps = state => {
   return { user: state.user };
 }
