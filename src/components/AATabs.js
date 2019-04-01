@@ -258,9 +258,12 @@ class AATabs extends Component {
        // Current plan
        // Chosen activity
        // False, as in this is not a custom activity!
-       this.props.addActivitySlot(this.props.plan.planId, activityId, false);
+       await this.props.addActivitySlot(this.props.plan.planId, place_id, false);
+       await this.props.planSet(this.props.plan.planId);
+       this.props.navigation.navigate('PlanView');
        // make api call to get details on activity
-       const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&fields=name,rating,formatted_phone_number,formatted_address,type,opening_hours,geometry&key=${global.apiKey}`
+       /*
+        const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&fields=name,rating,formatted_phone_number,formatted_address,type,opening_hours,geometry&key=${global.apiKey}`
        try {
            let result = await fetch(api_url);
            let activity_details = await result.json();
@@ -280,14 +283,17 @@ class AATabs extends Component {
        } catch (err){
            console.log(err)
        }
+       */
     };
 
-    onCustomActivityCardPress = (activityId) => {
+    onCustomActivityCardPress = async (activityId) => {
       // Sending an action to add an activity slot!
       // Current plan
       // Chosen activity
       // True, as in this is a custom activity!
-      this.props.addActivitySlot(this.props.plan.planId, activityId, true);
+      await this.props.addActivitySlot(this.props.plan.planId, activityId, true);
+      await this.props.planSet(this.props.plan.planId);
+      this.props.navigation.navigate('PlanView');
     }
 
 

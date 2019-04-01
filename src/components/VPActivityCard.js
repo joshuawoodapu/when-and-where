@@ -5,6 +5,7 @@ import PieChart from 'react-native-pie-chart';
 import Modal from "react-native-modal";
 import CardStack, { Card } from 'react-native-card-stack-swiper';
 import {connect} from 'react-redux';
+import firebase from 'firebase';
 import * as actions from '../redux/actions';
 
 
@@ -15,7 +16,54 @@ class VPActivityCard extends Component {
       visibleVotingModal: false,
       renderedActivityGroup: null,
       yesVote: false,
-      noVote: false
+      noVote: false,
+      activities: [],
+      activitiesLoaded: false
+    }
+  }
+
+  componentDidMount = async () => {
+    this.mounted = true;
+    var activitiesArray = Object.values(this.props.activityData.activities);
+    for (i = 0; i < activitiesArray.length; i++) {
+      // If a custom activity, then the information comes from the database!
+      if (activitiesArray[i].custom) {
+        await firebase.database().ref('activities/' + activitiesArray[i].activityId).once('value')
+        .then(snapshot => this.activityDataSuccess(snapshot.val()))
+        .catch((error) => {
+            console.log(error)
+        })
+      }
+      // If not a custom activity, then the information comes from the Google API!
+      else {
+        const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${activitiesArray[i].activityId}&fields=name,rating,formatted_phone_number,formatted_address,type,opening_hours,geometry&key=${global.apiKey}`
+        try {
+            let result = await fetch(api_url);
+            let activity_details = await result.json();
+            activity_details =  activity_details.result;
+            console.log(activity_details);
+            var formattedDetails = {activityName: activity_details.name};
+            this.activityDataSuccess(formattedDetails);
+        } catch (err){
+            console.log(err)
+        }
+      }
+    }
+    //this.props.planLoadFunction();
+    if (this.mounted) {
+      this.setState({activitiesLoaded:true})
+    }
+  }
+
+  componentWillUnmount(){
+    this.mounted = false;
+  }
+
+  activityDataSuccess = (data) => {
+    if (this.mounted) {
+      this.setState(prevState => ({
+        activities: [...prevState.activities, data]
+      }))
     }
   }
 
@@ -197,57 +245,60 @@ class VPActivityCard extends Component {
 
 
   render() {
-
     let voteNums = [];
     activityGroup1.map((activity) => {
       voteNums.push(activity.numVotes);
     });
-
+    if (this.state.activitiesLoaded) {
+      return (
+        <View flex={1} flexDirection="row">
+          <View style={styles.timeView}>
+            <Text style={styles.timeText}>12:30AM</Text>
+          </View>
+  
+          <View flex={1} alignItems='center' justifyContent='center'>
+            <View flex={4}>
+              {this.renderTopLine(this.props.index)}
+            </View>
+            <TouchableOpacity onPress={this.toggleVotingModal}>
+              <PieChart
+                chart_wh={31}
+                series={voteNums}
+                sliceColor={sliceColors}
+              />
+            </TouchableOpacity>
+            <View flex={4}>
+              {this.renderBottomLine(this.props.index)}
+            </View>
+          </View>
+  
+          <View style={styles.cardSectionStyle}>
+            <CardStack
+              style={styles.content}
+              loop={true}
+              ref={swiper => {
+                this.swiper = swiper
+              }}
+              verticalThreshold={8}
+              horizontalThreshold={8}
+            >
+              {this.state.activities.map((activity, index) => 
+              <Card style={styles.cardStyle} key={index}><Text>{activity.activityName}</Text></Card>
+              )}
+            </CardStack>
+          </View>
+  
+          <Modal isVisible={this.state.visibleVotingModal} backdropOpacity={0.5}>
+            {this.renderPieChart(voteNums)}
+          </Modal>
+        </View>
+      );
+    }
+  else {
     return (
-      <View flex={1} flexDirection="row">
-        <View style={styles.timeView}>
-          <Text style={styles.timeText}>12:30AM</Text>
-        </View>
-
-        <View flex={1} alignItems='center' justifyContent='center'>
-          <View flex={4}>
-            {this.renderTopLine(this.props.index)}
-          </View>
-          <TouchableOpacity onPress={this.toggleVotingModal}>
-            <PieChart
-              chart_wh={31}
-              series={voteNums}
-              sliceColor={sliceColors}
-            />
-          </TouchableOpacity>
-          <View flex={4}>
-            {this.renderBottomLine(this.props.index)}
-          </View>
-        </View>
-
-        <View style={styles.cardSectionStyle}>
-          <CardStack
-            style={styles.content}
-            loop={true}
-            ref={swiper => {
-              this.swiper = swiper
-            }}
-            verticalThreshold={8}
-            horizontalThreshold={8}
-          >
-            <Card style={styles.cardStyle}><Text>First Choice</Text></Card>
-            <Card style={styles.cardStyle}><Text>Second Choice</Text></Card>
-            <Card style={styles.cardStyle}><Text>Third Choice</Text></Card>
-            <Card style={styles.cardStyle}><Text>Fourth Choice</Text></Card>
-            <Card style={styles.cardStyle}><Text>Fifth Choice</Text></Card>
-          </CardStack>
-        </View>
-
-        <Modal isVisible={this.state.visibleVotingModal} backdropOpacity={0.5}>
-          {this.renderPieChart(voteNums)}
-        </Modal>
-      </View>
-    );
+      <View></View>
+    )
+  }
   }
 }
 
@@ -303,7 +354,7 @@ const styles = StyleSheet.create({
   cardStyle: {
     // Temp - Sprint 5
     width: 175,
-    height: 15,
+    height: 20,
     // ^ Temp - Sprint 5
     borderWidth: 0,
     borderRadius: 20,
