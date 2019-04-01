@@ -9,8 +9,34 @@ import DynamicInput from '../components/common/DynamicInput';
 
 class AATabs extends Component {
     state = {
-        activeTab: 'search'
+        activeTab: 'search',
+        location: '',
+        searchLat: 0.0,
+        searchLng: 0.0,
+        error: '',
+        locationPredictions: [],
+        filter_by_type: 'museum'
     };
+
+    componentWillMount = async () => {
+        // TODO: not saving to state
+        navigator.geolocation.getCurrentPosition(
+            position => {                
+                this.setState({
+                    searchLat: position.coords.latitude,
+                    searchLng: position.coords.longitude
+                });
+                console.log("pos.coord: " + position.coords.latitude + " " + position.coords.longitude);
+            }, 
+            error => this.setState({ error: error.message }),
+            { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
+        );
+        
+        console.log("coordinates: " + this.state.searchLat + " " + this.state.searchLng);
+        console.log(this.state.error);
+        this.browseActivityList();
+        
+    }
 
     renderTabs() {
         if (this.state.activeTab === 'search') {
@@ -75,6 +101,7 @@ class AATabs extends Component {
         }
 
     };
+
     renderContentHeader() {
       return(
         <View style={styles.tabsInputs}>
@@ -87,7 +114,8 @@ class AATabs extends Component {
                 iconStyle: "Icon",
                 iconName: "search",
                 iconColor: "#605985",
-                iconSize: 22},
+                iconSize: 22,
+                onChange: this.handleSearchChange },
               {placeholder: 'Current Location',
                 inputContainerStyle: 'tabsInput',
                 inputStyle: 'tabsText',
@@ -96,43 +124,104 @@ class AATabs extends Component {
                 iconStyle: "Icon",
                 iconName: "location-on",
                 iconColor: "#605985",
-                iconSize: 22},
+                iconSize: 22,
+                onChange: this.handleLocationChange },
               ]}
           />
         </View>
       );
     };
 
+    handleSearchChange = async (typedText) => {
+        this.setState({search: typedText});
+        
+        const apiURL = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${this.state.search}&key=${global.apiKey}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000`;
+        try {
+            let result = await fetch(apiURL);
+            let results_json = await result.json();
+            
+            this.setState({ locationPredictions: results_json.results });
+        } catch (err){
+            console.error(err)
+        }
+
+        if (this.state.search === ""){
+            this.browseActivityList();
+        }
+    }
+
+    handleLocationChange = (typedText) => {
+        this.setState({location: typedText});
+    }
+
+    browseActivityList = async () => {
+        // a sort of "browse" since search bar is empty 
+        const apiURL = `https://maps.googleapis.com/maps/api/place/search/json?types=${this.state.filter_by_type}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000&sensor=true&key=${global.apiKey}`
+        try {
+            let result = await fetch(apiURL);
+            let results_json = await result.json();
+            
+            this.setState({ locationPredictions: results_json.results });
+        } catch (err){
+            console.error(err)
+        }
+    }
+
     renderContentFooter() {
         if (this.state.activeTab === 'search') {
-          var activities = [{title: 'Aloha Sushi', add: true, address: '3030 Freedom Lane, Merced, CA 95340', stars: 5, favorited: true},
-            {title: 'Mystic Sports', add: true, address: '465 Edsel Road, Irvine, CA 92614', stars: 4},
-            {title: 'Primedia', add: true, address: '3903 Turnley Ave, Oakland, CA, 94605', stars: 4, favorited: true},
-            {title: 'Glaciarts', address: '3904 Sarno Ct, Moorpark, CA, 93021', stars: 2},
-            {title: 'Ridgeco', add: true, address: '3906 Chelsea Ct, Rocklin, CA, 95677', stars: 4},
-            {title: 'Lucent Bar & Grille', address: '3906 Mayfield St, Newbury Park, CA, 91320', stars: 3},];
+            let test = this.state.locationPredictions[0];
+            if (typeof test !== 'undefined'){
+                return (
+                    <View flex={6} paddingHorizontal={15}>
+                        <FlatList 
+                            data={this.state.locationPredictions}
+                            showsVerticalScrollIndicator={false}
+                            renderItem={({item}) =>
+                                <AAActivityCard 
+                                    title={item.name}
+                                    onCardPress={() => this.onActivityCardPress(item.place_id)} 
+                                    add={true}
+                                    text={item.name}
+                                    address={item.vicinity ? item.vicinity : item.formatted_address}  
+                                    stars={item.rating}
+                                    favorited={false}  
+                                />
+                            }
+                            keyExtractor= {(item) => {
+                                return item.place_id
+                            }}
+                        />
+                    </View>
+                );
+            } else {
+                var activities = [{title: 'Aloha Sushi', add: true, address: '3030 Freedom Lane, Merced, CA 95340', stars: 5, favorited: true},
+                    {title: 'Mystic Sports', add: true, address: '465 Edsel Road, Irvine, CA 92614', stars: 4},
+                    {title: 'Primedia', add: true, address: '3903 Turnley Ave, Oakland, CA, 94605', stars: 4, favorited: true},
+                    {title: 'Glaciarts', address: '3904 Sarno Ct, Moorpark, CA, 93021', stars: 2},
+                    {title: 'Ridgeco', add: true, address: '3906 Chelsea Ct, Rocklin, CA, 95677', stars: 4},
+                    {title: 'Lucent Bar & Grille', address: '3906 Mayfield St, Newbury Park, CA, 91320', stars: 3},];
+                return (
+                    <View flex={6} paddingHorizontal={15}>
+                        <FlatList
+                            data={activities}
+                            showsVerticalScrollIndicator={false}
+                            renderItem={({item}) =>
+                                <AAActivityCard
+                                    key={item.id}
+                                    title={item.title}
+                                    add={item.add}
+                                    text={item.title}
+                                    address={item.address}
+                                    stars={item.stars}
+                                    favorited={item.favorited}
+                                />
+                            }
+                            keyExtractor={(item, index) => index.toString()}
+                        />
+                    </View>
+                );
+            }
 
-          return (
-              <View flex={6} paddingHorizontal={15}>
-                <FlatList
-                    data={activities}
-                    showsVerticalScrollIndicator={false}
-                    renderItem={({item}) =>
-                      <AAActivityCard
-                        key={item.id}
-                        onCardPress={this.onActivityCardPress.bind(this, item.id)}
-                        title={item.title}
-                        add={item.add}
-                        text={item.title}
-                        address={item.address}
-                        stars={item.stars}
-                        favorited={item.favorited}
-                      />
-                    }
-                    keyExtractor={(item, index) => index.toString()}
-                />
-              </View>
-          );
         }
         else if (this.state.activeTab === 'myactivities') {
           return (
@@ -164,18 +253,43 @@ class AATabs extends Component {
             this.setState({activeTab: 'search'})
     };
 
-    onActivityCardPress = (activityId) => {
-      console.log(activityId);
+    onActivityCardPress = async (place_id) => {
+       // Sending an action to add an activity slot!
+       // Current plan
+       // Chosen activity
+       // False, as in this is not a custom activity!
+       this.props.addActivitySlot(this.props.plan.planId, activityId, false);
+       // make api call to get details on activity
+       const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&fields=name,rating,formatted_phone_number,formatted_address,type,opening_hours,geometry&key=${global.apiKey}`
+       try {
+           let result = await fetch(api_url);
+           let activity_details = await result.json();
+           activity_details =  activity_details.result;
+
+           let activity_hours = activity_details.opening_hours ? activity_details.opening_hours.weekday_text.join('\n') : "Sorry! These hours are currently not available online.";
+           this.props.navigation.navigate('Activity', {
+               activity_name: activity_details.name,
+               phone_number: activity_details.formatted_phone_number,
+               hours: activity_hours,
+               address: activity_details.formatted_address,
+               rating: activity_details.rating,
+               coordinates: activity_details.geometry.location,
+               activity_type: activity_details.types[0]
+           });
+
+       } catch (err){
+           console.log(err)
+       }
     };
 
     onCustomActivityCardPress = (activityId) => {
-      console.log(activityId);
       // Sending an action to add an activity slot!
       // Current plan
       // Chosen activity
       // True, as in this is a custom activity!
-      this.props.addActivitySlot(this.props.plan.planId, activityId, true)
-    };
+      this.props.addActivitySlot(this.props.plan.planId, activityId, true);
+    }
+
 
     onMyActivitiesTabPress() {
         if (this.state.activeTab !== 'myactivities')
@@ -195,8 +309,6 @@ class AATabs extends Component {
           var obj = this.props.customActivityData[key];
           result.push({activityId:key, ...obj})
       }
-      console.log("Custom Activities")
-      console.log(result);
       return result;
   }
 

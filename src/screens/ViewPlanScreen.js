@@ -77,30 +77,39 @@ class ViewPlanScreen extends Component {
   }
 
     iterate(activitySlotsObject) {
-      var activitySlotsArray = Object.values(activitySlotsObject);
-      var arrayLength = activitySlotsArray.length;
-      console.log(arrayLength);
-      console.log(activitySlotsArray);
-      return (
-        <View flex={1}>
-          {activitySlotsArray.map((activitySlot, index) => (
-            <FlatList
-            data={Object.values(activitySlot.activities)}
-            showsVerticalScrollIndicator={false}
-            renderItem={({item, index}) =>
-              <VPActivityCard
-                key={item.activityId}
-                custom={item.custom}
-                onCardPress={this.onRActivityCardPress.bind(this)}
-                index={index}
-                totalSlots={arrayLength-1}
-              />
-            }
-            keyExtractor={(item, index) => index.toString()}
-          />
-          ))}
-        </View>
-      );
+      if (activitySlotsObject) {
+        var activitySlotsArray = Object.values(activitySlotsObject);
+        var arrayLength = activitySlotsArray.length;
+        return (
+          <View flex={1}>
+            {activitySlotsArray.map((activitySlot, index) => (
+              <FlatList
+              key={index}
+              data={Object.values(activitySlot.activities)}
+              showsVerticalScrollIndicator={false}
+              renderItem={({item, index}) =>
+                <VPActivityCard
+                  key={item.activityId}
+                  custom={item.custom}
+                  onCardPress={this.onRActivityCardPress.bind(this)}
+                  index={index}
+                  totalSlots={arrayLength-1}
+                />
+              }
+              keyExtractor={(item, index) => index.toString()}
+            />
+            ))}
+          </View>
+        );
+      }
+      else {
+        return (
+          <View flex={1}>
+
+          </View>
+        )
+      }
+
     };
 
     render() {

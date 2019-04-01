@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {View, Text, ScrollView, StyleSheet} from 'react-native';
 import { MapView} from 'expo';
 import {Icon} from 'react-native-elements';
+import { Rating } from 'react-native-ratings';
 
 class ActivityScreen extends Component {
     constructor(props){
@@ -50,40 +51,14 @@ class ActivityScreen extends Component {
                     </View>
                     <View style={styles.subTitleView}>
                         <Text style={styles.subTitleText}>
-                            ACTIVITY TYPE
+                            {this.props.navigation.state.params.activity_type}
                         </Text>
                     </View>
                     <View style={styles.subIconsView}>
-                        <Icon 
-                            name='star'
-                            color='#FDAF17'
-                            size={20}
-                        />
-                        <Icon 
-                            name='star'
-                            color='#FDAF17'
-                            size={20}
-                        />
-                        <Icon 
-                            name='star'
-                            color='#FDAF17'
-                            size={20}
-                        />
-                        <Icon 
-                            name='star'
-                            color='#FDAF17'
-                            size={20}
-                        />
-                        <Icon 
-                            name='star'
-                            color='#B8BEC1'
-                            size={20}
-                        />
-                        <Icon
-                            containerStyle={styles.addIconStyle}
-                            name='add'
-                            color='#2661B2'
-                            size={30}
+                        <Rating
+                            imageSize={15}
+                            readonly
+                            startingValue={this.props.navigation.state.params.rating}
                         />
                     </View>
                     <View style={styles.subSectionTitleView}>
