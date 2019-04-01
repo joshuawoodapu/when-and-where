@@ -8,6 +8,8 @@ import DynamicInput from '../components/common/DynamicInput';
 import Footer from '../components/Footer';
 import Spinner from "../components/common/Spinner";
 import firebase from 'firebase';
+import ReactDOM from 'react-dom';
+import { FormProvider } from 'react-advanced-form';
 
 class RegistrationScreen extends Component {
     static navigationOptions = {
@@ -15,6 +17,19 @@ class RegistrationScreen extends Component {
     };
 
     state = { name: '', email: '', password: '', password_confirm: '', error: '', loading: false };
+
+    const { email, password } = this.state;
+    const isEnabled = email.length > 0 && password.length > 0;
+    const errors = validate(this.state.email, this.state.password);
+    const isEnabled = !Object.keys(errors).some(x => errors[x]);
+
+    function validate(email, password) {
+  // true means invalid, so our conditions got reversed
+  return {
+    email: email.length === 0,
+    password: password.length === 0
+  };
+}
 
     onButtonPress() {
         const { name, email, password_confirm, password } = this.state;
@@ -36,13 +51,69 @@ class RegistrationScreen extends Component {
         }
     }
 
+    onButtonPress() {
+        const { name, email, password_confirm, password } = this.state;
+        this.setState({ error: '', loading: true });
+
+        if( password === null){
+
+          .catch(error => {
+              console.log(error.code)
+              this.onRegisterFail.bind(this)
+
+        });
+    });
+  } else {
+      Vibration.vibrate(1000)
+      this.setState({ error: "Passwords do not match", loading: false });
+  }
+}
+
+onButtonPress() {
+    const { name, email, password_confirm, password } = this.state;
+    this.setState({ error: '', loading: true });
+
+    if( password_confirm === null || email === null || name === null){
+      .catch(error => {
+          console.log(error.code)
+          this.onRegisterFail.bind(this)
+    });
+});
+} else {
+  Vibration.vibrate(1000)
+  this.setState({ error: "Passwords do not match", loading: false });
+}
+}
+
+onButtonPress() {
+    const { name, email, password_confirm, password } = this.state;
+    this.setState({ error: '', loading: true });
+
+    if( !email.contain('@'){
+
+      .catch(error => {
+          console.log(error.code)
+          this.onRegisterFail.bind(this)
+
+    });
+});
+} else {
+  Vibration.vibrate(1000)
+  this.setState({ error: "Passwords do not match", loading: false });
+}
+}
+
+
+
+    // will be looking at doing catches for onButtonPress for each error such as email, matching passwords,
+    // and any other check
+
     onRegisterFail() {
         this.setState({ error: 'Registration failed.', loading: false });
     }
 
     onRegisterSuccess = async () => {
         const user = await firebase.auth().currentUser;
-        
 
         await firebase.database().ref('users/' + user.uid).set({
           fullName: this.state.name
@@ -53,7 +124,6 @@ class RegistrationScreen extends Component {
 
         if (user !== null)
             this.props.userLoad(user);
-
 
         this.setState({
           name: '',
@@ -98,7 +168,9 @@ class RegistrationScreen extends Component {
 
     render() {
         return (
-            <DismissKeyboard>
+          <KeyboardAvoidingView behavior='position'>
+         <DismissKeyboard style={styles.toplevel}>
+             <View style={styles.mainContainer}>
             <View flex={1}>
               <View flex={2} paddingLeft={48}>
                 <RHeader>Create Account</RHeader>
@@ -111,6 +183,7 @@ class RegistrationScreen extends Component {
                         autoCapitalize: "words",
                         stateLabel: "name",
                         onChange: this.handleNameChange},
+                        isRequired: true,
                       {placeholder: 'Email',
                         inputContainerStyle: 'regScreenInput',
                         autoCorrect: false,
@@ -118,12 +191,14 @@ class RegistrationScreen extends Component {
                         stateLabel: "email",
                         spellcheck: false,
                         onChange: this.handleEmailChange},
+                        isRequired: true,
                       {placeholder: 'Password',
                         inputContainerStyle: 'regScreenInput',
                         secureTextEntry: true,
                         autoCorrect: false,
                         stateLabel: "password",
                         onChange: this.handlePasswordChange},
+                        isRequired: true,
                       {placeholder: 'Confirm Password',
                         inputContainerStyle: 'regScreenInput',
                         secureTextEntry: true,
@@ -131,6 +206,7 @@ class RegistrationScreen extends Component {
                         autoCorrect: false,
                         stateLabel: "password_confirm",
                         onChange: this.handlePasswordConfirmChange},
+                        isRequired: true,
                       ]}
                   />
                 </View>
@@ -143,8 +219,9 @@ class RegistrationScreen extends Component {
                   <Footer/>
                 </View>
                 {this.renderButton()}
-            </View>
-            </DismissKeyboard>
+                </View>
+                </DismissKeyboard>
+                </KeyboardAvoidingView>
         )
     }
 }
@@ -163,12 +240,14 @@ const form = StyleSheet.create({
     }
 });
 
+
+
 const DismissKeyboard = ({children}) => (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         {children}
     </TouchableWithoutFeedback>
-);
 
+);
 const mapStateToProps = state => {
   return { user: state.user };
 }

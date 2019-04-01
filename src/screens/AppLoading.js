@@ -25,7 +25,7 @@ class AppLoading extends Component {
         this.setState({ fontLoaded:true })
 
         // Change to false once you have left development!
-        const development = true;
+        const development = false;
 
 
         if (development)
@@ -47,14 +47,14 @@ class AppLoading extends Component {
 
             const onBoarded = await AsyncStorage.getItem('onBoarded');
 
-            if (logged) 
+            if (logged)
                 this.props.userLoad(user);
-  
+
             if (logged && onBoarded)
                 this.props.navigation.navigate('App');
             else if (onBoarded)
                 this.props.navigation.navigate('Login');
-            else 
+            else
                 this.props.navigation.navigate(logged ? 'App' : 'Auth');
 
         }
