@@ -22,7 +22,9 @@ class DiscoveryScreen extends Component {
         searchLng: 0.0,
         error: '',
         locationPredictions: [],
-        filter_by_type: 'museum'
+        filter_by_type: 'establishment',
+        searchPageToken: '',
+        browsePageToken: ''
     }
 
     componentWillMount = async () => {
@@ -42,12 +44,19 @@ class DiscoveryScreen extends Component {
 
     browseActivityList = async () => {
         // a sort of "browse" since search bar is empty 
-        const apiURL = `https://maps.googleapis.com/maps/api/place/search/json?types=${this.state.filter_by_type}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000&sensor=true&key=${global.apiKey}`
+        const apiURL = `https://maps.googleapis.com/maps/api/place/search/json?types=${this.state.filter_by_type}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000&sensor=true&key=${global.apiKey}&pagetoken=${this.state.browsePageToken}`;
         try {
             let result = await fetch(apiURL);
             let results_json = await result.json();
             
             this.setState({ locationPredictions: results_json.results });
+            console.log(results_json);
+
+            if ( results_json.hasOwnProperty("next_page_token") ){
+                this.setState({ browsePageToken: result.next_page_token });
+                console.log(this.state.browsePageToken)
+            }
+            
         } catch (err){
             console.error(err)
         }
@@ -56,12 +65,17 @@ class DiscoveryScreen extends Component {
     handleSearchChange = async (typedText) => {
         this.setState({ search: typedText });
 
-        const apiURL = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${this.state.search}&key=${global.apiKey}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000`;
+        const apiURL = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${this.state.search}&key=${global.apiKey}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000&pagetoken=${this.state.searchPageToken}`;
         try {
             let result = await fetch(apiURL);
             let results_json = await result.json();
             
             this.setState({ locationPredictions: results_json.results });
+
+            if ( results_json.hasOwnProperty("next_page_token") ){
+                this.setState({ searchPageToken: result.next_page_token });
+                console.log(this.state.searchPageToken)
+            }
         } catch (err){
             console.error(err)
         }
@@ -110,6 +124,7 @@ class DiscoveryScreen extends Component {
                     navigation={this.props.navigation}
                     planData={this.props.user.plans}
                     activityList={this.state.locationPredictions}
+                    loadMore={this.browseActivityList}
                 />
             </View>
         )
