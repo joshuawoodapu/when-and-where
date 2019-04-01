@@ -14,8 +14,9 @@ export default class Footer extends Component {
 const styles = StyleSheet.create({
     footerStyle: {
         alignItems: 'center',
-        justifyContent: 'flex-start',
-        paddingBottom: 5,
+        justifyContent: 'center',
+        //paddingBottom: 5,
+        paddingTop: 10,
         flex: 1,
     },
     footerTextStyle: {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Text, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet, TouchableOpacity, Vibration} from 'react-native';
+import {View, Text, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet, TouchableOpacity, Vibration, KeyboardAvoidingView} from 'react-native';
 import { connect } from 'react-redux';
 import * as actions from '../redux/actions';
 import RHeader from '../components/common/RHeader';
@@ -98,6 +98,7 @@ class RegistrationScreen extends Component {
 
     render() {
         return (
+          <KeyboardAvoidingView flex={1} behavior='padding'>
             <DismissKeyboard>
             <View flex={1}>
               <View flex={2} paddingLeft={48}>
@@ -139,12 +140,16 @@ class RegistrationScreen extends Component {
                     {this.state.error}
                 </Text>
 
+                <KeyboardAvoidingView behavior='padding'>
+                  {this.renderButton()}
+                </KeyboardAvoidingView>
                 <View flex={2}>
                   <Footer/>
                 </View>
-                {this.renderButton()}
+                
             </View>
             </DismissKeyboard>
+            </KeyboardAvoidingView>
         )
     }
 }
