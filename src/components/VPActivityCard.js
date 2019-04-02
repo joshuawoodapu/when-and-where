@@ -26,8 +26,10 @@ class VPActivityCard extends Component {
     this.mounted = true;
     var activitiesArray = Object.values(this.props.activityData.activities);
     for (i = 0; i < activitiesArray.length; i++) {
+      // console.log("activitiesArray length " + activitiesArray.length);
       // If a custom activity, then the information comes from the database!
       if (activitiesArray[i].custom) {
+        console.log("[i] " + i);
         await firebase.database().ref('activities/' + activitiesArray[i].activityId).once('value')
         .then(snapshot => this.activityDataSuccess(snapshot.val()))
         .catch((error) => {
@@ -36,6 +38,7 @@ class VPActivityCard extends Component {
       }
       // If not a custom activity, then the information comes from the Google API!
       else {
+        console.log("[i] " + i);
         const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${activitiesArray[i].activityId}&fields=name,rating,formatted_phone_number,formatted_address,type,opening_hours,geometry&key=${global.apiKey}`
         try {
             let result = await fetch(api_url);
@@ -94,31 +97,58 @@ class VPActivityCard extends Component {
     }
   }
 
-  renderInfo() {
-    if (this.props.address.includes(",")) {
-      var index = this.props.address.indexOf(",");
-      var streetAddress = this.props.address.substr(0, index + 1);
-      var cityStateAddress = this.props.address.substr(index + 2);
+  renderInfo(activity) {
+    // console.log("START this.props.activityData");
+    // console.log(this.props.activityData);
+    // console.log("end this.props.activityData");
+    // console.log("start this.state.activities");
+    // console.log(this.state.activities);
+    // console.log("END this.state.activities");
+
+    var actAddr = activity.activityAddress;
+
+    if (actAddr.includes(",")) {
+      var index = actAddr.indexOf(",");
+      var streetAddress = actAddr.substr(0, index + 1);
+      var cityStateAddress = actAddr.substr(index + 2);
+
+      return (
+        <View flex={3} margin={10}>
+          <View style={styles.nameRow}>
+            <Text style={styles.titleText}>
+              {activity.activityName}
+            </Text>
+          </View>
+
+          <View style={styles.addressRow}>
+            <Text style={styles.addressText}>
+              {streetAddress}
+            </Text>
+            <Text style={styles.addressText}>
+              {cityStateAddress}
+            </Text>
+          </View>
+        </View>
+      );
     }
 
-    return (
-      <View flex={3} width="100%">
-        <View style={styles.nameRow}>
-          <Text style={styles.titleText}>
-            {this.props.title}
-          </Text>
-        </View>
+    else {
+      return (
+        <View flex={3} margin={10}>
+          <View style={styles.nameRow}>
+            <Text style={styles.titleText}>
+              {activity.activityName}
+            </Text>
+          </View>
 
-        <View style={styles.addressRow}>
-          <Text style={styles.addressText}>
-            {streetAddress}
-          </Text>
-          <Text style={styles.addressText}>
-            {cityStateAddress}
-          </Text>
+          <View style={styles.addressRow}>
+            <Text style={styles.addressText}>
+              {actAddr}
+            </Text>
+          </View>
         </View>
-      </View>
-    );
+      );
+    }
   }
 
   renderYes(yesVote) {
@@ -251,11 +281,11 @@ class VPActivityCard extends Component {
     });
     if (this.state.activitiesLoaded) {
       return (
-        <View flex={1} flexDirection="row">
+        <View flex={1} flexDirection="row" height={95}>
           <View style={styles.timeView}>
             <Text style={styles.timeText}>12:30AM</Text>
           </View>
-  
+
           <View flex={1} alignItems='center' justifyContent='center'>
             <View flex={4}>
               {this.renderTopLine(this.props.index)}
@@ -271,7 +301,7 @@ class VPActivityCard extends Component {
               {this.renderBottomLine(this.props.index)}
             </View>
           </View>
-  
+
           <View style={styles.cardSectionStyle}>
             <CardStack
               style={styles.content}
@@ -281,13 +311,39 @@ class VPActivityCard extends Component {
               }}
               verticalThreshold={8}
               horizontalThreshold={8}
+              secondCardZoom={1}
+              verticalSwipe={false}
             >
-              {this.state.activities.map((activity, index) => 
-              <Card style={styles.cardStyle} key={index}><Text>{activity.activityName}</Text></Card>
+              {this.state.activities.map((activity, index) =>
+                /*<Card style={styles.cardStyle} key={index}>
+                  <Text>{activity.activityName}</Text>
+                </Card>
+
+                // Cam Sprint 6 - Card w/out TouchableOpacity
+                <View flex={1} margin={10}>
+                    <View flex={3} width="100%">
+                      <View style={styles.nameRow}>
+                        <Text style={styles.titleText}>
+                          {activity.activityName}
+                        </Text>
+                      </View>
+                      <View style={styles.addressRow}>
+                        <Text style={styles.addressText}>
+                          {activity.activityAddress}
+                        </Text>
+                      </View>
+                    </View>
+                </View>
+                */
+                <Card style={styles.cardStyle} key={index}>
+                  <View flex={1}>
+                      {this.renderInfo(activity)}
+                  </View>
+                </Card>
               )}
             </CardStack>
           </View>
-  
+
           <Modal isVisible={this.state.visibleVotingModal} backdropOpacity={0.5}>
             {this.renderPieChart(voteNums)}
           </Modal>
@@ -353,8 +409,8 @@ const styles = StyleSheet.create({
   },
   cardStyle: {
     // Temp - Sprint 5
-    width: 175,
-    height: 20,
+    width: 195,
+    height: 75,
     // ^ Temp - Sprint 5
     borderWidth: 0,
     borderRadius: 20,

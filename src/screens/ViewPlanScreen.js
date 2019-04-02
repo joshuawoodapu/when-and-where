@@ -47,7 +47,7 @@ class ViewPlanScreen extends Component {
       msg += this.props.plan.planName;
       msg += "'! Join your friends on When&Where! https://tinyurl.com/yxeozq2t";
 
-      Share.share({ 
+      Share.share({
         message: msg
       }).then(this.showResult);
     }
@@ -58,7 +58,7 @@ class ViewPlanScreen extends Component {
       this.setState({planLoaded: true})
       //console.log(this.state.planLoaded);
     }
-  
+
     onAddPress() {
         this.props.navigation.navigate('AddActivity');
     }
@@ -84,13 +84,19 @@ class ViewPlanScreen extends Component {
     iterate(activitySlotsObject) {
       if (activitySlotsObject) {
         var activitySlotsArray = Object.values(activitySlotsObject);
-        // var arrayLength = activitySlotsArray.length;
+        console.log("********START********");
+        console.log(activitySlotsArray);
+        console.log("********END********");
+        var arrayLength = activitySlotsArray.length;
         return (
           <View flex={1}>
             {activitySlotsArray.map((activitySlot, index) => (
               <VPActivityCard
                 key={index}
+                index={index}
                 activityData={activitySlot}
+                onCardPress={this.onRActivityCardPress.bind(this)}
+                totalSlots={arrayLength-1}
               />
             ))}
           </View>
@@ -140,7 +146,7 @@ class ViewPlanScreen extends Component {
           {title: 'Cold Stone Creamery', address: '3730 S Figueroa St, Los Angeles, CA 90007', nVote: true},
         ]];
             return (
-            
+
               <ScrollView flex={1} showsVerticalScrollIndicator={false}>
                 <View flexDirection="row" padding={15} alignItems="center">
                   <RHeader>{this.props.plan.planName}</RHeader>
