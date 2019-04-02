@@ -26,40 +26,47 @@ class VPActivityCard extends Component {
     this.mounted = true;
     var activitiesArray = Object.values(this.props.activityData.activities);
     for (i = 0; i < activitiesArray.length; i++) {
-      // console.log("activitiesArray length " + activitiesArray.length);
+      //console.log("activitiesArray length " + activitiesArray.length);
       // If a custom activity, then the information comes from the database!
       if (activitiesArray[i].custom) {
-        console.log("[i] " + i);
-        await firebase.database().ref('activities/' + activitiesArray[i].activityId).once('value')
-        .then(snapshot => this.activityDataSuccess(snapshot.val()))
-        .catch((error) => {
-            console.log(error)
-        })
+        //console.log("[i] " + i);
+        this.getFirebaseData(activitiesArray);     
       }
       // If not a custom activity, then the information comes from the Google API!
       else {
         console.log("[i] " + i);
-        const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${activitiesArray[i].activityId}&fields=name,rating,formatted_phone_number,formatted_address,type,opening_hours,geometry&key=${global.apiKey}`
-        try {
-            let result = await fetch(api_url);
-            let activity_details = await result.json();
-            activity_details =  activity_details.result;
-            console.log(activity_details);
-            var formattedDetails = {activityName: activity_details.name};
-            this.activityDataSuccess(formattedDetails);
-        } catch (err){
-            console.log(err)
-        }
+        this.getAPIData(activitiesArray);
       }
     }
-    //this.props.planLoadFunction();
     if (this.mounted) {
       this.setState({activitiesLoaded:true})
     }
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     this.mounted = false;
+  }
+
+  getFirebaseData = async (activitiesArray) => {
+    await firebase.database().ref('activities/' + activitiesArray[i].activityId).once('value')
+    .then(snapshot => this.activityDataSuccess(snapshot.val()))
+    .catch((error) => {
+        console.log(error)
+    })
+  }
+
+  getAPIData = async (activitiesArray) => {
+    const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${activitiesArray[i].activityId}&fields=name,rating,formatted_phone_number,formatted_address,type,opening_hours,geometry&key=${global.apiKey}`
+    try {
+        let result = await fetch(api_url);
+        let activity_details = await result.json();
+        activity_details =  activity_details.result;
+        console.log(activity_details);
+        var formattedDetails = {activityName: activity_details.name, activityAddress: activity_details.formatted_address};
+        this.activityDataSuccess(formattedDetails);
+    } catch (err){
+        console.log(err)
+    }
   }
 
   activityDataSuccess = (data) => {
