@@ -7,19 +7,23 @@ import { connect } from 'react-redux';
 import * as actions from '../redux/actions';
 
 
-
 class SettingsScreen extends Component {
 
 
     state ={
         fullName: '',
         email: '',
-
+        visibleNameChangeModal: false,
 
     }
 
     onNotifPress = () => {
         this.props.navigation.navigate('Notifications');
+    }
+
+    onMePress = () => {
+        visibleNameChangeModal = true
+        this.navigation.navigate('ChangeNameModal');
     }
 
     onLogOutPress = async () => {
@@ -42,9 +46,10 @@ class SettingsScreen extends Component {
         
                 <View style={styles.settingsHolder}>
 
-                <Setting settingName='Me'
-                    currentSetting={this.props.user.fullName}
-                    iconName='edit'/>
+                <Setting settingName='Me' currentSetting={this.props.user.fullName}
+                    iconName='edit'
+                    onPress={this.onMePress.bind(this)}
+                    />
                 <Setting settingName='Notifications' iconName='notifications' onPress={this.onNotifPress.bind(this)}/>
                 <Setting settingName='Account' currentSetting='john.doe@gmail.com' iconName='person'/>
                 <Setting settingName='Privacy' iconName='lock'/>
