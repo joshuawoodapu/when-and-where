@@ -290,7 +290,7 @@ class VPActivityCard extends Component {
       return (
         <View flex={1} flexDirection="row" height={95}>
           <View style={styles.timeView}>
-            <Text style={styles.timeText}>12:30AM</Text>
+            <Text style={styles.timeText}>12AM</Text>
           </View>
 
           <View flex={1} alignItems='center' justifyContent='center'>

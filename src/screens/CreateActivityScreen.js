@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {View, Text, TextInput, TouchableWithoutFeedback, Keyboard, StyleSheet, TouchableOpacity} from 'react-native';
 import {Input} from 'react-native-elements';
+import {connect} from 'react-redux';
+import * as actions from '../redux/actions';
 import RHeader from '../components/common/RHeader';
 import RButton from '../components/common/RButton';
 import DynamicInput from '../components/common/DynamicInput';
@@ -113,7 +115,8 @@ class CreateActivityScreen extends Component {
             console.log(error);
             this.onCreateFail.bind(this);
         }}
-        this.props.navigation.navigate('TestCustom');
+        await this.props.customActivitiesLoad(user);
+        this.props.navigation.navigate('Discovery');
        } // End if, name validation
     }
 
@@ -257,4 +260,8 @@ const DismissKeyboard = ({children}) => (
     </TouchableWithoutFeedback>
 );
 
-export default CreateActivityScreen;
+const mapStateToProps = state => {
+  return { user: state.user, plan: state.plan };
+}
+
+export default connect(mapStateToProps, actions)(CreateActivityScreen);
