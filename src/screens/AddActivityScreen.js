@@ -20,12 +20,17 @@ class AddActivityScreen extends Component {
     };
 
     render() {
+      const { navigation } = this.props;
+      const parentComponent = navigation.getParam('parentComponent', 'NO-parentComponent');
+
+      console.log("parentComponent " + parentComponent);
         return (
             <View flex={1}>
                 <AATabs
-                navigation={this.props.navigation}
-                handleLocation={this.handleLocationChange}
-                customActivityData={this.props.user.customActivities}
+                  navigation={this.props.navigation}
+                  handleLocation={this.handleLocationChange}
+                  customActivityData={this.props.user.customActivities}
+                  parentComponent={parentComponent}
                 />
             </View>
         )

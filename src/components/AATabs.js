@@ -21,21 +21,21 @@ class AATabs extends Component {
     componentWillMount = async () => {
         // TODO: not saving to state
         navigator.geolocation.getCurrentPosition(
-            position => {                
+            position => {
                 this.setState({
                     searchLat: position.coords.latitude,
                     searchLng: position.coords.longitude
                 });
                 console.log("pos.coord: " + position.coords.latitude + " " + position.coords.longitude);
-            }, 
+            },
             error => this.setState({ error: error.message }),
             { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
         );
-        
+
         console.log("coordinates: " + this.state.searchLat + " " + this.state.searchLng);
         console.log(this.state.error);
         this.browseActivityList();
-        
+
     }
 
     renderTabs() {
@@ -134,12 +134,12 @@ class AATabs extends Component {
 
     handleSearchChange = async (typedText) => {
         this.setState({search: typedText});
-        
+
         const apiURL = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${this.state.search}&key=${global.apiKey}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000`;
         try {
             let result = await fetch(apiURL);
             let results_json = await result.json();
-            
+
             this.setState({ locationPredictions: results_json.results });
         } catch (err){
             console.error(err)
@@ -155,12 +155,12 @@ class AATabs extends Component {
     }
 
     browseActivityList = async () => {
-        // a sort of "browse" since search bar is empty 
+        // a sort of "browse" since search bar is empty
         const apiURL = `https://maps.googleapis.com/maps/api/place/search/json?types=${this.state.filter_by_type}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000&sensor=true&key=${global.apiKey}`
         try {
             let result = await fetch(apiURL);
             let results_json = await result.json();
-            
+
             this.setState({ locationPredictions: results_json.results });
         } catch (err){
             console.error(err)
@@ -173,18 +173,18 @@ class AATabs extends Component {
             if (typeof test !== 'undefined'){
                 return (
                     <View flex={6} paddingHorizontal={15}>
-                        <FlatList 
+                        <FlatList
                             data={this.state.locationPredictions}
                             showsVerticalScrollIndicator={false}
                             renderItem={({item}) =>
-                                <AAActivityCard 
+                                <AAActivityCard
                                     title={item.name}
-                                    onCardPress={() => this.onActivityCardPress(item.place_id)} 
+                                    onCardPress={() => this.onActivityCardPress(item.place_id, this.props.parentComponent)}
                                     add={true}
                                     text={item.name}
-                                    address={item.vicinity ? item.vicinity : item.formatted_address}  
+                                    address={item.vicinity ? item.vicinity : item.formatted_address}
                                     stars={item.rating}
-                                    favorited={false}  
+                                    favorited={false}
                                 />
                             }
                             keyExtractor= {(item) => {
@@ -253,14 +253,26 @@ class AATabs extends Component {
             this.setState({activeTab: 'search'})
     };
 
-    onActivityCardPress = async (place_id) => {
+    onActivityCardPress = async (place_id, parComp) => {
        // Sending an action to add an activity slot!
        // Current plan
        // Chosen activity
        // False, as in this is not a custom activity!
-       await this.props.addActivitySlot(this.props.plan.planId, place_id, false);
-       await this.props.planSet(this.props.plan.planId);
-       this.props.navigation.navigate('PlanView');
+
+       switch(parComp) {
+          case 'add-box':
+            console.log("ADDING TO EXISTING ACTIVITY SLOT");
+            break;
+          case 'add-circle':
+            console.log("ADDING AS NEW ACTIVITY SLOT");
+            await this.props.addActivitySlot(this.props.plan.planId, place_id, false);
+            await this.props.planSet(this.props.plan.planId);
+            this.props.navigation.navigate('PlanView');
+            break;
+          default:
+            console.log("Talk to Campbell lol");
+      }
+
        // make api call to get details on activity
        /*
         const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&fields=name,rating,formatted_phone_number,formatted_address,type,opening_hours,geometry&key=${global.apiKey}`

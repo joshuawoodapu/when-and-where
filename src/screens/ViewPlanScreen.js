@@ -60,7 +60,11 @@ class ViewPlanScreen extends Component {
     }
 
     onAddPress() {
-        this.props.navigation.navigate('AddActivity');
+        this.props.navigation.navigate('AddActivity', {parentComponent: 'add-circle'});
+    }
+
+    onAddBoxPress() {
+        this.props.navigation.navigate('AddActivity', {parentComponent: 'add-box'});
     }
 
     onPressViewComments() {
@@ -84,9 +88,6 @@ class ViewPlanScreen extends Component {
     iterate(activitySlotsObject) {
       if (activitySlotsObject) {
         var activitySlotsArray = Object.values(activitySlotsObject);
-        console.log("********START********");
-        console.log(activitySlotsArray);
-        console.log("********END********");
         var arrayLength = activitySlotsArray.length;
         return (
           <View flex={1}>
@@ -96,6 +97,7 @@ class ViewPlanScreen extends Component {
                 index={index}
                 activityData={activitySlot}
                 onCardPress={this.onRActivityCardPress.bind(this)}
+                onPlusPress={this.onAddBoxPress.bind(this)}
                 totalSlots={arrayLength-1}
               />
             ))}
