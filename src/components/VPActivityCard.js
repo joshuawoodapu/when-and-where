@@ -29,12 +29,10 @@ class VPActivityCard extends Component {
       //console.log("activitiesArray length " + activitiesArray.length);
       // If a custom activity, then the information comes from the database!
       if (activitiesArray[i].custom) {
-        //console.log("[i] " + i);
-        this.getFirebaseData(activitiesArray);     
+        this.getFirebaseData(activitiesArray);
       }
       // If not a custom activity, then the information comes from the Google API!
       else {
-        console.log("[i] " + i);
         this.getAPIData(activitiesArray);
       }
     }
@@ -104,14 +102,11 @@ class VPActivityCard extends Component {
     }
   }
 
-  renderInfo(activity) {
-    // console.log("START this.props.activityData");
-    // console.log(this.props.activityData);
-    // console.log("end this.props.activityData");
-    // console.log("start this.state.activities");
-    // console.log(this.state.activities);
-    // console.log("END this.state.activities");
+  onAddPress() {
+      this.props.navigation.navigate('AddActivity');
+  }
 
+  renderInfo(activity) {
     var actAddr = activity.activityAddress;
 
     if (actAddr.includes(",")) {
@@ -160,7 +155,6 @@ class VPActivityCard extends Component {
 
   renderYes(yesVote) {
     if (yesVote) {
-
       return (
         <Icon
           key={this.props.keyExtractor + "_yes"}
@@ -288,12 +282,18 @@ class VPActivityCard extends Component {
     });
     if (this.state.activitiesLoaded) {
       return (
-        <View flex={1} flexDirection="row" height={95}>
+        <View flex={.3} flexDirection="row" height={95}>
           <View style={styles.timeView}>
-            <Text style={styles.timeText}>12AM</Text>
+            <TouchableOpacity onPress={this.props.onPlusPress}>
+              <Icon
+                name='add-box'
+                color='#2661B2'
+                size={22}
+              />
+            </TouchableOpacity>
           </View>
 
-          <View flex={1} alignItems='center' justifyContent='center'>
+          <View flex={.5} alignItems='center' justifyContent='center'>
             <View flex={4}>
               {this.renderTopLine(this.props.index)}
             </View>
@@ -351,6 +351,25 @@ class VPActivityCard extends Component {
             </CardStack>
           </View>
 
+          <View flex={0.5} justifyContent="space-around">
+              <TouchableOpacity flex={1} onPress={ () => { this.swiper.swipeRight() }}>
+                <Icon
+                  key={this.props.keyExtractor + "_yes"}
+                  name='check'
+                  color='green'
+                  size={20}
+                />
+              </TouchableOpacity>
+              <TouchableOpacity flex={1} onPress={ () => { this.swiper.swipeLeft() }}>
+                <Icon
+                  key={this.props.keyExtractor + "_no"}
+                  name='close'
+                  color='red'
+                  size={20}
+                />
+              </TouchableOpacity>
+          </View>
+
           <Modal isVisible={this.state.visibleVotingModal} backdropOpacity={0.5}>
             {this.renderPieChart(voteNums)}
           </Modal>
@@ -393,8 +412,9 @@ const styles = StyleSheet.create({
   },
   cardSectionStyle: {
     flex: 3,
-    paddingBottom: 15,
+    paddingVertical: 15,
     justifyContent: 'space-between',
+    alignItems: 'stretch'
   },
   titleText: {
     color: '#2661B2',
@@ -416,8 +436,9 @@ const styles = StyleSheet.create({
   },
   cardStyle: {
     // Temp - Sprint 5
-    width: 195,
-    height: 75,
+    minWidth: 195,
+    maxWidth: '100%',
+    maxHeight: '100%',
     // ^ Temp - Sprint 5
     borderWidth: 0,
     borderRadius: 20,
