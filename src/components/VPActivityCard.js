@@ -59,7 +59,7 @@ class VPActivityCard extends Component {
         let result = await fetch(api_url);
         let activity_details = await result.json();
         activity_details =  activity_details.result;
-        console.log(activity_details);
+        //console.log(activity_details);
         var formattedDetails = {activityName: activity_details.name, activityAddress: activity_details.formatted_address};
         this.activityDataSuccess(formattedDetails);
     } catch (err){

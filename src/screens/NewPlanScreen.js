@@ -221,7 +221,7 @@ class NewPlanScreen extends Component {
                 <View flex={1} justifyContent="center" alignItems="center">
                   <TouchableOpacity>
                       <Icon
-                          name="add-circle"
+                          name="createSlot"
                           color="#0E91D6"
                           size={35}
                       />
@@ -302,7 +302,7 @@ class NewPlanScreen extends Component {
                           {/*plus button*/}
                           <View flex={1} justifyContent="center" alignItems="center">
                             <TouchableOpacity>
-                              <Icon name="add-circle" color="#0E91D6" size={35}/>
+                              <Icon name="createSlot" color="#0E91D6" size={35}/>
                             </TouchableOpacity>
                           </View>
                         </View>

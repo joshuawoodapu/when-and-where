@@ -60,11 +60,11 @@ class ViewPlanScreen extends Component {
     }
 
     onAddPress() {
-        this.props.navigation.navigate('AddActivity', {parentComponent: 'add-circle'});
+        this.props.navigation.navigate('AddActivity', {addAction: 'createSlot'});
     }
 
-    onAddBoxPress() {
-        this.props.navigation.navigate('AddActivity', {parentComponent: 'add-box'});
+    onAddBoxPress(newActivityIndex) {
+        this.props.navigation.navigate('AddActivity', {addAction: 'addActivity', newActivityIndex: newActivityIndex});
     }
 
     onPressViewComments() {
@@ -97,7 +97,7 @@ class ViewPlanScreen extends Component {
                 index={index}
                 activityData={activitySlot}
                 onCardPress={this.onRActivityCardPress.bind(this)}
-                onPlusPress={this.onAddBoxPress.bind(this)}
+                onPlusPress={this.onAddBoxPress.bind(this, index)}
                 totalSlots={arrayLength-1}
               />
             ))}

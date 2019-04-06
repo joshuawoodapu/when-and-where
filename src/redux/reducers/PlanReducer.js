@@ -20,7 +20,7 @@ export default (state = INITIAL_STATE, action) => {
                 planName: action.payload.planName,
                 privacy: action.payload.privacy,
                 startDate: action.payload.startDate,
-                activitySlots: action.payload.activitySlots}
+                activitySlots: action.payload.activitySlots};
         default:
             return state;
     }
