@@ -31,6 +31,7 @@ class ViewPlanScreen extends Component {
       this.state = {
           isSwitch1On: false,
           visibleSharePlanModal: false,
+          planLoaded: false
       };
       this.shareMessage = this.shareMessage.bind(this);
       this.showResult = this.showResult.bind(this);
@@ -53,6 +54,10 @@ class ViewPlanScreen extends Component {
 
     toggleSharePlanModal = () => this.setState({ visibleSharePlanModal: !this.state.visibleSharePlanModal });
 
+    planLoaded = () => {
+      this.setState({planLoaded: true})
+      //console.log(this.state.planLoaded);
+    }
   
     onAddPress() {
         this.props.navigation.navigate('AddActivity');
@@ -76,36 +81,53 @@ class ViewPlanScreen extends Component {
       this.props.navigation.navigate('CollabInvite');
   }
 
-    iterate(aList) {
-      var arrayLength = aList.length;
-
-      for (var i = 0; i < arrayLength; i++) {
+    iterate(activitySlotsObject) {
+      if (activitySlotsObject) {
+        var activitySlotsArray = Object.values(activitySlotsObject);
+        // var arrayLength = activitySlotsArray.length;
         return (
           <View flex={1}>
-            <FlatList
-              data={aList[i]}
+            {activitySlotsArray.map((activitySlot, index) => (
+              <VPActivityCard
+                key={index}
+                activityData={activitySlot}
+              />
+            ))}
+          </View>
+          // Old version for safekeeping
+          /*
+                    <View flex={1}>
+            {activitySlotsArray.map((activitySlot, index) => (
+              <FlatList
+              key={index}
+              data={Object.values(activitySlot.activities)}
               showsVerticalScrollIndicator={false}
               renderItem={({item, index}) =>
                 <VPActivityCard
-                  key={item.id}
+                  key={item.activityId}
+                  custom={item.custom}
                   onCardPress={this.onRActivityCardPress.bind(this)}
-                  title={item.title}
-                  text={item.title}
-                  address={item.address}
-                  yesVote={item.yVote}
-                  noVote={item.nVote}
-                  startTime={item.startTime}
                   index={index}
                   totalSlots={arrayLength-1}
                 />
               }
               keyExtractor={(item, index) => index.toString()}
             />
+            ))}
+          </View>
+          */
+        );
+      }
+      else {
+        //this.planLoaded();
+        return (
+          <View flex={1}>
+
           </View>
         )
       }
-    };
 
+    };
 
     render() {
       var activities = [[{title: 'Molino Metro', address: '1016 N El Molino Ave, Pasadena, CA 91104', yVote: true},
@@ -117,76 +139,74 @@ class ViewPlanScreen extends Component {
           {title: 'Halloween Horror Nights', address: '100 Universal City Plaza, Universal City, CA 91608'},
           {title: 'Cold Stone Creamery', address: '3730 S Figueroa St, Los Angeles, CA 90007', nVote: true},
         ]];
-        return (
-          
-            <ScrollView flex={1} showsVerticalScrollIndicator={false}>
-              <View flexDirection="row" padding={15} alignItems="center">
-                <RHeader>{this.props.plan.planName}</RHeader>
-                <Icon
-                  name="share"
-                  size={30}
-                  color="#B8BEC1"
-                  onPress={this.toggleSharePlanModal}
-                />
-              </View>
-
-              <Modal isVisible={this.state.visibleSharePlanModal} backdropOpacity={0.5}>
-                <View style={modalStyles.modalContainer}>
-                  <Text style={modalStyles.headerTextStyle}>Share Plan</Text>
-
-                <TouchableOpacity style={modalStyles.buttonContainer} onPress={this.onCollabPress.bind(this)}>
-                 <Text style={modalStyles.buttonText}>Manage Collaborators</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={modalStyles.buttonContainer} onPress={this.shareMessage}>
-                  <Text style={modalStyles.buttonText}>Export Plan</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={modalStyles.cancelButton} onPress={this.toggleSharePlanModal}>
-                  <Text style={modalStyles.cancelButtonText}>Cancel</Text>
-                </TouchableOpacity>
+            return (
+            
+              <ScrollView flex={1} showsVerticalScrollIndicator={false}>
+                <View flexDirection="row" padding={15} alignItems="center">
+                  <RHeader>{this.props.plan.planName}</RHeader>
+                  <Icon
+                    name="share"
+                    size={30}
+                    color="#B8BEC1"
+                    onPress={this.toggleSharePlanModal}
+                  />
                 </View>
-            </Modal>
-              <View flex={1} paddingRight={20}>
-                  <View flex={1}>
-                    {this.iterate(activities)}
+
+                <Modal isVisible={this.state.visibleSharePlanModal} backdropOpacity={0.5}>
+                  <View style={modalStyles.modalContainer}>
+                    <Text style={modalStyles.headerTextStyle}>Share Plan</Text>
+
+                  <TouchableOpacity style={modalStyles.buttonContainer} onPress={this.onCollabPress.bind(this)}>
+                  <Text style={modalStyles.buttonText}>Manage Collaborators</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={modalStyles.buttonContainer} onPress={this.shareMessage}>
+                    <Text style={modalStyles.buttonText}>Export Plan</Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity style={modalStyles.cancelButton} onPress={this.toggleSharePlanModal}>
+                    <Text style={modalStyles.cancelButtonText}>Cancel</Text>
+                  </TouchableOpacity>
                   </View>
-                  <View flex={1}>
-                    <TouchableOpacity onPress={this.onPressViewComments.bind(this)}>
-                      <View paddingLeft={145} flexDirection='row' alignItems='center'>
+                </Modal>
+                <View flex={1} paddingRight={20}>
+                    <View flex={1}>
+                      {this.iterate(this.props.plan.activitySlots)}
+                    </View>
+                    <View flex={1}>
+                      <TouchableOpacity onPress={this.onPressViewComments.bind(this)}>
+                        <View paddingLeft={145} flexDirection='row' alignItems='center'>
+                          <Icon
+                            name='chat-bubble'
+                            color='#B0CAED'
+                            size={16}
+                          />
+                          <View paddingLeft={6}>
+                            <Text style={styles.viewCommentsText}>View Comments…</Text>
+                          </View>
+                        </View>
+                        </TouchableOpacity>
+                      </View>
+                  </View>
+                  <View flex={1} paddingTop={38}>
+                    <TouchableOpacity onPress={this.onAddPress.bind(this)}>
+                      <View paddingLeft={80} flexDirection='row' alignItems='center'>
                         <Icon
-                          name='chat-bubble'
-                          color='#B0CAED'
-                          size={16}
+                          name='add-circle'
+                          color='#0E91D6'
+                          size={31}
                         />
-                        <View paddingLeft={6}>
-                          <Text style={styles.viewCommentsText}>View Comments…</Text>
+                        <View paddingLeft={35}>
+                          <Text style={styles.addActivityText}>Add a New Activity</Text>
                         </View>
                       </View>
-                      </TouchableOpacity>
-                    </View>
-                </View>
-                <View flex={1} paddingTop={38}>
-                  <TouchableOpacity onPress={this.onAddPress.bind(this)}>
-                    <View paddingLeft={80} flexDirection='row' alignItems='center'>
-                      <Icon
-                        name='add-circle'
-                        color='#0E91D6'
-                        size={31}
-                      />
-                      <View paddingLeft={35}>
-                        <Text style={styles.addActivityText}>Add a New Activity</Text>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-            </ScrollView>
-
-          
-        )
+                    </TouchableOpacity>
+                  </View>
+              </ScrollView>
+          )
+        // If the plan hasn't finished loading, we want to display a spinner!!!
     }
 }
-
 
 const styles = StyleSheet.create({
     headerStyle: {

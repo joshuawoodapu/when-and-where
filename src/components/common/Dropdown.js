@@ -8,7 +8,11 @@ class Dropdown extends Component {
 
         this.inputRefs = {};
 
-        this.state = { userSelected: undefined, items: props.choices};
+        this.state = { userSelected: undefined, items: props.choices, userFunction: undefined};
+    }
+
+    handleChangeDrop = (value) => {
+        this.setState({userSelected: value});
     }
 
     render() {
@@ -20,14 +24,14 @@ class Dropdown extends Component {
                         value: null,
                     }}
                     items={this.state.items}
+                    onValueChange={props.onChange || this.handleChangeDrop}
+
+                    style={{ ...pickerSelectStyles }}
                     onValueChange={(value) => {
                         this.setState({
                             userSelected: value,
                         });
                     }}
-
-                    style={{ ...pickerSelectStyles }}
-                    value={this.state.userSelected}
                     ref={(el) => {
                         this.inputRefs.picker = el;
                     }}

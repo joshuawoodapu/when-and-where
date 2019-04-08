@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, TouchableOpacity,
   ScrollView, Dimensions, FlatList } from 'react-native';
+import {connect} from 'react-redux';
+import * as actions from '../redux/actions';
 import { Icon } from 'react-native-elements';
 import AAActivityCard from './AAActivityCard';
 import DynamicInput from '../components/common/DynamicInput';
 
-
-export default class AATabs extends Component {
+class AATabs extends Component {
     state = {
         activeTab: 'search',
         location: '',
@@ -44,7 +45,7 @@ export default class AATabs extends Component {
                     <View style={[styles.activeLeft, styles.activeTab]}>
                         <TouchableHighlight
                             style={styles.activeLeft}
-                            onPress={this.onActivitiesTabPress.bind(this)}
+                            onPress={this.onSearchTabPress.bind(this)}
                             key={"search-active"}
                             underlayColor="#F0F3F7"
                             activeOpacity={1}
@@ -57,7 +58,7 @@ export default class AATabs extends Component {
                     <View style={[styles.inactiveRight, styles.inactiveTab]}>
                         <TouchableHighlight
                             style={styles.inactiveRight}
-                            onPress={this.onPlansTabPress.bind(this)}
+                            onPress={this.onMyActivitiesTabPress.bind(this)}
                             key={"myactivities-inactive"}
                         >
                             <Text style={styles.inactiveTabText}>
@@ -74,7 +75,7 @@ export default class AATabs extends Component {
                     <View style={[styles.inactiveLeft, styles.inactiveTab]}>
                         <TouchableHighlight
                             style={styles.inactiveLeft}
-                            onPress={this.onActivitiesTabPress.bind(this)}
+                            onPress={this.onSearchTabPress.bind(this)}
                             key={"search-inactive"}
                         >
                           <Text style={styles.inactiveTabText}>
@@ -85,7 +86,7 @@ export default class AATabs extends Component {
                     <View style={[styles.activeRight, styles.activeTab]}>
                         <TouchableHighlight
                             style={styles.activeRight}
-                            onPress={this.onPlansTabPress.bind(this)}
+                            onPress={this.onMyActivitiesTabPress.bind(this)}
                             key={"myactivities-active"}
                             underlayColor="#F0F3F7"
                             activeOpacity={1}
@@ -178,7 +179,7 @@ export default class AATabs extends Component {
                             renderItem={({item}) =>
                                 <AAActivityCard 
                                     title={item.name}
-                                    onCardPress={() => this.onRActivityCardPress(item.place_id)} 
+                                    onCardPress={() => this.onActivityCardPress(item.place_id)} 
                                     add={true}
                                     text={item.name}
                                     address={item.vicinity ? item.vicinity : item.formatted_address}  
@@ -223,24 +224,21 @@ export default class AATabs extends Component {
 
         }
         else if (this.state.activeTab === 'myactivities') {
-          var activities = [{title: 'Aloha Sushi', add: true, address: '3030 Freedom Lane, Merced, CA 95340', stars: 5, favorited: true},
-            {title: 'Primedia', add: true, address: '3903 Turnley Ave, Oakland, CA, 94605', stars: 4, favorited: true},];
-
           return (
               <View flex={6} paddingHorizontal={15}>
                 <FlatList
-                    data={activities}
+                    data={this.getCustomActivityData()}
                     showsVerticalScrollIndicator={false}
                     renderItem={({item}) =>
                       <AAActivityCard
-                        key={item.id}
-                        onCardPress={this.onRActivityCardPress.bind(this)}
-                        title={item.title}
-                        add={item.add}
-                        text={item.title}
-                        address={item.address}
+                        key={item.activityId}
+                        onCardPress={this.onCustomActivityCardPress.bind(this, item.activityId)}
+                        title={item.activityName}
+                        add={false}
+                        text={item.phoneNumber}
+                        address={item.activityAddress}
                         stars={item.stars}
-                        favorited={item.favorited}
+                        favorited={false}
                       />
                     }
                     keyExtractor={(item, index) => index.toString()}
@@ -250,36 +248,56 @@ export default class AATabs extends Component {
         }
     };
 
-    onActivitiesTabPress() {
+    onSearchTabPress() {
         if (this.state.activeTab !== 'search')
             this.setState({activeTab: 'search'})
     };
 
-    onRActivityCardPress = async (place_id) => {
-        // make api call to get details on activity
+    onActivityCardPress = async (place_id) => {
+       // Sending an action to add an activity slot!
+       // Current plan
+       // Chosen activity
+       // False, as in this is not a custom activity!
+       await this.props.addActivitySlot(this.props.plan.planId, place_id, false);
+       await this.props.planSet(this.props.plan.planId);
+       this.props.navigation.navigate('PlanView');
+       // make api call to get details on activity
+       /*
         const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&fields=name,rating,formatted_phone_number,formatted_address,type,opening_hours,geometry&key=${global.apiKey}`
-        try {
-            let result = await fetch(api_url);
-            let activity_details = await result.json();
-            activity_details =  activity_details.result;
+       try {
+           let result = await fetch(api_url);
+           let activity_details = await result.json();
+           activity_details =  activity_details.result;
 
-            let activity_hours = activity_details.opening_hours ? activity_details.opening_hours.weekday_text.join('\n') : "Sorry! These hours are currently not available online.";
-            this.props.navigation.navigate('Activity', {
-                activity_name: activity_details.name,
-                phone_number: activity_details.formatted_phone_number,
-                hours: activity_hours,
-                address: activity_details.formatted_address,
-                rating: activity_details.rating,
-                coordinates: activity_details.geometry.location,
-                activity_type: activity_details.types[0]
-            });
+           let activity_hours = activity_details.opening_hours ? activity_details.opening_hours.weekday_text.join('\n') : "Sorry! These hours are currently not available online.";
+           this.props.navigation.navigate('Activity', {
+               activity_name: activity_details.name,
+               phone_number: activity_details.formatted_phone_number,
+               hours: activity_hours,
+               address: activity_details.formatted_address,
+               rating: activity_details.rating,
+               coordinates: activity_details.geometry.location,
+               activity_type: activity_details.types[0]
+           });
 
-        } catch (err){
-            console.log(err)
-        }
+       } catch (err){
+           console.log(err)
+       }
+       */
     };
 
-    onPlansTabPress() {
+    onCustomActivityCardPress = async (activityId) => {
+      // Sending an action to add an activity slot!
+      // Current plan
+      // Chosen activity
+      // True, as in this is a custom activity!
+      await this.props.addActivitySlot(this.props.plan.planId, activityId, true);
+      await this.props.planSet(this.props.plan.planId);
+      this.props.navigation.navigate('PlanView');
+    }
+
+
+    onMyActivitiesTabPress() {
         if (this.state.activeTab !== 'myactivities')
             this.setState({activeTab: 'myactivities'})
     };
@@ -287,6 +305,18 @@ export default class AATabs extends Component {
     onCantFind() {
         this.props.navigation.navigate('CreateActivity');
     }
+
+    getCustomActivityData() {
+      const result = [];
+      for (var key in this.props.customActivityData) {
+          // skiping if prototype
+          if (!this.props.customActivityData.hasOwnProperty(key)) continue;
+
+          var obj = this.props.customActivityData[key];
+          result.push({activityId:key, ...obj})
+      }
+      return result;
+  }
 
     render() {
         return (
@@ -414,3 +444,10 @@ styles = StyleSheet.create({
       paddingHorizontal: 20
     },
 })
+
+
+const mapStateToProps = state => {
+  return { plan: state.plan };
+}
+
+export default connect(mapStateToProps, actions)(AATabs);
