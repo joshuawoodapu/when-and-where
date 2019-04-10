@@ -6,6 +6,8 @@ class LocationItem extends PureComponent {
         const res = await this.props.fetchDetails(this.props.place_id)
         console.log("result: ", res);
         Alert.alert(JSON.stringify(res))
+
+        this.props.onPress();
     }
     
     render() {

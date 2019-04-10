@@ -3,6 +3,7 @@ import {View, Text, TextInput, StyleSheet, ScrollView, ActivityIndicator, Button
 import {connect} from 'react-redux';
 import * as actions from '../redux/actions';
 import { GoogleAutoComplete } from 'react-native-google-autocomplete';
+// import {Overlay} from 'react-native-overlay';
 import LocationItem from '../components/locationSearch/LocationItem';
 import Tabs from '../components/Tabs';
 import DynamicInput from '../components/common/DynamicInput'; 
@@ -26,7 +27,8 @@ class DiscoveryScreen extends Component {
         locationPredictions: [],
         filter_by_type: 'establishment',
         searchPageToken: '',
-        browsePageToken: ''
+        browsePageToken: '',
+        locationInFocus: false,
     }
 
     componentWillMount = async () => {
@@ -93,12 +95,17 @@ class DiscoveryScreen extends Component {
         });
     }
 
+    handleLocAutocompletePress = () => {
+        this.setState({ locationInFocus: false });
+        console.log("bye!!!!");
+    }
+
     render() {
         return (
             <View style={{flex:1}}>
                 <View style={styles.discoveryInputs}>
-                    <DynamicInput placeholderList={[
-                        {placeholder: 'Search',
+                    <DynamicInput placeholderList={[{
+                        placeholder: 'Search',
                         inputContainerStyle: 'tabsInput',
                         inputStyle: 'tabsText',
                         autoCapitalize: "words",
@@ -107,54 +114,50 @@ class DiscoveryScreen extends Component {
                         iconName: "search",
                         iconColor: "#605985",
                         iconSize: 22,
-                        onChange: this.handleSearchChange}]}
-                        // {placeholder: 'Current Location',
-                        // inputContainerStyle: 'tabsInput',
-                        // inputStyle: 'tabsText',
-                        // returnKeyType: 'done',
-                        // stateLabel: "current_location",
-                        // iconStyle: "Icon",
-                        // iconName: "location-on",
-                        // iconColor: "#605985",
-                        // iconSize: 22,
-                        // onChange: this.handleLocationChange},
-                        // ]}
+                        onChange: this.handleSearchChange }]}
                     />
                     <GoogleAutoComplete apiKey={global.apiKey} debounce={500} minLength={3} >
                         {({ handleTextChange, locationResults, fetchDetails, isSearching }) => (
                             <React.Fragment>
                                 {console.log('locationResults: ', locationResults)}
-                                <View /*style={styles.locationInputWrapper}*/>
+                                <View>
                                     <TextInput 
                                         style={styles.locationInput}
                                         placeholder="Location" 
                                         onChangeText={handleTextChange}
+                                        onFocus={ () => ( this.setState({ locationInFocus: true }) ) }
                                     />
                                 </View>
+
                                 {isSearching && <ActivityIndicator size="large" />}
-                                <ScrollView>
-                                    <Text>testing sdfasd </Text>
-                                    {locationResults.map(el => (
-                                        <LocationItem 
-                                            {...el}
-                                            key={el.id}
-                                            fetchDetails={fetchDetails}
-                                        />
-                                    )) }
-                                </ScrollView>
+                               
+                                {this.state.locationInFocus && 
+                                    <View>
+                                        <Text>we in here</Text>
+                                        <ScrollView>
+                                            {locationResults.map(el => (
+                                                <LocationItem 
+                                                    {...el}
+                                                    key={el.id}
+                                                    fetchDetails={fetchDetails}
+                                                    onPress={this.handleLocAutocompletePress}
+                                                />
+                                            )) }
+                                        </ScrollView>
+                                    </View>
+                                }
+                                
                             </React.Fragment>
                         )}
                     </GoogleAutoComplete>
                 </View>
 
-
-
-                {/* <Tabs 
+                <Tabs 
                     navigation={this.props.navigation}
                     planData={this.props.user.plans}
                     activityList={this.state.locationPredictions}
                     loadMore={this.browseActivityList}
-                /> */}
+                />
             </View>
         )
     } 
