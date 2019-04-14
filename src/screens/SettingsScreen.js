@@ -10,21 +10,26 @@ import firebase from 'firebase';
 
 class SettingsScreen extends Component {
 
-
+    user = firebase.auth().currentUser;
     state ={
         fullNameInitial: '',
         fullNameConfirm: '',
         fullName: this.props.user.fullName,
-        email: '',
+        email: firebase.auth().currentUser.email,
+        emailNew: '',
+        emailConfirm: '',
         visibleNameChangeModal: false,
+        visibleEmailChangeModal: false,
         error: ''
     }
+
 
     onNotifPress = () => {
         this.props.navigation.navigate('Notifications');
     }
 
     toggleNameChangeModal = () => this.setState({ visibleNameChangeModal: !this.state.visibleNameChangeModal });
+    toggleEmailChangeModal = () => this.setState({ visibleEmailChangeModal: !this.state.visibleEmailChangeModal });
 
 
     onLogOutPress = async () => {
@@ -41,6 +46,14 @@ class SettingsScreen extends Component {
         },
     });
 
+    handleEmailChange = (typedText) =>{
+        this.setState({emailNew: typedText});
+    }
+
+    handleEmailChangeConfirm = (typedText) =>{
+        this.setState({emailConfirm: typedText});
+    }
+
     handleNameChange = (typedText) =>{
         this.setState({fullNameInitial: typedText});
     }
@@ -49,7 +62,30 @@ class SettingsScreen extends Component {
         this.setState({fullNameConfirm: typedText});
     }
 
-    handleConfirm = async () => {
+    emailValidation = (email)=> {
+
+        return true;
+    }
+
+    handleNewEmailConfirm = async () =>{
+        let user = await firebase.auth().currentUser;
+        if (this.state.emailNew == this.state.emailConfirm){
+            this.setState({email: this.state.emailConfirm});
+            this.toggleEmailChangeModal();
+            try{
+                user.updateEmail(this.state.email);
+                console.log(this.state.email);
+            } catch{(error)=>{
+                console.log(error);
+            }}
+        }
+        else{
+            console.log("email change fail");
+            this.setState({error: "Fields must match."})
+        }
+    }
+
+    handleNewNameConfirm = async () => {
         let user = await firebase.auth().currentUser;
         if (this.state.fullNameInitial == this.state.fullNameConfirm){
             this.setState({fullName:this.state.fullNameConfirm});
@@ -66,7 +102,7 @@ class SettingsScreen extends Component {
             this.props.user.name = this.state.fullName;
         }
         else {
-            console.log("fail");
+            console.log("name change fail");
             this.setState({error: "Fields must match."})
         }
     }
@@ -84,12 +120,16 @@ class SettingsScreen extends Component {
                     onPress={this.toggleNameChangeModal.bind(this)}
                     />
                 <Setting settingName='Notifications' iconName='notifications' onPress={this.onNotifPress.bind(this)}/>
-                <Setting settingName='Email' currentSetting='john.doe@gmail.com' iconName='person'/>
+                <Setting settingName='Email' currentSetting={this.state.email} iconName='person'
+                onPress={this.toggleEmailChangeModal.bind(this)}/>
                 <Setting settingName='Privacy' iconName='lock'/>
                 <Setting settingName='Log Out' onPress={this.onLogOutPress.bind(this)} iconName='not-interested'/>
                 <Setting settingName='Help' currentSetting='Questions?' iconName='help'/>
                 </View>
 
+
+
+                {/* NAME CHANGE MODAL */}
                 <Modal isVisible={this.state.visibleNameChangeModal}>
               <View style={styles.modalContainer}>
                     <Text style={styles.headerTextStyle}>Change Profile Name</Text>
@@ -116,7 +156,7 @@ class SettingsScreen extends Component {
                     <Text style={styles.error}>{this.state.error}</Text>
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity style={styles.button}
-                            onPress = {this.handleConfirm.bind(this)} >
+                            onPress = {this.handleNewNameConfirm.bind(this)} >
                             <Text style={styles.buttonText}>Save</Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
@@ -125,10 +165,50 @@ class SettingsScreen extends Component {
                             <Text style={styles.buttonText}>Cancel</Text>
                          </TouchableOpacity>
                     </View>
+              </View>
+            </Modal>
+
+                            {/* EMAIL CHANGE MODAL */}
+            <Modal isVisible={this.state.visibleEmailChangeModal}>
+              <View style={styles.modalContainer}>
+                    <Text style={styles.headerTextStyle}>Change Email</Text>
+                    <View style={styles.formStyle}>
+                        <DynamicInput placeholderList={[
+                            {placeholder: 'New Email',
+                            inputContainerStyle: "loginInput",
+                              inputStyle: "loginText",
+                              autoCapitalize: "none",
+                              spellCheck: false,
+                              stateLabel: "emailNew",
+                              onChange: this.handleEmailChange},
+                            {placeholder: 'Confirm New Email',
+                              inputContainerStyle: "loginInput",
+                              inputStyle: "loginText",
+                              autoCapitalize: "none",
+                              spellCheck: false,
+                              stateLabel: "emailConfirm",
+                              onChange: this.handleEmailChangeConfirm},
+                            ]}
+                        />
+                        
+                    </View>
+                    <Text style={styles.error}>{this.state.error}</Text>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style={styles.button}
+                            onPress = {this.handleNewEmailConfirm.bind(this)} >
+                            <Text style={styles.buttonText}>Save</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                            onPress = {this.toggleEmailChangeModal.bind(this)}
+                            style={styles.button}>
+                            <Text style={styles.buttonText}>Cancel</Text>
+                         </TouchableOpacity>
+                    </View>
                     
                     
               </View>
             </Modal>
+
             </View>
         )
     }
@@ -204,7 +284,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-    return { user: state.user, fullName: state.fullName };
+    return { user: state.user, fullName: state.fullName, email: state.email };
 }
 
 export default connect(mapStateToProps, actions)(SettingsScreen);
