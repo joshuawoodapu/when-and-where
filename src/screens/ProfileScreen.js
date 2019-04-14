@@ -103,7 +103,7 @@ class ProfileScreen extends Component {
 
                 <View style={styles.rowContainer}>
                         <ProfileBanner 
-                            name={this.state.fullName}
+                            name={this.props.user.fullName}
                             location={this.state.location}
                         />
                 </View>

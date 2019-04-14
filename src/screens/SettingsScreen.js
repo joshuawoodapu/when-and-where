@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, StyleSheet, AsyncStorage, Text, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, AsyncStorage, Text, TouchableOpacity, Image} from 'react-native';
 import Setting from '../../src/components/SettingsComponents/Setting';
 import ReusableHeader from '../components/ReusableHeader';
 import Modal from "react-native-modal";
@@ -20,6 +20,8 @@ class SettingsScreen extends Component {
         emailConfirm: '',
         visibleNameChangeModal: false,
         visibleEmailChangeModal: false,
+        visibleAboutUsModal: false,
+        visibleHelpModal: false,
         error: ''
     }
 
@@ -30,6 +32,8 @@ class SettingsScreen extends Component {
 
     toggleNameChangeModal = () => this.setState({ visibleNameChangeModal: !this.state.visibleNameChangeModal });
     toggleEmailChangeModal = () => this.setState({ visibleEmailChangeModal: !this.state.visibleEmailChangeModal });
+    toggleAboutUsModal = () => this.setState({ visibleAboutUsModal: !this.state.visibleAboutUsModal });
+    toggleHelpModal = () => this.setState({ visibleHelpModal: !this.state.visibleHelpModal });
 
 
     onLogOutPress = async () => {
@@ -120,9 +124,11 @@ class SettingsScreen extends Component {
                     />
                 <Setting settingName='Notifications' iconName='notifications' onPress={this.onNotifPress.bind(this)}/>
                 <Setting settingName='Email' currentSetting={this.state.email} iconName='person'
-                onPress={this.toggleEmailChangeModal.bind(this)}/>
-                <Setting settingName='Help' currentSetting='Questions?' iconName='help'/>
-                <Setting settingName='About Us' iconName='book' currentSetting=':-)'/>
+                    onPress={this.toggleEmailChangeModal.bind(this)}/>
+                <Setting settingName='Help' currentSetting='Questions?' iconName='help'
+                    onPress={this.toggleHelpModal.bind(this)}/>
+                <Setting settingName='About Us' iconName='book' currentSetting=':-)'
+                    onPress={this.toggleAboutUsModal.bind(this)}/>
                 <Setting settingName='Log Out' onPress={this.onLogOutPress.bind(this)} iconName='not-interested'/>
                 </View>
 
@@ -211,7 +217,47 @@ class SettingsScreen extends Component {
                     
               </View>
             </Modal>
+                
+                
+                {/* ABOUT US MODAL */}
+            <Modal isVisible={this.state.visibleAboutUsModal}>
+                <View style={styles.modalContainer}>
+                   <Text style={styles.mascotText1}>This is our mascot, Oliver!</Text>
+                   <Text style={styles.mascotText2}>(The dog, not Sabrina.)</Text>
+                   <Text style={styles.mascotText3}>(Sabrina is one of our engineers.)</Text>
+                   <Text style={styles.mascotText4}>(Not our mascot.)</Text>
 
+                   <Image style={styles.mascotPic}
+                    source={require('../components/images/mascot.png')}/>
+
+                <View style={styles.okayButton}>
+                        <TouchableOpacity 
+                            onPress = {this.toggleAboutUsModal.bind(this)}
+                            style={styles.button}>
+                            <Text style={styles.buttonText}>NICE!</Text>
+                         </TouchableOpacity>
+                    </View>
+
+                </View>
+            </Modal>
+
+            {/* HELP MODAL */}
+            <Modal isVisible={this.state.visibleHelpModal}>
+                <View style={styles.modalContainer}>
+                   <Text style={styles.headerTextStyle}>NEED HELP?</Text>
+                   <Text style={styles.helpText}>
+                   Contact us:
+                   help@fake_when_where_email.com</Text>
+                <View style={styles.okayButton}>
+                        <TouchableOpacity 
+                            onPress = {this.toggleHelpModal.bind(this)}
+                            style={styles.button}>
+                            <Text style={styles.buttonText}>OKAY</Text>
+                         </TouchableOpacity>
+                    </View>
+
+                </View>
+            </Modal>
             </View>
         )
     }
@@ -246,9 +292,47 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
+    mascotText1: {
+        marginTop: 10,
+        marginBottom: 5,
+        textAlign: 'center',
+        color: '##605985',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    mascotText2: {
+        marginBottom: 5,
+        textAlign: 'center',
+        color: '#B8BeC1',
+        fontSize: 14,
+        fontWeight: 'bold',
+    },
+    mascotText3: {
+        marginBottom: 5,
+        textAlign: 'center',
+        color: '#B8BeC1',
+        fontSize: 12,
+        fontWeight: 'bold',
+    },
+    mascotText4: {
+        marginBottom: 5,
+        textAlign: 'center',
+        color: '#B8BeC1',
+        fontSize: 10,
+        fontWeight: 'bold',
+    },
+    mascotPic: {
+        resizeMode: 'contain',
+        flex: 2
+    },
     buttonContainer: {
         flex: .8,
         justifyContent: 'space-around',
+        marginBottom: 20
+    },
+    okayButton: {
+        flex: 1,
+        justifyContent: 'flex-end',
         marginBottom: 20
     },
     button: {
@@ -258,6 +342,13 @@ const styles = StyleSheet.create({
         height: 60,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    helpText: {
+        fontSize: 16,
+        color: '#605985',
+        fontWeight: 'bold',
+        marginTop: 20,
+        marginBottom: 20
     },
     buttonText: {
         textAlign: 'center',
