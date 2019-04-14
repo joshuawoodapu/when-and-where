@@ -11,6 +11,8 @@ import ProfileBanner from '../components/ProfileComponents/ProfileBanner';
 import ProfileDescription from '../components/ProfileComponents/ProfileDescription';
 import { Icon } from 'react-native-elements';
 import Modal from "react-native-modal";
+import { NavigationEvents } from "react-navigation";
+
 
 class ProfileScreen extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -46,6 +48,22 @@ class ProfileScreen extends Component {
         userActivities: []
     };
 
+    // shouldComponentUpdate(nextProps){
+    //         console.log("In should component update");
+    //         console.log(nextProps.user.fullName);
+    //         return nextProps.user.fullName != this.props.user.fullName;
+    //   }
+
+    // componentWillReceiveProps(nextProps){
+    //     //fires when props change as expected
+    //     console.log("In will receive props");
+
+    //     console.log({'will receive props': nextProps.user.fullName});
+    //     this.setState({
+    //       fullName: nextProps.user.fullName
+    //     });
+    // }
+
     componentWillMount = async () => {
         // gets current location and set initial region to this
         navigator.geolocation.getCurrentPosition(
@@ -59,7 +77,6 @@ class ProfileScreen extends Component {
             { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
         );
         this.browseActivityList();
-
 
         this.loadUserActivities();
     }
@@ -93,10 +110,6 @@ class ProfileScreen extends Component {
         console.log(Object.keys(this.props.user.plans).length);
     }
 
-    onPressProfile() {
-        this.props.navigation.navigate('Settings');
-    }
-
     renderDescription() {
         if (this.state.editProfile) {
             
@@ -114,11 +127,16 @@ class ProfileScreen extends Component {
     render() {
         return (
             <View style={styles.topViewContainer}>
-
+            <NavigationEvents
+                    onDidFocus={payload => {
+                        console.log("will focus", payload);
+                        this.setState({fullName: this.props.user.fullName});
+                    }}
+                    />
 
                 <View style={styles.rowContainer}>
                         <ProfileBanner 
-                            name={this.props.user.fullName}
+                            name={this.state.fullName}
                             location={this.state.location}
                         />
                 </View>
@@ -161,7 +179,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-    return { user: state.user, plan: state.plan};
+    return { user: state.user, plan: state.plan, fullName: state.fullName};
 }
 
 export default connect(mapStateToProps, actions)(ProfileScreen);

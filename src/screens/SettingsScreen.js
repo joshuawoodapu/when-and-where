@@ -102,7 +102,6 @@ class SettingsScreen extends Component {
               }
             }
             this.props.user.fullName = this.state.fullName;
-            this.props.user.name = this.state.fullName;
         }
         else {
             console.log("name change fail");
@@ -378,7 +377,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-    return { user: state.user, fullName: state.fullName, email: state.email };
+    return { user: state.user, email: state.email, fullName: state.fullName };
 }
 
 export default connect(mapStateToProps, actions)(SettingsScreen);
