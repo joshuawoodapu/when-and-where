@@ -114,7 +114,6 @@ class AATabs extends Component {
             location_lat =  location_details.result.geometry.location.lat;
             location_lng =  location_details.result.geometry.location.lng;
             
-            console.log("new loc coords: " + location_lat + " , " + location_lng);
             this.setState({
                 searchLat: location_lat,
                 searchLng: location_lng
@@ -153,10 +152,8 @@ class AATabs extends Component {
                         </View>
 
                         {isSearching && <ActivityIndicator size="large" />}
-                        
                         {this.state.locationInFocus && 
                             <View>
-                                <Text>we in here</Text>
                                 <ScrollView>
                                     {locationResults.map(el => (
                                         <LocationItem 
