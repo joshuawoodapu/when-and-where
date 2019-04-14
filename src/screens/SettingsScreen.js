@@ -135,13 +135,15 @@ class SettingsScreen extends Component {
                     <View style={styles.formStyle}>
                         <DynamicInput placeholderList={[
                             {placeholder: 'New Full Name',
-                            inputContainerStyle: "loginInput",
+                              autoCorrect: false,
+                              inputContainerStyle: "loginInput",
                               inputStyle: "loginText",
                               autoCapitalize: "none",
                               spellCheck: false,
                               stateLabel: "nameChange",
                               onChange: this.handleNameChange},
                             {placeholder: 'Confirm Full Name',
+                              autoCorrect: false,
                               inputContainerStyle: "loginInput",
                               inputStyle: "loginText",
                               autoCapitalize: "none",
@@ -174,13 +176,15 @@ class SettingsScreen extends Component {
                     <View style={styles.formStyle}>
                         <DynamicInput placeholderList={[
                             {placeholder: 'New Email',
-                            inputContainerStyle: "loginInput",
+                              autoCorrect: false,
+                              inputContainerStyle: "loginInput",
                               inputStyle: "loginText",
                               autoCapitalize: "none",
                               spellCheck: false,
                               stateLabel: "emailNew",
                               onChange: this.handleEmailChange},
                             {placeholder: 'Confirm New Email',
+                              autoCorrect: false,
                               inputContainerStyle: "loginInput",
                               inputStyle: "loginText",
                               autoCapitalize: "none",

@@ -31,7 +31,7 @@ class ProfileScreen extends Component {
     });
 
     state = {
-        fullName: this.props.user.name,
+        fullName: this.props.user.fullName,
         description: 'Hello friends, this is my description',
         editProfile: false,
         planData: {},
@@ -103,7 +103,7 @@ class ProfileScreen extends Component {
 
                 <View style={styles.rowContainer}>
                         <ProfileBanner 
-                            name={this.props.user.fullName}
+                            name={this.state.fullName}
                             location={this.state.location}
                         />
                 </View>
