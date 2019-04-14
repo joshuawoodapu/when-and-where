@@ -64,13 +64,15 @@ class ProfileScreen extends Component {
         this.loadUserActivities();
     }
 
-    loadUserActivities = async () =>{
-        try{
-            
+    loadUserActivities = async () => {
+        let user = await firebase.auth().currentUser;
+        var loadedActivities = await firebase.database().ref('activities').child('owner').equalTo(user.uid);
+        var userActivities = [];
+    
+        console.log("Here are your user activities:");
+        console.log(loadedActivities);
 
-        } catch (err){
-            console.log(err);
-        }
+        this.setState({ userActivities: loadedActivities});
     }
 
     browseActivityList = async () => {
