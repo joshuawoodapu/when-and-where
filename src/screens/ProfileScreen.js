@@ -48,22 +48,6 @@ class ProfileScreen extends Component {
         userActivities: []
     };
 
-    // shouldComponentUpdate(nextProps){
-    //         console.log("In should component update");
-    //         console.log(nextProps.user.fullName);
-    //         return nextProps.user.fullName != this.props.user.fullName;
-    //   }
-
-    // componentWillReceiveProps(nextProps){
-    //     //fires when props change as expected
-    //     console.log("In will receive props");
-
-    //     console.log({'will receive props': nextProps.user.fullName});
-    //     this.setState({
-    //       fullName: nextProps.user.fullName
-    //     });
-    // }
-
     componentWillMount = async () => {
         // gets current location and set initial region to this
         navigator.geolocation.getCurrentPosition(

@@ -22,7 +22,11 @@ class SettingsScreen extends Component {
         visibleEmailChangeModal: false,
         visibleAboutUsModal: false,
         visibleHelpModal: false,
-        error: ''
+        visiblePasswordModal: false,
+        error: '',
+        passwordInitial: '',
+        passwordConfirm: '',
+        password: ''
     }
 
 
@@ -34,7 +38,7 @@ class SettingsScreen extends Component {
     toggleEmailChangeModal = () => this.setState({ visibleEmailChangeModal: !this.state.visibleEmailChangeModal });
     toggleAboutUsModal = () => this.setState({ visibleAboutUsModal: !this.state.visibleAboutUsModal });
     toggleHelpModal = () => this.setState({ visibleHelpModal: !this.state.visibleHelpModal });
-
+    togglePasswordModal = () => this.setState({ visiblePasswordModal: !this.state.visiblePasswordModal });
 
     onLogOutPress = async () => {
         await AsyncStorage.setItem('logged', 'false');
@@ -49,6 +53,13 @@ class SettingsScreen extends Component {
             fontFamily: 'circular-std-bold',
         },
     });
+
+    handlePasswordChange=(typedText)=>{
+        this.setState({passwordInitial: typedText});
+    }
+    handlePasswordConfirmChange=(typedText)=>{
+        this.setState({passwordConfirm: typedText});
+    }
 
     handleEmailChange = (typedText) =>{
         this.setState({emailNew: typedText});
@@ -66,6 +77,28 @@ class SettingsScreen extends Component {
         this.setState({fullNameConfirm: typedText});
     }
 
+    handleNewPasswordUpdate = async () =>{
+        let user = await firebase.auth().currentUser;
+        // Comment
+        if (this.state.passwordInitial == this.state.passwordConfirm){
+            if (this.state.passwordConfirm.length > 5){
+                this.setState({password: this.state.passwordConfirm});
+                this.togglePasswordModal();
+                this.setState({error: ''});
+                try{
+                    user.updatePassword(this.state.password);
+                    console.log(this.state.password);
+                }catch{(error)=>{
+                    console.log(error);
+                }}
+            }else{
+                this.setState({error: "Password must be at least 6 characters."})
+            }
+        } else{
+            this.setState({error: "Fields must match."});
+        }
+    }
+
     handleNewEmailConfirm = async () =>{
         let user = await firebase.auth().currentUser;
         if (this.state.emailNew.includes('@') && this.state.emailNew.includes('.')) {
@@ -81,10 +114,10 @@ class SettingsScreen extends Component {
                 }}
             }
             else{
-                this.setState({error: "Fields Must Match"});
+                this.setState({error: "Fields must match."});
             }
         } else{
-            this.setState({error: "Incorrect Email Format"});
+            this.setState({error: "Incorrect email format."});
             }
      }
 
@@ -105,7 +138,7 @@ class SettingsScreen extends Component {
         }
         else {
             console.log("name change fail");
-            this.setState({error: "Fields Must Match"})
+            this.setState({error: "Fields must match."})
         }
     }
 
@@ -121,9 +154,11 @@ class SettingsScreen extends Component {
                     iconName='edit'
                     onPress={this.toggleNameChangeModal.bind(this)}
                     />
-                <Setting settingName='Notifications' iconName='notifications' onPress={this.onNotifPress.bind(this)}/>
                 <Setting settingName='Email' currentSetting={this.state.email} iconName='person'
                     onPress={this.toggleEmailChangeModal.bind(this)}/>
+                <Setting settingName='Password' iconName='lock'
+                    onPress={this.togglePasswordModal.bind(this)}/>
+                <Setting settingName='Notifications' iconName='notifications' onPress={this.onNotifPress.bind(this)}/>
                 <Setting settingName='Help' currentSetting='Questions?' iconName='help'
                     onPress={this.toggleHelpModal.bind(this)}/>
                 <Setting settingName='About Us' iconName='book' currentSetting=':-)'
@@ -150,6 +185,7 @@ class SettingsScreen extends Component {
                             {placeholder: 'Confirm Full Name',
                               autoCorrect: false,
                               inputContainerStyle: "loginInput",
+                              returnKeyType: "done",
                               inputStyle: "loginText",
                               autoCapitalize: "none",
                               spellCheck: false,
@@ -192,6 +228,7 @@ class SettingsScreen extends Component {
                               autoCorrect: false,
                               inputContainerStyle: "loginInput",
                               inputStyle: "loginText",
+                              returnKeyType: "done",
                               autoCapitalize: "none",
                               spellCheck: false,
                               stateLabel: "emailConfirm",
@@ -217,6 +254,53 @@ class SettingsScreen extends Component {
               </View>
             </Modal>
                 
+                         {/* Password CHANGE MODAL */}
+            <Modal isVisible={this.state.visiblePasswordModal}>
+              <View style={styles.modalContainer}>
+                    <Text style={styles.headerTextStyle}>Change Password</Text>
+                    <View style={styles.formStyle}>
+                        <DynamicInput placeholderList={[
+                            {
+                              secureTextEntry: true,
+                              placeholder: 'New Password',
+                              autoCorrect: false,
+                              inputContainerStyle: "loginInput",
+                              inputStyle: "loginText",
+                              autoCapitalize: "none",
+                              spellCheck: false,
+                              stateLabel: "emailNew",
+                              onChange: this.handlePasswordChange},
+                            { 
+                              secureTextEntry: true,
+                              placeholder: 'Confirm New Password',
+                              autoCorrect: false,
+                              inputContainerStyle: "loginInput",
+                              inputStyle: "loginText",
+                              returnKeyType: "done",
+                              autoCapitalize: "none",
+                              spellCheck: false,
+                              stateLabel: "emailConfirm",
+                              onChange: this.handlePasswordConfirmChange},
+                            ]}
+                        />
+                        
+                    </View>
+                    <Text style={styles.error}>{this.state.error}</Text>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style={styles.button}
+                            onPress = {this.handleNewPasswordUpdate.bind(this)} >
+                            <Text style={styles.buttonText}>SAVE</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                            onPress = {this.togglePasswordModal.bind(this)}
+                            style={styles.button}>
+                            <Text style={styles.buttonText}>CANCEL</Text>
+                         </TouchableOpacity>
+                    </View>
+                    
+                    
+              </View>
+            </Modal>
                 
                 {/* ABOUT US MODAL */}
             <Modal isVisible={this.state.visibleAboutUsModal}>
