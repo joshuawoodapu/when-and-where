@@ -4,10 +4,9 @@ import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 class LocationItem extends PureComponent {
     _handlePress = async () => {
         const res = await this.props.fetchDetails(this.props.place_id)
-        console.log("result: ", res);
-        Alert.alert(JSON.stringify(res))
-
-        this.props.onPress();
+        // Alert.alert(JSON.stringify(res))
+    
+        this.props.onPress(res.place_id); // this hides the other recommendations
     }
     
     render() {

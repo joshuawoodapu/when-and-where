@@ -26,8 +26,6 @@ class DiscoveryScreen extends Component {
         error: '',
         locationPredictions: [],
         filter_by_type: 'establishment',
-        searchPageToken: '',
-        browsePageToken: '',
         locationInFocus: false,
     }
 
@@ -48,19 +46,12 @@ class DiscoveryScreen extends Component {
 
     browseActivityList = async () => {
         // a sort of "browse" since search bar is empty 
-        const apiURL = `https://maps.googleapis.com/maps/api/place/search/json?types=${this.state.filter_by_type}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000&sensor=true&key=${global.apiKey}&pagetoken=${this.state.browsePageToken}`;
+        const apiURL = `https://maps.googleapis.com/maps/api/place/search/json?types=${this.state.filter_by_type}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000&sensor=true&key=${global.apiKey}`;
         try {
             let result = await fetch(apiURL);
             let results_json = await result.json();
             
             this.setState({ locationPredictions: results_json.results });
-            console.log(results_json);
-
-            if ( results_json.hasOwnProperty("next_page_token") ){
-                this.setState({ browsePageToken: result.next_page_token });
-                console.log(this.state.browsePageToken)
-            }
-            
         } catch (err){
             console.error(err)
         }
@@ -69,19 +60,16 @@ class DiscoveryScreen extends Component {
     handleSearchChange = async (typedText) => {
         this.setState({ search: typedText });
 
-        const apiURL = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${this.state.search}&key=${global.apiKey}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000&pagetoken=${this.state.searchPageToken}`;
+        const apiURL = `https://maps.googleapis.com/maps/api/place/textsearch/json?query=${this.state.search}&key=${global.apiKey}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000`;
         try {
             let result = await fetch(apiURL);
             let results_json = await result.json();
             
             this.setState({ locationPredictions: results_json.results });
 
-            if ( results_json.hasOwnProperty("next_page_token") ){
-                this.setState({ searchPageToken: result.next_page_token });
-                console.log(this.state.searchPageToken)
-            }
         } catch (err){
-            console.error(err)
+            console.log("FUCK SHIT BITCH");
+            console.error(err);
         }
 
         if(this.state.search === ""){
@@ -89,15 +77,25 @@ class DiscoveryScreen extends Component {
         }
     }
 
-    handleLocationChange = (typedText) => {
-        this.setState({location: typedText}, () => {
-          console.log(typedText);
-        });
-    }
-
-    handleLocAutocompletePress = () => {
+    handleLocationSuggestionPress = async (location_id) => {
         this.setState({ locationInFocus: false });
-        console.log("bye!!!!");
+
+        const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${location_id}&fields=geometry&key=${global.apiKey}`
+        try {
+            let result = await fetch(api_url);
+            let location_details = await result.json();
+            location_lat =  location_details.result.geometry.location.lat;
+            location_lng =  location_details.result.geometry.location.lng;
+            
+            console.log("new loc coords: " + location_lat + " , " + location_lng);
+            this.setState({
+                searchLat: location_lat,
+                searchLng: location_lng
+            });
+
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     render() {
@@ -119,7 +117,6 @@ class DiscoveryScreen extends Component {
                     <GoogleAutoComplete apiKey={global.apiKey} debounce={500} minLength={3} >
                         {({ handleTextChange, locationResults, fetchDetails, isSearching }) => (
                             <React.Fragment>
-                                {console.log('locationResults: ', locationResults)}
                                 <View>
                                     <TextInput 
                                         style={styles.locationInput}
@@ -140,7 +137,10 @@ class DiscoveryScreen extends Component {
                                                     {...el}
                                                     key={el.id}
                                                     fetchDetails={fetchDetails}
-                                                    onPress={this.handleLocAutocompletePress}
+                                                    onPress={this.handleLocationSuggestionPress}
+                                                    onBlur={() => (
+                                                        this.setState({locationInFocus: false})
+                                                    )}
                                                 />
                                             )) }
                                         </ScrollView>
