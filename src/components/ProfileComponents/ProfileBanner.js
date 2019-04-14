@@ -11,7 +11,7 @@ class ProfileBanner extends Component {
                     source={require('../../onboardingArt/1_corgi.png')}/>
 
                 <View style={styles.secondaryTextContainer}>
-                    <Text style={styles.profileName}>{this.props.name}</Text>
+                    <Text numberOfLines={2} style={styles.profileName}>{this.props.name}</Text>
                     <Text style={styles.locationText}>{this.props.location}</Text>
                 </View>
 

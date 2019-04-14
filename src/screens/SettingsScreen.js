@@ -104,13 +104,18 @@ class SettingsScreen extends Component {
         if (this.state.emailNew.includes('@') && this.state.emailNew.includes('.')) {
             if(this.state.emailNew == this.state.emailConfirm){
                 this.setState({email: this.state.emailConfirm});
-                this.toggleEmailChangeModal();
-                this.setState({error: ''}); 
                 try{
-                    user.updateEmail(this.state.email);
+                    user.updateEmail(this.state.email)
+                    .then(() =>{
                     console.log(this.state.email);
-                } catch{(error)=>{
-                    console.log(error);
+                    this.toggleEmailChangeModal();
+                    this.setState({error: ''}); 
+                    })
+                    .catch(() => {
+                        this.setState({error: "This email is already in use."});
+                    });
+                } catch{(err)=>{
+                    console.log(err);
                 }}
             }
             else{
@@ -124,17 +129,23 @@ class SettingsScreen extends Component {
     handleNewNameConfirm = async () => {
         let user = await firebase.auth().currentUser;
         if (this.state.fullNameInitial == this.state.fullNameConfirm){
-            this.setState({fullName:this.state.fullNameConfirm});
-            this.toggleNameChangeModal();
-            this.setState({error: ''});
-            try{await firebase.database().ref('/users/' + user.uid).update({
-                fullName: this.state.fullName
-              }).getKey()}
-              catch{(error) =>{
-                console.log(error);
-              }
+            console.log(this.state.fullNameConfirm.length);
+            if(this.state.fullNameConfirm.length < 36){
+                this.setState({fullName:this.state.fullNameConfirm});
+                this.toggleNameChangeModal();
+                this.setState({error: ''});
+                try{await firebase.database().ref('/users/' + user.uid).update({
+                    fullName: this.state.fullName
+                })} catch{(err) =>{
+                    console.log(err);
+                    this.setState({error: err});
+                }}
+                this.props.user.fullName = this.state.fullName;
             }
-            this.props.user.fullName = this.state.fullName;
+            else{
+            console.log("name change fail");
+            this.setState({error: "Name must be 35 or fewer characters."})
+            }
         }
         else {
             console.log("name change fail");
