@@ -27,7 +27,6 @@ import VotingScreen from './src/screens/VotingScreen';
 import InviteCollabScreen from './src/screens/InviteCollabScreen';
 import SharePlanModal from './src/screens/SharePlanModal';
 import { Icon } from 'react-native-elements';
-import ChangeFullnameModal from './src/screens/ChangeFullnameModal';
 
 export default class App extends React.Component {
   componentWillMount() {
@@ -82,7 +81,6 @@ export default class App extends React.Component {
         Settings: SettingsScreen,
         MyPlans: MyPlansScreen,
         Notifications: NotificationsScreen,
-        ChangeNameModal: ChangeFullnameModal
 
       }
     );

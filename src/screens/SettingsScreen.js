@@ -1,30 +1,31 @@
 import React, { Component } from 'react';
-import {View, StyleSheet, AsyncStorage} from 'react-native';
+import {View, StyleSheet, AsyncStorage, Text, TouchableOpacity} from 'react-native';
 import Setting from '../../src/components/SettingsComponents/Setting';
 import ReusableHeader from '../components/ReusableHeader';
 import Modal from "react-native-modal";
 import { connect } from 'react-redux';
 import * as actions from '../redux/actions';
-
+import DynamicInput from '../components/common/DynamicInput';
+import firebase from 'firebase';
 
 class SettingsScreen extends Component {
 
 
     state ={
-        fullName: '',
+        fullNameInitial: '',
+        fullNameConfirm: '',
+        fullName: this.props.user.fullName,
         email: '',
         visibleNameChangeModal: false,
-
+        error: ''
     }
 
     onNotifPress = () => {
         this.props.navigation.navigate('Notifications');
     }
 
-    onMePress = () => {
-        visibleNameChangeModal = true
-        this.navigation.navigate('ChangeNameModal');
-    }
+    toggleNameChangeModal = () => this.setState({ visibleNameChangeModal: !this.state.visibleNameChangeModal });
+
 
     onLogOutPress = async () => {
         await AsyncStorage.setItem('logged', 'false');
@@ -40,22 +41,94 @@ class SettingsScreen extends Component {
         },
     });
 
+    handleNameChange = (typedText) =>{
+        this.setState({fullNameInitial: typedText});
+    }
+ 
+    handleNameChangeConfirm = (typedText) =>{
+        this.setState({fullNameConfirm: typedText});
+    }
+
+    handleConfirm = async () => {
+        let user = await firebase.auth().currentUser;
+        if (this.state.fullNameInitial == this.state.fullNameConfirm){
+            this.setState({fullName:this.state.fullNameConfirm});
+            console.log(this.state.fullName);
+            this.toggleNameChangeModal();
+            try{await firebase.database().ref('/users/' + user.uid).update({
+                fullName: this.state.fullName
+              }).getKey()}
+              catch{(error) =>{
+                console.log(error);
+              }
+            }
+            this.props.user.fullName = this.state.fullName;
+            this.props.user.name = this.state.fullName;
+        }
+        else {
+            console.log("fail");
+            this.setState({error: "Fields must match."})
+        }
+    }
+
+
+
     render() {
         return (
             <View style={styles.mainContainer}> 
         
                 <View style={styles.settingsHolder}>
 
-                <Setting settingName='Me' currentSetting={this.props.user.fullName}
+                <Setting settingName='Me' currentSetting={this.state.fullName}
                     iconName='edit'
-                    onPress={this.onMePress.bind(this)}
+                    onPress={this.toggleNameChangeModal.bind(this)}
                     />
                 <Setting settingName='Notifications' iconName='notifications' onPress={this.onNotifPress.bind(this)}/>
-                <Setting settingName='Account' currentSetting='john.doe@gmail.com' iconName='person'/>
+                <Setting settingName='Email' currentSetting='john.doe@gmail.com' iconName='person'/>
                 <Setting settingName='Privacy' iconName='lock'/>
                 <Setting settingName='Log Out' onPress={this.onLogOutPress.bind(this)} iconName='not-interested'/>
                 <Setting settingName='Help' currentSetting='Questions?' iconName='help'/>
                 </View>
+
+                <Modal isVisible={this.state.visibleNameChangeModal}>
+              <View style={styles.modalContainer}>
+                    <Text style={styles.headerTextStyle}>Change Profile Name</Text>
+                    <View style={styles.formStyle}>
+                        <DynamicInput placeholderList={[
+                            {placeholder: 'New Full Name',
+                            inputContainerStyle: "loginInput",
+                              inputStyle: "loginText",
+                              autoCapitalize: "none",
+                              spellCheck: false,
+                              stateLabel: "nameChange",
+                              onChange: this.handleNameChange},
+                            {placeholder: 'Confirm Full Name',
+                              inputContainerStyle: "loginInput",
+                              inputStyle: "loginText",
+                              autoCapitalize: "none",
+                              spellCheck: false,
+                              stateLabel: "nameChangeConfirm",
+                              onChange: this.handleNameChangeConfirm},
+                            ]}
+                        />
+                        
+                    </View>
+                    <Text style={styles.error}>{this.state.error}</Text>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style={styles.button}
+                            onPress = {this.handleConfirm.bind(this)} >
+                            <Text style={styles.buttonText}>Save</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity 
+                            onPress = {this.toggleNameChangeModal.bind(this)}
+                            style={styles.button}>
+                            <Text style={styles.buttonText}>Cancel</Text>
+                         </TouchableOpacity>
+                    </View>
+                    
+                    
+              </View>
+            </Modal>
             </View>
         )
     }
@@ -64,6 +137,18 @@ class SettingsScreen extends Component {
 
 
 const styles = StyleSheet.create({
+    defaultInput: {
+        height: 40,
+        borderWidth: 1,
+        borderColor: '#B8BeC1',
+        borderRadius: 15,
+        paddingLeft: 17,
+        paddingBottom: 14,
+      },
+    modalFields:{
+        flex: 2,
+        justifyContent: 'space-around',
+    },
     mainContainer: {
         flex: 1, 
     },
@@ -71,10 +156,55 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
     },
+    modalContainer: {
+        height: "60%",
+        backgroundColor: '#fff',
+        borderRadius: 15,
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    buttonContainer: {
+        flex: .8,
+        justifyContent: 'space-around',
+        marginBottom: 20
+    },
+    button: {
+        backgroundColor: '#Ed7248',
+        borderRadius: 30,
+        width: 270,
+        height: 60,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    buttonText: {
+        textAlign: 'center',
+        color: '#ffffff',
+        fontSize: 11,
+        fontWeight: 'bold',
+    },
+    formStyle: {
+        width: '90%',
+        justifyContent: 'space-around'
+    },
+    error: {
+        flex: .2,
+        fontSize: 12,
+        alignSelf: 'center',
+        color: '#E23737',
+        marginTop: 15
+    },
+    ////////////////////////Header////////////////////
+    headerTextStyle: {
+        fontSize: 30,
+        color: '#605985',
+        fontWeight: 'bold',
+        marginTop: 20,
+        marginBottom: 20
+    },
 });
 
 const mapStateToProps = state => {
-    return { user: state.user };
+    return { user: state.user, fullName: state.fullName };
 }
 
 export default connect(mapStateToProps, actions)(SettingsScreen);

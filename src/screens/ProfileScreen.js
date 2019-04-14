@@ -31,7 +31,7 @@ class ProfileScreen extends Component {
     });
 
     state = {
-        fullName: '',
+        fullName: this.props.user.name,
         description: 'Hello friends, this is my description',
         editProfile: false,
         planData: {},
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-    return { user: state.user, plan: state.plan };
+    return { user: state.user, plan: state.plan};
 }
 
 export default connect(mapStateToProps, actions)(ProfileScreen);
