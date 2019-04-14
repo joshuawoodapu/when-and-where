@@ -68,6 +68,7 @@ class SettingsScreen extends Component {
             if(this.state.emailNew == this.state.emailConfirm){
                 this.setState({email: this.state.emailConfirm});
                 this.toggleEmailChangeModal();
+                this.setState({error: ''}); 
                 try{
                     user.updateEmail(this.state.email);
                     console.log(this.state.email);
@@ -87,8 +88,8 @@ class SettingsScreen extends Component {
         let user = await firebase.auth().currentUser;
         if (this.state.fullNameInitial == this.state.fullNameConfirm){
             this.setState({fullName:this.state.fullNameConfirm});
-            console.log(this.state.fullName);
             this.toggleNameChangeModal();
+            this.setState({error: ''});
             try{await firebase.database().ref('/users/' + user.uid).update({
                 fullName: this.state.fullName
               }).getKey()}
@@ -120,9 +121,9 @@ class SettingsScreen extends Component {
                 <Setting settingName='Notifications' iconName='notifications' onPress={this.onNotifPress.bind(this)}/>
                 <Setting settingName='Email' currentSetting={this.state.email} iconName='person'
                 onPress={this.toggleEmailChangeModal.bind(this)}/>
-                <Setting settingName='Privacy' iconName='lock'/>
-                <Setting settingName='Log Out' onPress={this.onLogOutPress.bind(this)} iconName='not-interested'/>
                 <Setting settingName='Help' currentSetting='Questions?' iconName='help'/>
+                <Setting settingName='About Us' iconName='book' currentSetting=':-)'/>
+                <Setting settingName='Log Out' onPress={this.onLogOutPress.bind(this)} iconName='not-interested'/>
                 </View>
 
 
@@ -155,12 +156,12 @@ class SettingsScreen extends Component {
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity style={styles.button}
                             onPress = {this.handleNewNameConfirm.bind(this)} >
-                            <Text style={styles.buttonText}>Save</Text>
+                            <Text style={styles.buttonText}>SAVE</Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
                             onPress = {this.toggleNameChangeModal.bind(this)}
                             style={styles.button}>
-                            <Text style={styles.buttonText}>Cancel</Text>
+                            <Text style={styles.buttonText}>CANCEL</Text>
                          </TouchableOpacity>
                     </View>
               </View>
@@ -194,12 +195,12 @@ class SettingsScreen extends Component {
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity style={styles.button}
                             onPress = {this.handleNewEmailConfirm.bind(this)} >
-                            <Text style={styles.buttonText}>Save</Text>
+                            <Text style={styles.buttonText}>SAVE</Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
                             onPress = {this.toggleEmailChangeModal.bind(this)}
                             style={styles.button}>
-                            <Text style={styles.buttonText}>Cancel</Text>
+                            <Text style={styles.buttonText}>CANCEL</Text>
                          </TouchableOpacity>
                     </View>
                     
