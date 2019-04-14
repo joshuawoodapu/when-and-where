@@ -42,7 +42,8 @@ class ProfileScreen extends Component {
         error: '',
         locationPredictions: [],
         filter_by_type: 'museum',
-        isModalVisible: false
+        isModalVisible: false,
+        userActivities: []
     };
 
     componentWillMount = async () => {
@@ -58,6 +59,18 @@ class ProfileScreen extends Component {
             { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
         );
         this.browseActivityList();
+
+
+        this.loadUserActivities();
+    }
+
+    loadUserActivities = async () =>{
+        try{
+            
+
+        } catch (err){
+            console.log(err);
+        }
     }
 
     browseActivityList = async () => {
@@ -115,7 +128,7 @@ class ProfileScreen extends Component {
                     navigation={this.props.navigation}
                     style={styles.Tabs}
                     planData={this.props.user.plans}
-                    activityList={this.state.locationPredictions}
+                    activityList={this.state.userActivities}
                 />
             </View>
         )
