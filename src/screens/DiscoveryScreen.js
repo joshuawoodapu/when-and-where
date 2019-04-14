@@ -3,7 +3,6 @@ import {View, Text, TextInput, StyleSheet, ScrollView, ActivityIndicator, Button
 import {connect} from 'react-redux';
 import * as actions from '../redux/actions';
 import { GoogleAutoComplete } from 'react-native-google-autocomplete';
-// import {Overlay} from 'react-native-overlay';
 import LocationItem from '../components/locationSearch/LocationItem';
 import Tabs from '../components/Tabs';
 import DynamicInput from '../components/common/DynamicInput'; 
@@ -68,7 +67,6 @@ class DiscoveryScreen extends Component {
             this.setState({ locationPredictions: results_json.results });
 
         } catch (err){
-            console.log("FUCK SHIT BITCH");
             console.error(err);
         }
 

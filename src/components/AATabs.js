@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableHighlight, TouchableOpacity,
-  ScrollView, Dimensions, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, TextInput, 
+    ScrollView, Dimensions, FlatList, ActivityIndicator } from 'react-native';
 import {connect} from 'react-redux';
 import * as actions from '../redux/actions';
 import { Icon } from 'react-native-elements';
 import AAActivityCard from './AAActivityCard';
 import DynamicInput from '../components/common/DynamicInput';
+import { GoogleAutoComplete } from 'react-native-google-autocomplete';
+import LocationItem from './locationSearch/LocationItem';
 
 class AATabs extends Component {
     state = {
@@ -102,11 +104,32 @@ class AATabs extends Component {
 
     };
 
+    handleLocationSuggestionPress = async (location_id) => {
+        this.setState({ locationInFocus: false });
+
+        const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${location_id}&fields=geometry&key=${global.apiKey}`
+        try {
+            let result = await fetch(api_url);
+            let location_details = await result.json();
+            location_lat =  location_details.result.geometry.location.lat;
+            location_lng =  location_details.result.geometry.location.lng;
+            
+            console.log("new loc coords: " + location_lat + " , " + location_lng);
+            this.setState({
+                searchLat: location_lat,
+                searchLng: location_lng
+            });
+
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     renderContentHeader() {
       return(
         <View style={styles.tabsInputs}>
-          <DynamicInput placeholderList={[
-              {placeholder: 'Search',
+          <DynamicInput placeholderList={[{
+                placeholder: 'Search',
                 inputContainerStyle: 'tabsInput',
                 inputStyle: 'tabsText',
                 autoCapitalize: "words",
@@ -115,19 +138,44 @@ class AATabs extends Component {
                 iconName: "search",
                 iconColor: "#605985",
                 iconSize: 22,
-                onChange: this.handleSearchChange },
-              {placeholder: 'Current Location',
-                inputContainerStyle: 'tabsInput',
-                inputStyle: 'tabsText',
-                returnKeyType: 'done',
-                stateLabel: "current_location",
-                iconStyle: "Icon",
-                iconName: "location-on",
-                iconColor: "#605985",
-                iconSize: 22,
-                onChange: this.handleLocationChange },
-              ]}
+                onChange: this.handleSearchChange } ]}
           />
+          <GoogleAutoComplete apiKey={global.apiKey} debounce={500} minLength={3} >
+                {({ handleTextChange, locationResults, fetchDetails, isSearching }) => (
+                    <React.Fragment>
+                        <View>
+                            <TextInput 
+                                style={styles.locationInput}
+                                placeholder="Location" 
+                                onChangeText={handleTextChange}
+                                onFocus={ () => ( this.setState({ locationInFocus: true }) ) }
+                            />
+                        </View>
+
+                        {isSearching && <ActivityIndicator size="large" />}
+                        
+                        {this.state.locationInFocus && 
+                            <View>
+                                <Text>we in here</Text>
+                                <ScrollView>
+                                    {locationResults.map(el => (
+                                        <LocationItem 
+                                            {...el}
+                                            key={el.id}
+                                            fetchDetails={fetchDetails}
+                                            onPress={this.handleLocationSuggestionPress}
+                                            onBlur={() => (
+                                                this.setState({locationInFocus: false})
+                                            )}
+                                        />
+                                    )) }
+                                </ScrollView>
+                            </View>
+                        }
+                        
+                    </React.Fragment>
+                )}
+            </GoogleAutoComplete>
         </View>
       );
     };
@@ -261,29 +309,6 @@ class AATabs extends Component {
        await this.props.addActivitySlot(this.props.plan.planId, place_id, false);
        await this.props.planSet(this.props.plan.planId);
        this.props.navigation.navigate('PlanView');
-       // make api call to get details on activity
-       /*
-        const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&fields=name,rating,formatted_phone_number,formatted_address,type,opening_hours,geometry&key=${global.apiKey}`
-       try {
-           let result = await fetch(api_url);
-           let activity_details = await result.json();
-           activity_details =  activity_details.result;
-
-           let activity_hours = activity_details.opening_hours ? activity_details.opening_hours.weekday_text.join('\n') : "Sorry! These hours are currently not available online.";
-           this.props.navigation.navigate('Activity', {
-               activity_name: activity_details.name,
-               phone_number: activity_details.formatted_phone_number,
-               hours: activity_hours,
-               address: activity_details.formatted_address,
-               rating: activity_details.rating,
-               coordinates: activity_details.geometry.location,
-               activity_type: activity_details.types[0]
-           });
-
-       } catch (err){
-           console.log(err)
-       }
-       */
     };
 
     onCustomActivityCardPress = async (activityId) => {
