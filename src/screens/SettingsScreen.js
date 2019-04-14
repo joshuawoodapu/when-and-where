@@ -62,28 +62,26 @@ class SettingsScreen extends Component {
         this.setState({fullNameConfirm: typedText});
     }
 
-    emailValidation = (email)=> {
-
-        return true;
-    }
-
     handleNewEmailConfirm = async () =>{
         let user = await firebase.auth().currentUser;
-        if (this.state.emailNew == this.state.emailConfirm){
-            this.setState({email: this.state.emailConfirm});
-            this.toggleEmailChangeModal();
-            try{
-                user.updateEmail(this.state.email);
-                console.log(this.state.email);
-            } catch{(error)=>{
-                console.log(error);
-            }}
-        }
-        else{
-            console.log("email change fail");
-            this.setState({error: "Fields must match."})
-        }
-    }
+        if (this.state.emailNew.includes('@') && this.state.emailNew.includes('.')) {
+            if(this.state.emailNew == this.state.emailConfirm){
+                this.setState({email: this.state.emailConfirm});
+                this.toggleEmailChangeModal();
+                try{
+                    user.updateEmail(this.state.email);
+                    console.log(this.state.email);
+                } catch{(error)=>{
+                    console.log(error);
+                }}
+            }
+            else{
+                this.setState({error: "Fields Must Match"});
+            }
+        } else{
+            this.setState({error: "Incorrect Email Format"});
+            }
+     }
 
     handleNewNameConfirm = async () => {
         let user = await firebase.auth().currentUser;
@@ -103,7 +101,7 @@ class SettingsScreen extends Component {
         }
         else {
             console.log("name change fail");
-            this.setState({error: "Fields must match."})
+            this.setState({error: "Fields Must Match"})
         }
     }
 
