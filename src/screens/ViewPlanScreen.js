@@ -67,6 +67,11 @@ class ViewPlanScreen extends Component {
         this.props.navigation.navigate('AddActivity', {addAction: 'addActivity', newActivityIndex: newActivityIndex});
     }
 
+    onInfoPress = async (place_id) => {
+        // make api call to get details on activity
+        console.log("onInfoPress triggered.");
+    };
+
     onPressViewComments() {
         this.props.navigation.navigate('CommentsView');
     }
@@ -92,6 +97,7 @@ class ViewPlanScreen extends Component {
                 index={index}
                 activityData={activitySlot}
                 onPlusPress={this.onAddBoxPress.bind(this, index)}
+                onInfoPress={this.onInfoPress.bind(this)}
                 totalSlots={arrayLength-1}
               />
             ))}

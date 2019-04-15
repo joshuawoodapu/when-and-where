@@ -294,6 +294,7 @@ class VPActivityCard extends Component {
   }
 
   render() {
+    console.log("this.props = " + this.props)
     let voteNums = [];
     activityGroup1.map((activity) => {
       voteNums.push(activity.numVotes);
@@ -341,7 +342,9 @@ class VPActivityCard extends Component {
               {this.state.activities.map((activity, index) =>
                 <Card style={styles.cardStyle} key={index} onSwipedTop={this.onSwipeUp.bind(this, activity.activityName)}>
                     <View flex={1}>
+                      <TouchableOpacity key={index} onPress={this.props.onInfoPress}>
                         {this.renderInfo(activity)}
+                      </TouchableOpacity>
                     </View>
                 </Card>
               )}
