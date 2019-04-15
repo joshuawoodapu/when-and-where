@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import {View, StyleSheet, AsyncStorage} from 'react-native';
+import { connect } from 'react-redux';
+import * as actions from '../redux/actions';
 import Setting from '../../src/components/SettingsComponents/Setting';
 import ReusableHeader from '../components/ReusableHeader';
 
 
 class SettingsScreen extends Component {
     onLogOutPress = async () => {
+        this.props.logOut();
         await AsyncStorage.setItem('logged', 'false');
         this.props.navigation.navigate('Login');
     }
@@ -50,4 +53,8 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SettingsScreen;
+const mapStateToProps = state => {
+    return { user: state.user };
+}
+
+export default connect(mapStateToProps, actions)(SettingsScreen);

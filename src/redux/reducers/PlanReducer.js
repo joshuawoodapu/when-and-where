@@ -1,5 +1,6 @@
 import {
-    PLAN_SET
+    PLAN_SET,
+    LOG_OUT
 } from '../actions/types'
 
 const INITIAL_STATE = {
@@ -21,6 +22,8 @@ export default (state = INITIAL_STATE, action) => {
                 privacy: action.payload.privacy,
                 startDate: action.payload.startDate,
                 activitySlots: action.payload.activitySlots}
+        case LOG_OUT:
+            return INITIAL_STATE;
         default:
             return state;
     }

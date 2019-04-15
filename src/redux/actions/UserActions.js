@@ -2,7 +2,8 @@ import firebase from 'firebase';
 import {
     USER_LOAD,
     PLANS_LOAD,
-    CUSTOM_ACTIVITIES_LOAD
+    CUSTOM_ACTIVITIES_LOAD,
+    LOG_OUT
 } from './types';
 
 export const userLoad = (user) => {
@@ -15,6 +16,12 @@ export const userLoad = (user) => {
     };
 };
 
+export const logOut = () => {
+    return {
+        type: LOG_OUT
+    }
+}
+
 /*
 export const newPlanInUser = (user, newPlan) => {
     return (dispatch) => {
@@ -24,6 +31,7 @@ export const newPlanInUser = (user, newPlan) => {
 */
 
 export const plansLoad = (ownedPlans, collabForPlans) => {
+    console.log(collabForPlans);
     var allPlans = ownedPlans.concat(collabForPlans);
     return (dispatch) => {
         return Promise.all(allPlans.map(function(planId){
@@ -48,10 +56,11 @@ export const customActivitiesLoad = (user) => {
 
 const userDataSuccess = (dispatch, snapshot) => {
     var fullName = (snapshot.val() && snapshot.val().fullName) || 'Jane Doe';
-    var ownedPlans = snapshot.val().ownedPlans
+    var ownedPlans = snapshot.val().ownedPlans;
+    var collabForPlans = snapshot.val().collabForPlans;
     dispatch({
         type: USER_LOAD,
-        payload: {fullName: fullName, ownedPlans: ownedPlans}
+        payload: {fullName: fullName, ownedPlans, collabForPlans}
     })
 };
 
