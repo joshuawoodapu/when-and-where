@@ -108,6 +108,9 @@ class Tabs extends Component {
                             keyExtractor= {(item) => {
                                 return item.place_id
                             }}
+                            // onEndReached={this.props.loadMoreActivities_search}
+                            // onEndReached={this.props.loadMore}
+                            onEndReachedThreshold={0}
                         />
                     </View>
                 );
