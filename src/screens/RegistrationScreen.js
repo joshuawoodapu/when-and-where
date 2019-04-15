@@ -42,7 +42,6 @@ class RegistrationScreen extends Component {
             if(!(name.length > 35)){
               
               if(password == password_confirm ){
-                console.log(email + password)
                 firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
                 firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then(this.onRegisterSuccess.bind(this))

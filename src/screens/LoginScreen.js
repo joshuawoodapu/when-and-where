@@ -30,7 +30,8 @@ class LoginScreen extends Component {
         firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
             firebase.auth().signInWithEmailAndPassword(email, password)
                 .then(this.onLoginSuccess.bind(this))
-                .catch(() => {
+                .catch((error) => {
+                    console.log(error);
                     this.setState({ error: "Login attempt failed.", loading: false });
                 });
         });
@@ -52,7 +53,7 @@ class LoginScreen extends Component {
         if (user !== null)
         {
             await this.props.userLoad(user);
-            await this.props.plansLoad(user);
+            // await this.props.plansLoad(user);
             await this.props.customActivitiesLoad(user);
         }
             
