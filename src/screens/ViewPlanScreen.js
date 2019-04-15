@@ -60,12 +60,17 @@ class ViewPlanScreen extends Component {
     }
 
     onAddPress() {
-        this.props.navigation.navigate('AddActivity', {parentComponent: 'add-circle'});
+        this.props.navigation.navigate('AddActivity', {addAction: 'createSlot'});
     }
 
-    onAddBoxPress() {
-        this.props.navigation.navigate('AddActivity', {parentComponent: 'add-box'});
+    onAddBoxPress(newActivityIndex) {
+        this.props.navigation.navigate('AddActivity', {addAction: 'addActivity', newActivityIndex: newActivityIndex});
     }
+
+    onInfoPress = async (place_id) => {
+        // make api call to get details on activity
+        console.log("onInfoPress triggered.");
+    };
 
     onPressViewComments() {
         this.props.navigation.navigate('CommentsView');
@@ -74,11 +79,6 @@ class ViewPlanScreen extends Component {
     onPiePress() {
         this.props.navigation.navigate('VotingView')
     }
-
-    onRActivityCardPress() {
-        this.props.navigation.navigate('Activity');
-    };
-
 
     onCollabPress() {
       this.setState({ visibleSharePlanModal: !this.state.visibleSharePlanModal });
@@ -96,8 +96,8 @@ class ViewPlanScreen extends Component {
                 key={index}
                 index={index}
                 activityData={activitySlot}
-                onCardPress={this.onRActivityCardPress.bind(this)}
-                onPlusPress={this.onAddBoxPress.bind(this)}
+                onPlusPress={this.onAddBoxPress.bind(this, index)}
+                onInfoPress={this.onInfoPress.bind(this)}
                 totalSlots={arrayLength-1}
               />
             ))}

@@ -28,14 +28,14 @@ class AATabs extends Component {
                     searchLat: position.coords.latitude,
                     searchLng: position.coords.longitude
                 });
-                console.log("pos.coord: " + position.coords.latitude + " " + position.coords.longitude);
+                //console.log("pos.coord: " + position.coords.latitude + " " + position.coords.longitude);
             },
             error => this.setState({ error: error.message }),
             { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
         );
 
-        console.log("coordinates: " + this.state.searchLat + " " + this.state.searchLng);
-        console.log(this.state.error);
+        //console.log("coordinates: " + this.state.searchLat + " " + this.state.searchLng);
+        //console.log(this.state.error);
         this.browseActivityList();
 
     }
@@ -224,7 +224,7 @@ class AATabs extends Component {
                             renderItem={({item}) =>
                                 <AAActivityCard
                                     title={item.name}
-                                    onCardPress={() => this.onActivityCardPress(item.place_id, this.props.parentComponent)}
+                                    onCardPress={() => this.onActivityCardPress(item.place_id, this.props.addAction, this.props.newActInd)}
                                     add={true}
                                     text={item.name}
                                     address={item.vicinity ? item.vicinity : item.formatted_address}
@@ -277,7 +277,7 @@ class AATabs extends Component {
                     renderItem={({item}) =>
                       <AAActivityCard
                         key={item.activityId}
-                        onCardPress={this.onCustomActivityCardPress.bind(this, item.activityId)}
+                        onCardPress={this.onCustomActivityCardPress.bind(this, item.activityId, this.props.addAction, this.props.newActInd)}
                         title={item.activityName}
                         add={false}
                         text={item.phoneNumber}
@@ -298,18 +298,22 @@ class AATabs extends Component {
             this.setState({activeTab: 'search'})
     };
 
-    onActivityCardPress = async (place_id, parComp) => {
+    onActivityCardPress = async (place_id, addAction, newActivityIndex) => {
        // Sending an action to add an activity slot!
        // Current plan
        // Chosen activity
        // False, as in this is not a custom activity!
+       // console.log("onActivityCardPress action: " + addAction);
 
-       switch(parComp) {
-          case 'add-box':
-            console.log("ADDING TO EXISTING ACTIVITY SLOT");
+       switch(addAction) {
+          case 'addActivity':
+            // console.log("ADDING TO EXISTING ACTIVITY SLOT");
+            await this.props.addActivityToExistingSlot(this.props.plan.planId, place_id, false, newActivityIndex);
+            await this.props.planSet(this.props.plan.planId);
+            this.props.navigation.navigate('PlanView');
             break;
-          case 'add-circle':
-            console.log("ADDING AS NEW ACTIVITY SLOT");
+          case 'createSlot':
+            // console.log("ADDING AS NEW ACTIVITY SLOT");
             await this.props.addActivitySlot(this.props.plan.planId, place_id, false);
             await this.props.planSet(this.props.plan.planId);
             this.props.navigation.navigate('PlanView');
@@ -343,14 +347,29 @@ class AATabs extends Component {
        */
     };
 
-    onCustomActivityCardPress = async (activityId) => {
+    onCustomActivityCardPress = async (activityId, addAction, newActivityIndex) => {
       // Sending an action to add an activity slot!
       // Current plan
       // Chosen activity
       // True, as in this is a custom activity!
-      await this.props.addActivitySlot(this.props.plan.planId, activityId, true);
-      await this.props.planSet(this.props.plan.planId);
-      this.props.navigation.navigate('PlanView');
+      // console.log("onCustomActivityCardPress action: " + addAction);
+
+      switch(addAction) {
+         case 'addActivity':
+           // console.log("ADDING TO EXISTING ACTIVITY SLOT");
+           await this.props.addActivityToExistingSlot(this.props.plan.planId, activityId, true, newActivityIndex);
+           await this.props.planSet(this.props.plan.planId);
+           this.props.navigation.navigate('PlanView');
+           break;
+         case 'createSlot':
+           // console.log("ADDING AS NEW ACTIVITY SLOT");
+           await this.props.addActivitySlot(this.props.plan.planId, activityId, true);
+           await this.props.planSet(this.props.plan.planId);
+           this.props.navigation.navigate('PlanView');
+           break;
+         default:
+           console.log("Talk to Campbell lol");
+     }
     }
 
 
