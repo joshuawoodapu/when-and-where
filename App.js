@@ -28,6 +28,7 @@ import InviteCollabScreen from './src/screens/InviteCollabScreen';
 import SharePlanModal from './src/screens/SharePlanModal';
 import { Icon } from 'react-native-elements';
 
+
 export default class App extends React.Component {
   componentWillMount() {
     YellowBox.ignoreWarnings(['Setting a timer']);

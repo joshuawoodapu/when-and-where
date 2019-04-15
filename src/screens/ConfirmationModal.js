@@ -16,7 +16,7 @@ import FlipToggle from 'react-native-flip-toggle-button';
 import Modal from "react-native-modal";
 
 
-class NewPlanScreen extends Component {
+class ConfirmationModal extends Component {
     static navigationOptions = {
         title: 'NEW PLAN',
         headerTitleStyle: {
@@ -31,7 +31,7 @@ class NewPlanScreen extends Component {
     monthNames = ["January", "February", "March", "April", "May","June","July", "August", "September", "October", "November","December"];
     this.state = {
       planName: "",
-      privacySetting: false,
+      privacySetting: false, 
       chosenDate: new Date(),
       isModalVisible: false
     };
@@ -94,7 +94,6 @@ class NewPlanScreen extends Component {
         console.log(displayDate);
       }
       else {
-        this._toggleModal();
         console.log(this.state.chosenDate);
       }
     }
@@ -116,6 +115,7 @@ class NewPlanScreen extends Component {
 
     chosenDateToString() {
       return (this.state.chosenDate.toDateString())
+
     }
 
     renderPrivacySetting() {
@@ -124,21 +124,21 @@ class NewPlanScreen extends Component {
         return (
           <View style={containerStyle.rowContainer}>
           <Icon
-
+  
           name='lock'
           color='#2661B2' />
           <View style={containerStyle.textContainer}>
-          <Text style={styles.toggleLabel1}> Private </Text>
+          <Text style={styles.toggleLabel}> Private </Text>
           </View>
           </View>
         )
       }
-      else
+      else 
       {
         return (
           <View style={containerStyle.rowContainer}>
           <Icon
-
+  
           name='lock-open'
           color='#2661B2' />
           <View style={containerStyle.textContainer}>
@@ -148,7 +148,7 @@ class NewPlanScreen extends Component {
         )
       }
     }
-
+ 
     confirmPlan = async () => {
 
       let user = await firebase.auth().currentUser;
@@ -159,12 +159,9 @@ class NewPlanScreen extends Component {
         privacy: this.state.privacySetting ? "Private" : "Public",
         favorites: 0
       }).getKey();
-      await firebase.database().ref('users/' + user.uid + '/ownedPlans').push({
-        planId: newPlanId
-      })
-      this.props.userLoad(user);
+      console.log(newPlanId);
       this.props.planSet(newPlanId);
-      this.props.plansLoad(this.props.user.ownedPlans, this.props.user.collabForPlans);
+      this.props.plansLoad(user);
       this._toggleModal();
       this.props.navigation.navigate('PlanView');
     }
@@ -262,83 +259,89 @@ class NewPlanScreen extends Component {
 
               <Modal isVisible={this.state.isModalVisible}>
 
-{/* Modal Starts */}
-<View style={{ flex: 1, paddingTop: 50, paddingBottom: 50 }}>
+              {/* Modal Starts */}
+              <View style={{ flex: 1, paddingTop: 50, paddingBottom: 50 }}>
 
-<View style={styles.modalContainer}>
+              <View style={styles.modalContainer}>
 
-  <ScrollView showsVerticalScrollIndicator={false}>
+                <ScrollView showsVerticalScrollIndicator={false}>
 
-      <View>
-          <View flex={1} justifyContent='center' alignItems='center' paddingTop={30} paddingLeft={70} paddingRight={70}>
-            <RHeader>Confirmation</RHeader>
-          </View>
+                    <View>
+                        <View flex={1} paddingLeft={25} paddingTop={35}>
+                          <RHeader>Confirmation</RHeader>
+                        </View>
 
-          <View paddingHorizontal={24} paddingTop={17} paddingBottom={27}>
-            <Text style={styles.textLabel}>PLAN NAME</Text>
-            <Text style={styles.toggleLabel}>{this.state.planName}</Text>
-          </View>
+                        <View paddingHorizontal={24} paddingTop={17} paddingBottom={27}>
+                          <Text style={styles.textLabel}>PLAN NAME</Text>
+                          <Text style={styles.toggleLabel}>{this.state.planName}</Text>
+                        </View>
 
-          {/*Avatars*/}
-          <View paddingHorizontal={24}>
-            <Text style={styles.textLabel}>WHO'S GOING?</Text>
-          </View>
-          <View flexDirection="row" flex={1} paddingBottom={2} paddingHorizontal={35}>
-            <View flex={20}>
-              <FlatList
-                  data={avatars}
-                  horizontal={true}
-                  showsHorizontalScrollIndicator={false}
-                  renderItem={({item}) =>
-                    <Avatars
-                        size={item.size}
-                        rounded={item.rounded}
-                        uri={item.uri}
-                        avatarContainer="newPlanContainer"
-                        name={item.name}
-                    />
-                  }
-                  keyExtractor={(item, index) => index.toString()}
-              />
-            </View>
+                        {/*Avatars*/}
+                        <View paddingHorizontal={24}>
+                          <Text style={styles.textLabel}>WHO'S GOING?</Text>
+                        </View>
+                        <View flexDirection="row" flex={1} paddingBottom={2} paddingHorizontal={35}>
+                          <View flex={6}>
+                            <FlatList
+                                data={avatars}
+                                horizontal={true}
+                                showsHorizontalScrollIndicator={false}
+                                renderItem={({item}) =>
+                                  <Avatars
+                                      size={item.size}
+                                      rounded={item.rounded}
+                                      uri={item.uri}
+                                      avatarContainer="newPlanContainer"
+                                      name={item.name}
+                                  />
+                                }
+                                keyExtractor={(item, index) => index.toString()}
+                            />
+                          </View>
 
-          </View>
+                          {/*plus button*/}
+                          <View flex={1} justifyContent="center" alignItems="center">
+                            <TouchableOpacity>
+                              <Icon name="add-circle" color="#0E91D6" size={35}/>
+                            </TouchableOpacity>
+                          </View>
+                        </View>
 
-          <View paddingHorizontal={24} paddingBottom={24}>
-            <Text style={styles.textLabel}>WHEN?</Text>
-            <Text style={styles.toggleLabel}>{this.chosenDateToString()}</Text>
-          </View>
+                        <View paddingHorizontal={24} paddingBottom={24}>
+                          <Text style={styles.textLabel}>WHEN?</Text>
+                          <Text style={styles.toggleLabel}>{this.chosenDateToString()}</Text>
+                        </View>
 
-          <View paddingHorizontal={24}>
-            <Text style={styles.textLabel}>PRIVACY</Text>
+                        <View paddingHorizontal={24}>
+                          <Text style={styles.textLabel}>PRIVACY</Text>
 
-            {this.renderPrivacySetting()}
+                          {this.renderPrivacySetting()}
 
-            <View style={containerStyle.checkContainer}>
+                          <View style={containerStyle.checkContainer}>
 
-            <View style={containerStyle.exButton}>
-            <TouchableOpacity onPress={this._toggleModal}>
-              <Icon raised name='clear' color='#2699FB' />
-            </TouchableOpacity>
-            </View>
+                          <View style={containerStyle.exButton}>
+                          <TouchableOpacity onPress={this._toggleModal}>
+                            <Icon raised name='clear' color='#2699FB' />
+                          </TouchableOpacity>
+                          </View>
 
-            <TouchableOpacity onPress={this.confirmPlan.bind(this)}>
-            <Icon
-            raised
-            name='done'
-            color='#2699FB' />
-            </TouchableOpacity>
+                          <TouchableOpacity onPress={this.confirmPlan.bind(this)}>
+                          <Icon
+                          raised
+                          name='done'
+                          color='#2699FB' />
+                          </TouchableOpacity>
 
-            </View>
+                          </View>
 
-          </View>
-      </View>
+                        </View>
+                    </View>
 
-    </ScrollView>
-</View>
+                  </ScrollView>
+              </View>
 
-</View>
-</Modal>
+              </View>
+              </Modal>
               </View>
 
           </View>
@@ -379,11 +382,7 @@ const styles = StyleSheet.create({
     toggleLabel: {
       fontSize: 14,
       color: "#2661B2",
-      paddingLeft: 10
-    },
-    toggleLabel1: {
-      fontSize: 14,
-      color: "#2661B2",
+      //paddingLeft: 10
     },
     toggleContainer: {
       paddingHorizontal: 9,
@@ -424,7 +423,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 15,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
     }
 });
 
@@ -455,7 +454,7 @@ const containerStyle = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  return { user: state.user, plan: state.plan };
+  return { plan: state.plan };
 }
 
-export default connect(mapStateToProps, actions)(NewPlanScreen);
+//export default connect(mapStateToProps, actions)(NewPlanScreen);

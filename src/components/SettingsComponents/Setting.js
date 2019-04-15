@@ -10,7 +10,7 @@ class Setting extends Component {
 
                 <View style={styles.leftContainer}>
                     <View style={styles.iconHolder}>
-                        <Icon name={this.props.iconName} size={30} color="#2661B2"/>
+                        <Icon name={this.props.iconName} size={20} color="#605985"/>
                     </View>
                     <View style={styles.placeHolder2}>
                         <Text style={styles.settingNameText}>
@@ -37,7 +37,8 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'flex-start',
         backgroundColor: '#F0F3F7',
-        marginTop: '1%'
+        //marginTop: '1%',
+        marginTop: 15,
     },
     iconHolder: {
         // flex: 1,
