@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../redux/actions';
+import firebase from 'firebase';
 import {View, StyleSheet, AsyncStorage, Text, TouchableOpacity, Image} from 'react-native';
 import Setting from '../../src/components/SettingsComponents/Setting';
 import ReusableHeader from '../components/ReusableHeader';
 import Modal from "react-native-modal";
-import { connect } from 'react-redux';
-import * as actions from '../redux/actions';
 import DynamicInput from '../components/common/DynamicInput';
-import firebase from 'firebase';
 
 class SettingsScreen extends Component {
 

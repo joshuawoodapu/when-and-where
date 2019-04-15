@@ -103,7 +103,7 @@ class Tabs extends Component {
     renderContent() {
         if (this.state.activeTab === 'activities') {
           return (
-              <View flex={1}>
+              <View style={styles.contentContainer}>
                 <FlatList
                     data={this.getCustomActivityData()}
                     showsVerticalScrollIndicator={false}
