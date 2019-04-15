@@ -194,8 +194,11 @@ class Tabs extends Component {
     };
 
     onPlansTabPress() {
-        if (this.state.activeTab !== 'plans')
+
+        if (this.state.activeTab !== 'plans') {
+            this.props.plansLoad(this.props.user.ownedPlans);
             this.setState({activeTab: 'plans'})
+        }
     };
 
     onActivitiesTabPress() {
@@ -272,7 +275,7 @@ styles = StyleSheet.create({
 })
 
 const mapStateToProps = state => {
-    return { plan: state.plan };
+    return { user: state.user, plan: state.plan };
 }
 
 export default connect(mapStateToProps, actions)(Tabs);

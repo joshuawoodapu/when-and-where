@@ -73,11 +73,6 @@ class ProfileScreen extends Component {
         }
     }
 
-    componentDidMount() {
-        console.log(this.props.user.plans);
-        console.log(Object.keys(this.props.user.plans).length);
-    }
-
     onPressProfile() {
         this.props.navigation.navigate('Settings');
     }
