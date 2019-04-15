@@ -35,29 +35,40 @@ class RegistrationScreen extends Component {
         const { name, email, password_confirm, password } = this.state;
         this.setState({ error: '', loading: true });
 
-        if ( password_confirm === null || email === null || name === null) {
-          Vibration.vibrate(1000)
-          this.setState({ error: "Blank Fields", loading: false });
-        }
+        if ( !(password == '' || email == '' || name == '')) {
 
-        else if (!email.includes('@')) {
-          Vibration.vibrate(1000)
-          this.setState({ error: "Incorrect Email Format", loading: false });
-        }
+          if(!(!email.includes('@') || !email.includes('.'))){
 
-        else if( password === password_confirm ){
-            console.log(email + password)
-            firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
-              firebase.auth().createUserWithEmailAndPassword(email, password)
+            if(!(name.length > 35)){
+              
+              if(password == password_confirm ){
+                console.log(email + password)
+                firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
+                firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then(this.onRegisterSuccess.bind(this))
                 .catch(error => {
                     console.log(error.code)
-                    this.onRegisterFail.bind(this)
+
+                    this.setState({error: "This email is already in use.",loading: false});
+                  });
                 });
-            });
-        } else {
+              } else {
+                  Vibration.vibrate(1000)
+                  this.setState({ error: "Passwords must match.", loading: false });
+              }
+            } else{
+              Vibration.vibrate(1000)
+              this.setState({ error: "Name must be 35 or fewer characters.", loading: false });
+            }
+          }
+          else{
             Vibration.vibrate(1000)
-            this.setState({ error: "Passwords do not match", loading: false });
+            this.setState({ error: "Incorrect email format.", loading: false });
+          }
+        }
+        else{
+          Vibration.vibrate(1000)
+          this.setState({ error: "Fields cannot be blank.", loading: false });
         }
     }
     // will be looking at doing catches for onButtonPress for each error such as email, matching passwords,

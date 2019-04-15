@@ -11,7 +11,7 @@ class ProfileBanner extends Component {
                     source={require('../../onboardingArt/1_corgi.png')}/>
 
                 <View style={styles.secondaryTextContainer}>
-                    <Text style={styles.profileName}>{this.props.name}</Text>
+                    <Text numberOfLines={2} style={styles.profileName}>{this.props.name}</Text>
                     <Text style={styles.locationText}>{this.props.location}</Text>
                 </View>
 
@@ -28,10 +28,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'flex-start',
         alignContent: 'center',
+        marginRight: 15
     },
     profilePic: {
-            height: 100,
-            width: 100,
+            resizeMode: 'contain',
+            width: '20%',
             justifyContent: 'center',
             alignSelf: 'center',
             // borderWidth: 5,
@@ -43,6 +44,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     secondaryTextContainer: {
+        width: '80%',
         paddingLeft: '3%',
         flexDirection: 'column',
         justifyContent: 'center',

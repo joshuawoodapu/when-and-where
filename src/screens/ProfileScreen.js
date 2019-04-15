@@ -11,6 +11,8 @@ import ProfileBanner from '../components/ProfileComponents/ProfileBanner';
 import ProfileDescription from '../components/ProfileComponents/ProfileDescription';
 import { Icon } from 'react-native-elements';
 import Modal from "react-native-modal";
+import { NavigationEvents } from "react-navigation";
+
 
 class ProfileScreen extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -31,7 +33,7 @@ class ProfileScreen extends Component {
     });
 
     state = {
-        fullName: '',
+        fullName: this.props.user.fullName,
         description: 'Hello friends, this is my description',
         editProfile: false,
         planData: {},
@@ -42,7 +44,8 @@ class ProfileScreen extends Component {
         error: '',
         locationPredictions: [],
         filter_by_type: 'museum',
-        isModalVisible: false
+        isModalVisible: false,
+        userActivities: []
     };
 
     componentWillMount = async () => {
@@ -58,6 +61,19 @@ class ProfileScreen extends Component {
             { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
         );
         this.browseActivityList();
+
+        this.loadUserActivities();
+    }
+
+    loadUserActivities = async () => {
+        let user = await firebase.auth().currentUser;
+        var loadedActivities = await firebase.database().ref('activities').child('owner').equalTo(user.uid);
+        var userActivities = [];
+    
+        console.log("Here are your user activities:");
+        console.log(loadedActivities);
+
+        this.setState({ userActivities: loadedActivities});
     }
 
     browseActivityList = async () => {
@@ -75,6 +91,11 @@ class ProfileScreen extends Component {
 
     onPressProfile() {
         this.props.navigation.navigate('Settings');
+    }
+    
+    componentDidMount() {
+        console.log(this.props.user.plans);
+        console.log(Object.keys(this.props.user.plans).length);
     }
 
     renderDescription() {
@@ -94,11 +115,16 @@ class ProfileScreen extends Component {
     render() {
         return (
             <View style={styles.topViewContainer}>
-
+            <NavigationEvents
+                    onDidFocus={payload => {
+                        console.log("will focus", payload);
+                        this.setState({fullName: this.props.user.fullName});
+                    }}
+                    />
 
                 <View style={styles.rowContainer}>
                         <ProfileBanner 
-                            name={this.props.user.fullName}
+                            name={this.state.fullName}
                             location={this.state.location}
                         />
                 </View>
@@ -110,7 +136,7 @@ class ProfileScreen extends Component {
                     navigation={this.props.navigation}
                     style={styles.Tabs}
                     planData={this.props.user.plans}
-                    activityList={this.state.locationPredictions}
+                    activityList={this.state.userActivities}
                 />
             </View>
         )
@@ -141,7 +167,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-    return { user: state.user, plan: state.plan };
+    return { user: state.user, plan: state.plan, fullName: state.fullName};
 }
 
 export default connect(mapStateToProps, actions)(ProfileScreen);

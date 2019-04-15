@@ -79,7 +79,9 @@ export default class App extends React.Component {
       {
         Profile: ProfileScreen,
         Settings: SettingsScreen,
-        MyPlans: MyPlansScreen
+        MyPlans: MyPlansScreen,
+        Notifications: NotificationsScreen,
+
       }
     );
     const AppNavigator = createBottomTabNavigator(
