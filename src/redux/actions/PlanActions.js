@@ -47,6 +47,7 @@ export const addActivityToExistingSlot = (planId, activityId, custom, slotIndex)
 };
 
 export const planSet = (planId) => {
+    console.log(planId)
     return (dispatch) => {
         firebase.database().ref('plans/' + planId).once('value')
           .then(snapshot => planDataSuccess(dispatch, snapshot, planId))

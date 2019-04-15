@@ -94,6 +94,7 @@ class NewPlanScreen extends Component {
         console.log(displayDate);
       }
       else {
+        this._toggleModal();
         console.log(this.state.chosenDate);
       }
     }
@@ -115,7 +116,6 @@ class NewPlanScreen extends Component {
 
     chosenDateToString() {
       return (this.state.chosenDate.toDateString())
-
     }
 
     renderPrivacySetting() {
@@ -159,9 +159,12 @@ class NewPlanScreen extends Component {
         privacy: this.state.privacySetting ? "Private" : "Public",
         favorites: 0
       }).getKey();
-      console.log(newPlanId);
+      await firebase.database().ref('users/' + user.uid + '/ownedPlans').push({
+        planId: newPlanId
+      })
+      this.props.userLoad(user);
       this.props.planSet(newPlanId);
-      this.props.plansLoad(user);
+      this.props.plansLoad(this.props.user.ownedPlans);
       this._toggleModal();
       this.props.navigation.navigate('PlanView');
     }
@@ -454,7 +457,7 @@ const containerStyle = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  return { plan: state.plan };
+  return { user: state.user, plan: state.plan };
 }
 
 export default connect(mapStateToProps, actions)(NewPlanScreen);

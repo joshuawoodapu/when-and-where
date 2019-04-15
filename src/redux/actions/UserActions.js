@@ -15,13 +15,24 @@ export const userLoad = (user) => {
     };
 };
 
-export const plansLoad = (user) => {
+/*
+export const newPlanInUser = (user, newPlan) => {
     return (dispatch) => {
-        firebase.database().ref('plans/').once('value')
-        .then(snapshot => plansDataSuccess(dispatch, snapshot))
-        .catch((error) => {
-            console.log(error)
-        })
+        firebase.database().ref('users/' + user.uid + '/ownedPlans').push()
+    }
+}
+*/
+
+export const plansLoad = (ownedPlans) => {
+    console.log(ownedPlans);
+    return (dispatch) => {
+        return Promise.all(ownedPlans.map(function(planId){
+            firebase.database().ref('plans/' + planId).once('value')
+            .then(snapshot => plansDataSuccess(dispatch, snapshot, planId))
+            .catch((error) => {
+                console.log(error)
+            })
+        }));
     };
 };
 
@@ -37,14 +48,15 @@ export const customActivitiesLoad = (user) => {
 
 const userDataSuccess = (dispatch, snapshot) => {
     var fullName = (snapshot.val() && snapshot.val().fullName) || 'Jane Doe';
+    var ownedPlans = snapshot.val().ownedPlans
     dispatch({
         type: USER_LOAD,
-        payload: fullName
+        payload: {fullName: fullName, ownedPlans: ownedPlans}
     })
 };
 
-const plansDataSuccess = (dispatch, snapshot) => {
-    var plansData = snapshot.val();
+const plansDataSuccess = (dispatch, snapshot, planId) => {
+    var plansData = {planData: snapshot.val(), planId};
     dispatch({
         type: PLANS_LOAD,
         payload: plansData
@@ -53,7 +65,6 @@ const plansDataSuccess = (dispatch, snapshot) => {
 
 const customActivitiesDataSuccess = (dispatch, snapshot) => {
     var customActivitiesData = snapshot.val();
-    console.log(customActivitiesData);
     dispatch({
         type: CUSTOM_ACTIVITIES_LOAD,
         payload: customActivitiesData
