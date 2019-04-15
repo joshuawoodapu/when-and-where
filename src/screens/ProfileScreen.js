@@ -11,6 +11,7 @@ import ProfileBanner from '../components/ProfileComponents/ProfileBanner';
 import ProfileDescription from '../components/ProfileComponents/ProfileDescription';
 import { Icon } from 'react-native-elements';
 import Modal from "react-native-modal";
+import ProfileTabs from '../components/ProfileTabs';
 
 class ProfileScreen extends Component {
     static navigationOptions = ({navigation}) => ({
@@ -48,12 +49,12 @@ class ProfileScreen extends Component {
     componentWillMount = async () => {
         // gets current location and set initial region to this
         navigator.geolocation.getCurrentPosition(
-            position => {                
+            position => {
                 this.setState({
                     searchLat: position.coords.latitude,
                     searchLng: position.coords.longitude
                 });
-            }, 
+            },
             error => this.setState({ error: error.message }),
             { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
         );
@@ -61,12 +62,12 @@ class ProfileScreen extends Component {
     }
 
     browseActivityList = async () => {
-        // a sort of "browse" since search bar is empty 
+        // a sort of "browse" since search bar is empty
         const apiURL = `https://maps.googleapis.com/maps/api/place/search/json?types=${this.state.filter_by_type}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000&sensor=true&key=${global.apiKey}`
         try {
             let result = await fetch(apiURL);
             let results_json = await result.json();
-            
+
             this.setState({ locationPredictions: results_json.results });
         } catch (err){
             console.error(err)
@@ -84,7 +85,7 @@ class ProfileScreen extends Component {
 
     renderDescription() {
         if (this.state.editProfile) {
-            
+
         }
         else {
             return (
@@ -95,14 +96,14 @@ class ProfileScreen extends Component {
             )
         }
     }
-    
+
     render() {
         return (
             <View style={styles.topViewContainer}>
 
 
                 <View style={styles.rowContainer}>
-                        <ProfileBanner 
+                        <ProfileBanner
                             name={this.props.user.fullName}
                             location={this.state.location}
                         />
@@ -111,7 +112,7 @@ class ProfileScreen extends Component {
                 <View style={styles.descriptionContainer}>
                 {this.renderDescription()}
                 </View>
-                <Tabs
+                <ProfileTabs
                     navigation={this.props.navigation}
                     style={styles.Tabs}
                     planData={this.props.user.plans}
