@@ -21,8 +21,9 @@ class AddActivityScreen extends Component {
 
     render() {
       const { navigation } = this.props;
-      const addAction = navigation.getParam('addAction', 'NO-addAction');
-      const newActivityIndex = navigation.getParam('newActivityIndex', 'NO-newActivityIndex');
+      const addAction = navigation.getParam('addAction');
+      const newActivityIndex = navigation.getParam('newActivityIndex');
+      console.log("newActivityIndex = " + newActivityIndex);
 
       console.log("addAction " + addAction);
         return (

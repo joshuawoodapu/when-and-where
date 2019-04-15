@@ -31,7 +31,7 @@ class NewPlanScreen extends Component {
     monthNames = ["January", "February", "March", "April", "May","June","July", "August", "September", "October", "November","December"];
     this.state = {
       planName: "",
-      privacySetting: false, 
+      privacySetting: false,
       chosenDate: new Date(),
       isModalVisible: false
     };
@@ -124,7 +124,7 @@ class NewPlanScreen extends Component {
         return (
           <View style={containerStyle.rowContainer}>
           <Icon
-  
+
           name='lock'
           color='#2661B2' />
           <View style={containerStyle.textContainer}>
@@ -133,12 +133,12 @@ class NewPlanScreen extends Component {
           </View>
         )
       }
-      else 
+      else
       {
         return (
           <View style={containerStyle.rowContainer}>
           <Icon
-  
+
           name='lock-open'
           color='#2661B2' />
           <View style={containerStyle.textContainer}>
@@ -148,7 +148,7 @@ class NewPlanScreen extends Component {
         )
       }
     }
- 
+
     confirmPlan = async () => {
 
       let user = await firebase.auth().currentUser;
@@ -224,7 +224,7 @@ class NewPlanScreen extends Component {
                 <View flex={1} justifyContent="center" alignItems="center">
                   <TouchableOpacity>
                       <Icon
-                          name="createSlot"
+                          name="add-circle"
                           color="#0E91D6"
                           size={35}
                       />
@@ -305,7 +305,7 @@ class NewPlanScreen extends Component {
                           {/*plus button*/}
                           <View flex={1} justifyContent="center" alignItems="center">
                             <TouchableOpacity>
-                              <Icon name="createSlot" color="#0E91D6" size={35}/>
+                              <Icon name="add-circle" color="#0E91D6" size={35}/>
                             </TouchableOpacity>
                           </View>
                         </View>

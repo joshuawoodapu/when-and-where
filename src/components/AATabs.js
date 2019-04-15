@@ -179,7 +179,7 @@ class AATabs extends Component {
                             renderItem={({item}) =>
                                 <AAActivityCard
                                     title={item.name}
-                                    onCardPress={() => this.onActivityCardPress(item.place_id, this.props.addAction, item.newActInd)}
+                                    onCardPress={() => this.onActivityCardPress(item.place_id, this.props.addAction, this.props.newActInd)}
                                     add={true}
                                     text={item.name}
                                     address={item.vicinity ? item.vicinity : item.formatted_address}
@@ -232,7 +232,7 @@ class AATabs extends Component {
                     renderItem={({item}) =>
                       <AAActivityCard
                         key={item.activityId}
-                        onCardPress={this.onCustomActivityCardPress.bind(this, item.activityId, this.props.addAction, item.newActInd)}
+                        onCardPress={this.onCustomActivityCardPress.bind(this, item.activityId, this.props.addAction, this.props.newActInd)}
                         title={item.activityName}
                         add={false}
                         text={item.phoneNumber}
@@ -258,17 +258,17 @@ class AATabs extends Component {
        // Current plan
        // Chosen activity
        // False, as in this is not a custom activity!
-       console.log("onActivityCardPress action: " + addAction);
+       // console.log("onActivityCardPress action: " + addAction);
 
        switch(addAction) {
           case 'addActivity':
-            console.log("ADDING TO EXISTING ACTIVITY SLOT");
+            // console.log("ADDING TO EXISTING ACTIVITY SLOT");
             await this.props.addActivityToExistingSlot(this.props.plan.planId, place_id, false, newActivityIndex);
             await this.props.planSet(this.props.plan.planId);
             this.props.navigation.navigate('PlanView');
             break;
           case 'createSlot':
-            console.log("ADDING AS NEW ACTIVITY SLOT");
+            // console.log("ADDING AS NEW ACTIVITY SLOT");
             await this.props.addActivitySlot(this.props.plan.planId, place_id, false);
             await this.props.planSet(this.props.plan.planId);
             this.props.navigation.navigate('PlanView');
@@ -307,17 +307,17 @@ class AATabs extends Component {
       // Current plan
       // Chosen activity
       // True, as in this is a custom activity!
-      console.log("onCustomActivityCardPress action: " + addAction);
+      // console.log("onCustomActivityCardPress action: " + addAction);
 
       switch(addAction) {
          case 'addActivity':
-           console.log("ADDING TO EXISTING ACTIVITY SLOT");
+           // console.log("ADDING TO EXISTING ACTIVITY SLOT");
            await this.props.addActivityToExistingSlot(this.props.plan.planId, activityId, true, newActivityIndex);
            await this.props.planSet(this.props.plan.planId);
            this.props.navigation.navigate('PlanView');
            break;
          case 'createSlot':
-           console.log("ADDING AS NEW ACTIVITY SLOT");
+           // console.log("ADDING AS NEW ACTIVITY SLOT");
            await this.props.addActivitySlot(this.props.plan.planId, activityId, true);
            await this.props.planSet(this.props.plan.planId);
            this.props.navigation.navigate('PlanView');

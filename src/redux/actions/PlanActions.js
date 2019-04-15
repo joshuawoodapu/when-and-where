@@ -9,7 +9,7 @@ export const addActivityToExistingSlot = (planId, activityId, custom, slotIndex)
     return (dispatch) => {
         var planRef = firebase.database().ref('plans/' + planId + '/activitySlots' + '/slot' + slotIndex + '/activities')
         planRef.transaction(function(currentData) {
-            console.log(currentData);
+            // console.log(currentData);
             if (currentData === null) {
                 return { activity0: { custom: custom, activityId: activityId } };
             }
@@ -21,7 +21,7 @@ export const addActivityToExistingSlot = (planId, activityId, custom, slotIndex)
                 var lastActivity = activitiesArray[activitiesArray.length - 1];
                 // Get the number of that last slot
                 var lastActivityNum = Number(lastActivity.slice(8));
-                console.log(lastActivityNum);
+                // console.log(lastActivityNum);
                 // Only 5 slots are supported
                 if (lastActivityNum < 5) {
                     // Now we will push to database, the next slot
@@ -39,7 +39,7 @@ export const addActivityToExistingSlot = (planId, activityId, custom, slotIndex)
             if (error) {
               console.log("Transaction failed abnormally!", error);
             } else {
-              console.log("Slot pushed");
+              console.log("Activity pushed");
               addActivityToExistingSlotSuccess(dispatch, snapshot)
             }
         });
@@ -65,7 +65,7 @@ export const addActivitySlot = (planId, activityId, custom) => {
     return (dispatch) => {
         var planRef = firebase.database().ref('plans/' + planId + '/activitySlots')
         planRef.transaction(function(currentData) {
-            console.log(currentData);
+            // console.log(currentData);
             if (currentData === null) {
                 return { slot0: { activities: { activity0: { custom: custom, activityId: activityId } } } };
             }

@@ -75,11 +75,6 @@ class ViewPlanScreen extends Component {
         this.props.navigation.navigate('VotingView')
     }
 
-    onRActivityCardPress() {
-        this.props.navigation.navigate('Activity');
-    };
-
-
     onCollabPress() {
       this.setState({ visibleSharePlanModal: !this.state.visibleSharePlanModal });
       this.props.navigation.navigate('CollabInvite');
@@ -96,7 +91,6 @@ class ViewPlanScreen extends Component {
                 key={index}
                 index={index}
                 activityData={activitySlot}
-                onCardPress={this.onRActivityCardPress.bind(this)}
                 onPlusPress={this.onAddBoxPress.bind(this, index)}
                 totalSlots={arrayLength-1}
               />

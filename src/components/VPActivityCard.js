@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Dimensions, TouchableOpacity, Alert } from 'react-native';
 import { Icon } from 'react-native-elements';
 import PieChart from 'react-native-pie-chart';
 import Modal from "react-native-modal";
@@ -106,6 +106,11 @@ class VPActivityCard extends Component {
       this.props.navigation.navigate('AddActivity');
   }
 
+  onRActivityCardPress() {
+      console.log("this.props.navigation.navigate('Activity');");
+      // this.props.navigation.navigate('Activity');
+  };
+
   renderInfo(activity) {
     var actAddr = activity.activityAddress;
 
@@ -115,40 +120,40 @@ class VPActivityCard extends Component {
       var cityStateAddress = actAddr.substr(index + 2);
 
       return (
-        <View flex={3} margin={10}>
-          <View style={styles.nameRow}>
-            <Text style={styles.titleText}>
-              {activity.activityName}
-            </Text>
-          </View>
+          <View flex={3} margin={13}>
+            <View style={styles.nameRow}>
+              <Text style={styles.titleText}>
+                {activity.activityName}
+              </Text>
+            </View>
 
-          <View style={styles.addressRow}>
-            <Text style={styles.addressText}>
-              {streetAddress}
-            </Text>
-            <Text style={styles.addressText}>
-              {cityStateAddress}
-            </Text>
+            <View style={styles.addressRow}>
+              <Text style={styles.addressText}>
+                {streetAddress}
+              </Text>
+              <Text style={styles.addressText}>
+                {cityStateAddress}
+              </Text>
+            </View>
           </View>
-        </View>
       );
     }
 
     else {
       return (
-        <View flex={3} margin={10}>
-          <View style={styles.nameRow}>
-            <Text style={styles.titleText}>
-              {activity.activityName}
-            </Text>
-          </View>
+          <View flex={3} margin={13}>
+            <View style={styles.nameRow}>
+              <Text style={styles.titleText}>
+                {activity.activityName}
+              </Text>
+            </View>
 
-          <View style={styles.addressRow}>
-            <Text style={styles.addressText}>
-              {actAddr}
-            </Text>
+            <View style={styles.addressRow}>
+              <Text style={styles.addressText}>
+                {actAddr}
+              </Text>
+            </View>
           </View>
-        </View>
       );
     }
   }
@@ -274,6 +279,19 @@ class VPActivityCard extends Component {
     </View>
   );
 
+  onSwipeUp(actName) {
+    return(
+      Alert.alert(
+        'Delete',
+        'Do you want to delete ' + actName + ' from the activity slot?',
+        [
+          {text: 'Cancel', onPress: () => console.log('Activity not deleted.')},
+          {text: 'OK', onPress: () => console.log(actName + ' removed from slot.')},
+        ],
+        { cancelable: false }
+      )
+    );
+  }
 
   render() {
     let voteNums = [];
@@ -316,55 +334,35 @@ class VPActivityCard extends Component {
               ref={swiper => {
                 this.swiper = swiper
               }}
-              verticalThreshold={8}
+              verticalThreshold={50}
               horizontalThreshold={8}
               secondCardZoom={1}
-              verticalSwipe={false}
             >
               {this.state.activities.map((activity, index) =>
-                /*<Card style={styles.cardStyle} key={index}>
-                  <Text>{activity.activityName}</Text>
-                </Card>
-
-                // Cam Sprint 6 - Card w/out TouchableOpacity
-                <View flex={1} margin={10}>
-                    <View flex={3} width="100%">
-                      <View style={styles.nameRow}>
-                        <Text style={styles.titleText}>
-                          {activity.activityName}
-                        </Text>
-                      </View>
-                      <View style={styles.addressRow}>
-                        <Text style={styles.addressText}>
-                          {activity.activityAddress}
-                        </Text>
-                      </View>
+                <Card style={styles.cardStyle} key={index} onSwipedTop={this.onSwipeUp.bind(this, activity.activityName)}>
+                    <View flex={1}>
+                        {this.renderInfo(activity)}
                     </View>
-                </View>
-                */
-                <Card style={styles.cardStyle} key={index}>
-                  <View flex={1}>
-                      {this.renderInfo(activity)}
-                  </View>
                 </Card>
               )}
             </CardStack>
           </View>
 
-          <View flex={0.5} justifyContent="space-around">
+          <View flex={0.5} justifyContent="center">
               <TouchableOpacity flex={1} onPress={ () => { this.swiper.swipeRight() }}>
                 <Icon
                   key={this.props.keyExtractor + "_yes"}
                   name='check'
-                  color='green'
+                  color='#0E91D6'
                   size={20}
                 />
               </TouchableOpacity>
+              <View flex={.3}></View>
               <TouchableOpacity flex={1} onPress={ () => { this.swiper.swipeLeft() }}>
                 <Icon
                   key={this.props.keyExtractor + "_no"}
                   name='close'
-                  color='red'
+                  color='#0E91D6'
                   size={20}
                 />
               </TouchableOpacity>
@@ -437,7 +435,7 @@ const styles = StyleSheet.create({
   cardStyle: {
     // Temp - Sprint 5
     minWidth: 195,
-    maxWidth: '100%',
+    maxWidth: 205,
     maxHeight: '100%',
     // ^ Temp - Sprint 5
     borderWidth: 0,
