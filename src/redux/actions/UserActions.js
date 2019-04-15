@@ -23,10 +23,10 @@ export const newPlanInUser = (user, newPlan) => {
 }
 */
 
-export const plansLoad = (ownedPlans) => {
-    console.log(ownedPlans);
+export const plansLoad = (ownedPlans, collabForPlans) => {
+    var allPlans = ownedPlans.concat(collabForPlans);
     return (dispatch) => {
-        return Promise.all(ownedPlans.map(function(planId){
+        return Promise.all(allPlans.map(function(planId){
             firebase.database().ref('plans/' + planId).once('value')
             .then(snapshot => plansDataSuccess(dispatch, snapshot, planId))
             .catch((error) => {

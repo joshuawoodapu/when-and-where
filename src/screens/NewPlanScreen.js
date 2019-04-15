@@ -164,7 +164,7 @@ class NewPlanScreen extends Component {
       })
       this.props.userLoad(user);
       this.props.planSet(newPlanId);
-      this.props.plansLoad(this.props.user.ownedPlans);
+      this.props.plansLoad(this.props.user.ownedPlans, this.props.user.collabForPlans);
       this._toggleModal();
       this.props.navigation.navigate('PlanView');
     }

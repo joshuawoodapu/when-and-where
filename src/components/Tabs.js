@@ -196,7 +196,7 @@ class Tabs extends Component {
     onPlansTabPress() {
 
         if (this.state.activeTab !== 'plans') {
-            this.props.plansLoad(this.props.user.ownedPlans);
+            this.props.plansLoad(this.props.user.ownedPlans, this.props.user.collabForPlans);
             this.setState({activeTab: 'plans'})
         }
     };

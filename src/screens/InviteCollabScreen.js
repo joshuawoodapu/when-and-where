@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableWithoutFeedback, Keyboard, TouchableOpacity, FlatList } from 'react-native';
 import { Avatar } from 'react-native-elements';
+import { connect } from 'react-redux';
+import firebase from 'firebase';
+import 'firebase/functions';
+import * as actions from '../redux/actions';
 import Avatars from '../../src/components/common/Avatars';
 import DynamicInput from '../components/common/DynamicInput';
 
-export default class InviteCollabsScreen extends Component {
+class InviteCollabsScreen extends Component {
     static navigationOptions = {
         title: 'INVITE COLLABORATORS',
         headerTitleStyle: {
@@ -13,6 +17,22 @@ export default class InviteCollabsScreen extends Component {
             fontWeight: 'bold'
         }
     };
+
+    state = { nameToAdd: '' };
+
+
+    onInvitePress = async () => {
+        var addCollabEmail = firebase.functions().httpsCallable('addCollabEmail');
+        addCollabEmail({planId: this.props.plan.planId, collabEmail: this.state.nameToAdd})
+            .then(result => {
+                console.log("HAHAHA " + result.data.success);
+            })
+    };
+
+    handleAddUserChange = (typedText) => {
+        this.setState({nameToAdd:typedText});
+    }
+
     render() {
 
         var avatars = [{name: "Kasey B.", size: "medium", rounded: true, uri:'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg'},
@@ -40,8 +60,8 @@ export default class InviteCollabsScreen extends Component {
                         inputContainerStyle: 'regScreenInput',
                         autoCorrect: false,
                         autoCapitalize: "words",
-                        stateLabel: "name",
-                        onChange: this.handleNameChange,
+                        stateLabel: "nameToAdd",
+                        onChange: this.handleAddUserChange,
                         returnKeyType: 'done'} ]} />
                     </View>
                 </DismissKeyboard>
@@ -75,7 +95,7 @@ export default class InviteCollabsScreen extends Component {
                 </DismissKeyboard>
 
                 <View style={styles.inviteButtonView}>
-                    <TouchableOpacity style={styles.inviteContainer}>
+                    <TouchableOpacity onPress={this.onInvitePress.bind(this)} style={styles.inviteContainer}>
                         <Text style={styles.inviteButtonText}>INVITE</Text>
                     </TouchableOpacity>
                 </View>
@@ -181,3 +201,10 @@ const DismissKeyboard = ({children}) => (
         {children}
     </TouchableWithoutFeedback>
 );
+
+const mapStateToProps = state => {
+    return { user: state.user, plan: state.plan };
+  }
+  
+export default connect(mapStateToProps, actions)(InviteCollabsScreen);
+  
