@@ -13,16 +13,62 @@ class CommentsScreen extends Component {
         this.state = {
             new_comment: '',
             loading: false,
-            loadedComments: []
+            loadedComments: [],
+            update: false
         };
+    }
+
+
+    static navigationOptions = ({navigation}) => ({
+        title: 'COMMENTS',
+        headerTitleStyle: {
+            color: '#2661B2',
+            fontSize: 14,
+            fontWeight: 'bold'
+        },
+        headerRight:  (
+            <Icon
+              name="refresh"
+              size={30}
+              color="#B8BEC1"
+              onPress={navigation.getParam('forceRefresh')}
+            />
+          )
+    });
+
+
+    // This is a stop-gap re-query called by the top right refresh button
+    // until I can get a db change listener working
+    _forceRefresh = async() => {
+        
+        var keyArray = [];
+        var dataArray = [];
+
+        try {
+        var commentQuery = await firebase.database().ref("/plans/"+this.props.plan.planId+"/commentthread").orderByKey();
+        await commentQuery.once("value").then(function(snapshot){
+            snapshot.forEach(function(childSnapshot){
+                var key = childSnapshot.key;
+                var childData = childSnapshot.val();
+                keyArray.push(key);
+                dataArray.push(childData);
+            });
+        });
+        } catch(err){
+            console.log(err);
+        }
+
+        await this.setState({loadedComments: dataArray});
     }
 
     state = {new_comment: '', loading: true, initComments: [], loadedComments: []}
 
     componentWillMount = async ()=>{
+        this.props.navigation.setParams({ forceRefresh: this._forceRefresh });
         this.setState({loading: true});
         var keyArray = [];
         var dataArray = [];
+
 
         try {
         var commentQuery = await firebase.database().ref("/plans/"+this.props.plan.planId+"/commentthread").orderByKey();
@@ -41,16 +87,15 @@ class CommentsScreen extends Component {
         await this.setState({loadedComments: dataArray});
         this.setState({loading: false});
 
+        // Listener for updates
+        commentQuery.onSnapshot(function(child){
+            console.log('INSIDE LISTENER');
+            this.state.loadedComments.push(object);
+            this.setState(this.state);
+        });
+
     }
 
-    static navigationOptions = {
-        title: 'COMMENTS',
-        headerTitleStyle: {
-            color: '#2661B2',
-            fontSize: 14,
-            fontWeight: 'bold'
-        }
-    };
 
     setCommentState = (value) => {
         this.setState({new_comment: value});
