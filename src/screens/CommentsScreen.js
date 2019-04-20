@@ -93,8 +93,13 @@ class CommentsScreen extends Component {
         }catch{(error)=>{
             console.log(error);
         }}
+
+        // Adds new comment to loaded comments state, then forces re-render
         this.state.loadedComments.push(object);
         this.forceUpdate();
+
+        //Clears input field.
+        // Requires " ref = {input => { this.textInput = input }} " in TextInput props.
         this.textInput.clear();
     }
 
@@ -102,7 +107,11 @@ class CommentsScreen extends Component {
 
         return (
             <View style={styles.container}>
-                <ScrollView style={styles.contentContainer}>
+                <ScrollView style={styles.contentContainer}
+                    ref={ref => this.scrollView = ref}
+                    onContentSizeChange={(contentWidth, contentHeight)=>{        
+                        this.scrollView.scrollToEnd({animated: true});
+                    }}>
                     {this.renderComments()}
                 </ScrollView>
 
