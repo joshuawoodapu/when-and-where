@@ -63,15 +63,19 @@ class CommentsScreen extends Component {
 
     state = {new_comment: '', loading: true, initComments: [], loadedComments: []}
 
-    componentWillMount = async ()=>{
+    componentWillMount = async () => {
+        // This line is so I can access the forceRefresh function from the navigation header
         this.props.navigation.setParams({ forceRefresh: this._forceRefresh });
         this.setState({loading: true});
+
+        // These arrays will be used below to store data from database as a middle man to the state
         var keyArray = [];
         var dataArray = [];
 
-
+        // Get commentthread children from database
         try {
         var commentQuery = await firebase.database().ref("/plans/"+this.props.plan.planId+"/commentthread").orderByKey();
+       
         await commentQuery.once("value").then(function(snapshot){
             snapshot.forEach(function(childSnapshot){
                 var key = childSnapshot.key;
@@ -84,15 +88,22 @@ class CommentsScreen extends Component {
             console.log(err);
         }
         
+        // Set the state's comments to the pulled database comments
         await this.setState({loadedComments: dataArray});
         this.setState({loading: false});
 
-        // Listener for updates
-        commentQuery.onSnapshot(function(child){
+
+        await firebase.database().ref("/plans/"+this.props.plan.planId+"/commentthread")
+        .on('child_added', ()=>{
             console.log('INSIDE LISTENER');
-            this.state.loadedComments.push(object);
             this.setState(this.state);
-        });
+            this._forceRefresh();
+            })
+
+        // Listener for updates, not working
+        // commentQuery.onSnapshot(function(child){
+
+        // });
 
     }
 
@@ -139,10 +150,6 @@ class CommentsScreen extends Component {
             console.log(error);
         }}
 
-        // Adds new comment to loaded comments state, then forces re-render
-        this.state.loadedComments.push(object);
-        this.forceUpdate();
-
         //Clears input field.
         // Requires " ref = {input => { this.textInput = input }} " in TextInput props.
         this.textInput.clear();
@@ -160,7 +167,7 @@ class CommentsScreen extends Component {
                     {this.renderComments()}
                 </ScrollView>
 
-                <KeyboardAvoidingView keyboardVerticalOffset={125} behavior={"position"} styles={styles.footer}>
+                <KeyboardAvoidingView keyboardVerticalOffset={63} behavior={"position"} styles={styles.footer}>
                     <View style={styles.postCommentContainer}>
                         <TextInput
                             ref = {input => { this.textInput = input }} 
