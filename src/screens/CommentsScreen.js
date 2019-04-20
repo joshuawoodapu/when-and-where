@@ -95,6 +95,7 @@ class CommentsScreen extends Component {
         }}
         this.state.loadedComments.push(object);
         this.forceUpdate();
+        this.textInput.clear();
     }
 
     render() {
@@ -108,9 +109,10 @@ class CommentsScreen extends Component {
                 <KeyboardAvoidingView keyboardVerticalOffset={125} behavior={"position"} styles={styles.footer}>
                     <View style={styles.postCommentContainer}>
                         <TextInput
+                            ref = {input => { this.textInput = input }} 
                             placeholder="Say something..."
                             label="comment_input"
-                            // value={this.state.new_comment}
+                            returnKeyType="done"
                             onChangeText={this.setCommentState.bind(this)}
                             style={styles.input}
                         />
