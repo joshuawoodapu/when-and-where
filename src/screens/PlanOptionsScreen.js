@@ -5,8 +5,11 @@ import { Icon } from 'react-native-elements';
 import FlipToggle from 'react-native-flip-toggle-button';
 import Modal from "react-native-modal";
 import Dropdown from '../components/common/Dropdown';
+import firebase from 'firebase';
+import {connect} from 'react-redux';
+import * as actions from '../redux/actions';
 
-export default class PlanOptionsScreen extends Component {
+class PlanOptionsScreen extends Component {
 
     static navigationOptions = {
         title: 'PLAN OPTIONS',
@@ -101,6 +104,22 @@ export default class PlanOptionsScreen extends Component {
     toggleNotificationModal = () => this.setState({ visibleNotificationModal: !this.state.visibleNotificationModal });
     toggleDatesModal = () => this.setState({ visibleDatesModal: !this.state.visibleDatesModal });
     toggleDeletePlanModal = () => this.setState({ visibleDeletePlanModal: !this.state.visibleDeletePlanModal });
+
+
+    deletePlan = async () => {
+        console.log("Delet planmn calld");
+        let user = await firebase.auth().currentUser.uid;
+        let planID = this.props.plan.planId;
+        console.log("planID:" + planID);
+        try{
+                await firebase.database().ref("plans/"+planID).remove();
+                this.toggleDeletePlanModal;
+                this.props.navigation.navigate('Discovery');
+        }  catch{(error) => {
+            console.log(error);
+        }}
+
+    }
 
     render() {
 
@@ -212,7 +231,7 @@ export default class PlanOptionsScreen extends Component {
                         </View>
 
                         <View style={modalstyles.deletePlanContainer}>
-                            <TouchableOpacity style={modalstyles.deletePlanButtonContainer} onPress={this.toggleDeletePlanModal}>
+                            <TouchableOpacity style={modalstyles.deletePlanButtonContainer} onPress={this.deletePlan}>
                                 <Text style={modalstyles.buttonText}>Yes</Text>
                             </TouchableOpacity>
                             <View style={modalstyles.noButton}>
@@ -378,3 +397,10 @@ const modalstyles = StyleSheet.create({
         alignItems: 'center'
     }
 });
+
+
+const mapStateToProps = state => {
+    return { user: state.user, plan: state.plan };
+   }
+   
+   export default connect(mapStateToProps, actions)(PlanOptionsScreen);
