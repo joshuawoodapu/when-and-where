@@ -19,7 +19,7 @@ class Comment extends Component {
                         rounded
                         size="medium"
                         containerStyle={{ marginRight: 7 }}
-                        source={{ uri: avatar }} 
+                        title="E" 
                     />
 
                     <View style={styles.contentContainer}>
