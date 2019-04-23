@@ -30,7 +30,7 @@ class AppLoading extends Component {
 
         if (development)
         {
-            await firebase.auth().signInWithEmailAndPassword("plantest@test.com", "plantest")
+            await firebase.auth().signInWithEmailAndPassword("potato@potato.potato", "potato")
                 .catch((error) => {
                     this.setState({ error: error, loading: false });
             });

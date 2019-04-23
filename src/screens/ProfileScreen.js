@@ -14,6 +14,7 @@ import Modal from "react-native-modal";
 import { NavigationEvents } from "react-navigation";
 import ProfileTabs from '../components/ProfileTabs';
 
+
 class ProfileScreen extends Component {
     static navigationOptions = ({navigation}) => ({
         headerTitle: 'MY PROFILE',
@@ -45,10 +46,12 @@ class ProfileScreen extends Component {
         locationPredictions: [],
         filter_by_type: 'museum',
         isModalVisible: false,
-        userActivities: []
+        userActivities: [],
+        profileURL: ''
     };
 
     componentWillMount = async () => {
+
         // gets current location and set initial region to this
         navigator.geolocation.getCurrentPosition(
             position => {
