@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, ScrollView, FlatList, Share } from 'react-native';
+import firebase from 'firebase';
 import { connect } from 'react-redux';
 import * as actions from '../redux/actions';
 import VPActivityCard from '../components/VPActivityCard';
@@ -26,17 +27,35 @@ class ViewPlanScreen extends Component {
         )
     });
 
-    constructor(props) {
-      super(props);
-      this.state = {
-          isSwitch1On: false,
-          visibleSharePlanModal: false,
-          planLoaded: false
-      };
-      this.shareMessage = this.shareMessage.bind(this);
-      this.showResult = this.showResult.bind(this);
-      this.state = { result: '' };
+  constructor(props) {
+    super(props);
+    this.state = {
+        isSwitch1On: false,
+        visibleSharePlanModal: false,
+        planLoaded: false
+    };
+    this.shareMessage = this.shareMessage.bind(this);
+    this.showResult = this.showResult.bind(this);
+    this.state = { result: '' };
   };
+
+  componentDidMount = async () => {
+    firebase.database().ref("plans/" + this.props.plan.planId + "/activitySlots/").on("child_added", () => {
+      console.log("Change detected in plan!!! Live updating!");
+      this.setState(this.state);
+      this.props.planSet(this.props.plan.planId);
+    })
+    firebase.database().ref("plans/" + this.props.plan.planId + "/activitySlots/").on("child_changed", () => {
+      console.log("Change detected in plan!!! Live updating!");
+      this.setState(this.state);
+      this.props.planSet(this.props.plan.planId);
+    })
+    firebase.database().ref("plans/" + this.props.plan.planId + "/activitySlots/").on("child_removed", () => {
+      console.log("Change detected in plan!!! Live updating!");
+      this.setState(this.state);
+      this.props.planSet(this.props.plan.planId);
+    })
+  }
 
     showResult(result) {
       this.setState({result})

@@ -66,7 +66,12 @@ export default class PlanOptionsScreen extends Component {
       }
   
       setDate(newDate) {
-        this.setState({chosenDate: newDate});
+        if (Platform.OS === 'ios')
+          this.setState({chosenDate: newDate});
+        else {
+          var translatedDate = new Date(newDate.year,newDate.month, newDate.day);
+          this.setState({chosenDate: translatedDate});
+        }
       }
   
       handlePlanNameChange = (typedText) => {
