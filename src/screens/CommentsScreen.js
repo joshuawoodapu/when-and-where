@@ -119,7 +119,7 @@ class CommentsScreen extends Component {
             <View key={index}>
                 <Comment
                     username={c.user}
-                    avatar={c.avatar_url}
+                    avatar={c.user}
                     content={c.content}
                     created={c.created} />
             </View>
