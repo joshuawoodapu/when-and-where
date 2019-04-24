@@ -279,14 +279,24 @@ class VPActivityCard extends Component {
     </View>
   );
 
-  onSwipeUp(actName) {
+  onLongDelPress = async (activitiy) => {
+    console.log("Delete activity called");
+    let user = await firebase.auth().currentUser.uid;
+    let planID = this.props.plan.planId;
+    // Get activity ID
+    //try{
+    // call firebase.database().ref(WHEREVER THE ACTIVITY IS).remove();
+    //} catch {(error)=>{
+      
+    //}}
+
     return(
       Alert.alert(
         'Delete',
-        'Do you want to delete ' + actName + ' from the activity slot?',
+        'Do you want to delete ' + activity.activityName + ' from the activity slot?',
         [
           {text: 'Cancel', onPress: () => console.log('Activity not deleted.')},
-          {text: 'OK', onPress: () => console.log(actName + ' removed from slot.')},
+          {text: 'OK', onPress: () => console.log(activity.activityName + ' removed from slot.')},
         ],
         { cancelable: false }
       )
@@ -335,14 +345,17 @@ class VPActivityCard extends Component {
               ref={swiper => {
                 this.swiper = swiper
               }}
-              verticalThreshold={50}
-              horizontalThreshold={8}
+              horizontalThreshold={5}
               secondCardZoom={1}
             >
               {this.state.activities.map((activity, index) =>
-                <Card style={styles.cardStyle} key={index} onSwipedTop={this.onSwipeUp.bind(this, activity.activityName)}>
+                <Card style={styles.cardStyle} key={index}>
                     <View flex={1}>
-                      <TouchableOpacity key={index} onPress={this.props.onInfoPress}>
+                      <TouchableOpacity
+                        key={index}
+                        onPress={this.props.onInfoPress}
+                        onLongPress={this.onLongDelPress.bind(this, activity)}
+                      >
                         {this.renderInfo(activity)}
                       </TouchableOpacity>
                     </View>
