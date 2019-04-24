@@ -126,7 +126,7 @@ class DiscoveryScreen extends Component {
                                 {isSearching && <ActivityIndicator size="large" />}
                                 {this.state.locationInFocus && 
                                     <View>
-                                        <ScrollView>
+                                        <ScrollView style={styles.autocomplete}>
                                             {locationResults.map(el => (
                                                 <LocationItem 
                                                     {...el}
@@ -168,7 +168,9 @@ const styles = StyleSheet.create({
         paddingVertical: 11,
         backgroundColor: "#fff"
     },
-    
+    autocomplete: {
+        height: 120
+    },
     discoveryInputs: {
         // height: 120,
         justifyContent: "space-around",
