@@ -93,6 +93,7 @@ class ViewPlanScreen extends Component {
           <View flex={1}>
             {activitySlotsArray.map((activitySlot, index) => (
               <VPActivityCard
+                activityId={}
                 key={index}
                 index={index}
                 activityData={activitySlot}

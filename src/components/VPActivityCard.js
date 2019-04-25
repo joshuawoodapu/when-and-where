@@ -18,7 +18,7 @@ class VPActivityCard extends Component {
       yesVote: false,
       noVote: false,
       activities: [],
-      activitiesLoaded: false
+      activitiesLoaded: false,
     }
   }
 
@@ -279,7 +279,12 @@ class VPActivityCard extends Component {
     </View>
   );
 
-  onLongDelPress = async (activitiy) => {
+
+  activityDelete = async (activity, activityIndex) =>{
+    // ActivitySlot is this.props.activityData
+    // ActivitySlot INDEX is this.props.index
+    // PlanID is this.props.plan.planId
+
     console.log("Delete activity called");
     let user = await firebase.auth().currentUser.uid;
     let planID = this.props.plan.planId;
@@ -287,16 +292,38 @@ class VPActivityCard extends Component {
     //try{
     // call firebase.database().ref(WHEREVER THE ACTIVITY IS).remove();
     //} catch {(error)=>{
-      
     //}}
 
+    slotname = '';
+
+    console.log("Activity::::::::" + activity);
+
+    var ref = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+'slot'+this.props.index);
+    slotname = ref.getKey();
+
+    // getting activity #
+    var ref2 = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots'+slotname+'/activities/');
+    ref.orderByChild('activityId').equalTo('').on("value", function(snapshot) {
+      snapshot.forEach((function(child) { console.log(child.key) })); 
+    });
+    try {
+
+        // await firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'
+        //   +'slot'+this.props.index+'/activities/'+ACTIVITYNAME+activity.activityId).remove();
+        console.log(activity.activityName + ' removed from slot.');
+    } catch {(error)=>{
+      console.log(error);
+    }}
+  }
+
+  onLongDelPress = (activity, slotname) => {
     return(
       Alert.alert(
         'Delete',
         'Do you want to delete ' + activity.activityName + ' from the activity slot?',
         [
           {text: 'Cancel', onPress: () => console.log('Activity not deleted.')},
-          {text: 'OK', onPress: () => console.log(activity.activityName + ' removed from slot.')},
+          {text: 'OK', onPress: () => this.activityDelete(activity)},
         ],
         { cancelable: false }
       )
