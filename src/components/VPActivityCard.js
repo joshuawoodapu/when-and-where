@@ -46,7 +46,7 @@ class VPActivityCard extends Component {
   }
 
   getFirebaseData = async (activitiesArray) => {
-    console.log("YOYO: "+activitiesArray[i].activityId);
+    // console.log("YOYO: "+activitiesArray[i].activityId);
     let id = activitiesArray[i].activityId;
     await firebase.database().ref('activities/' + activitiesArray[i].activityId).once('value')
     .then(snapshot => this.activityDataSuccess(snapshot.val(), id))
@@ -307,20 +307,24 @@ class VPActivityCard extends Component {
 
     var id = activity.activityId;
 
-    var ref = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+'slot'+this.props.index);
-    slotname = ref.getKey();
+    var slotRef = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+'slot'+this.props.index);
+    slotname = slotRef.getKey();
 
-    // getting 'activity#' reference for firebase
-    var ref2 = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots'+slotname+'/activities/');
-    ref.orderByChild('activityId').equalTo(id).on("value", function(snapshot) {
-      snapshot.forEach((function(child) {
-        console.log("child.key: "+ child.key) })); 
+    // getting 'activity#' reference for firebase #########
+    var activityRef = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+slotname+'/activities/');
+    activityName = '';
+
+    await activityRef.orderByChild('activityId').equalTo(id).once("value", function(snapshot){
+      snapshot.forEach((function(child){
+        console.log("child.key: "+child.key);
+        activityName = child.key;
+      }));
     });
-    
-    try {
+    console.log("We out here: " + activityName);
 
-        // await firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'
-        //   +'slot'+this.props.index+'/activities/'+ACTIVITYNAME+activity.activityId).remove();
+    try {
+        await firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'
+          +'slot'+this.props.index+'/activities/'+activityName).remove();
         console.log(activity.activityName + ' removed from slot.');
     } catch {(error)=>{
       console.log(error);
