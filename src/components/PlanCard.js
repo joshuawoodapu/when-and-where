@@ -15,12 +15,13 @@ export default class PlanCard extends Component {
 
         if (this.props.activitySlots != undefined) {
             if ( "slot0" in this.props.activitySlots && "activities" in this.props.activitySlots.slot0) {
-                const firstActName = await this.getActivityName(this.props.activitySlots.slot0.activities.activity0.activityId)
+                const firstActName = await this.getActivityName(this.props.activitySlots.slot0.activities.activity0.activityId);
                 this.setState({ firstAct: firstActName });
 
-                // if ( "slot1" in this.props.activitySlots && "activities" in this.props.activitySlots.slot1 ) {
-                //     this.setState({ secondAct: this.props.activitySlots.slot1.activities.activity0.activityId });
-                // }
+                if ( "slot1" in this.props.activitySlots && "activities" in this.props.activitySlots.slot1 ) {
+                    const secondActName = await this.getActivityName(this.props.activitySlots.slot1.activities.activity0.activityId);
+                    this.setState({ secondAct: secondActName });
+                }
                 
             } else {
                 console.log("slot0 is empty")
