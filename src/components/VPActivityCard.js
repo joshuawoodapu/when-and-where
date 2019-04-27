@@ -46,8 +46,10 @@ class VPActivityCard extends Component {
   }
 
   getFirebaseData = async (activitiesArray) => {
+    console.log("YOYO: "+activitiesArray[i].activityId);
+    let id = activitiesArray[i].activityId;
     await firebase.database().ref('activities/' + activitiesArray[i].activityId).once('value')
-    .then(snapshot => this.activityDataSuccess(snapshot.val()))
+    .then(snapshot => this.activityDataSuccess(snapshot.val(), id))
     .catch((error) => {
         console.log(error)
     })
@@ -67,10 +69,14 @@ class VPActivityCard extends Component {
     }
   }
 
-  activityDataSuccess = (data) => {
+  activityDataSuccess = (data, id) => {
+    var newActivityData = {...data, 'activityId': id};
+
+    //console.log("CHECK IT OR RECK IT: " + Object.values(newActivityData));
+
     if (this.mounted) {
       this.setState(prevState => ({
-        activities: [...prevState.activities, data]
+        activities: [...prevState.activities, newActivityData]
       }))
     }
   }
@@ -107,7 +113,7 @@ class VPActivityCard extends Component {
   }
 
   onRActivityCardPress() {
-      console.log("this.props.navigation.navigate('Activity');");
+      //console.log("this.props.navigation.navigate('Activity');");
       // this.props.navigation.navigate('Activity');
   };
 
@@ -280,7 +286,7 @@ class VPActivityCard extends Component {
   );
 
 
-  activityDelete = async (activity, activityIndex) =>{
+  activityDelete = async (activity, activityId) =>{
     // ActivitySlot is this.props.activityData
     // ActivitySlot INDEX is this.props.index
     // PlanID is this.props.plan.planId
@@ -294,18 +300,23 @@ class VPActivityCard extends Component {
     //} catch {(error)=>{
     //}}
 
+    var activitiesArray = Object.values(this.props.activityData.activities);
+    // console.log("ACTIVITIES ARRAY: "+ activitiesArray[index]);
+
     slotname = '';
 
-    console.log("Activity::::::::" + activity);
+    var id = activity.activityId;
 
     var ref = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+'slot'+this.props.index);
     slotname = ref.getKey();
 
-    // getting activity #
+    // getting 'activity#' reference for firebase
     var ref2 = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots'+slotname+'/activities/');
-    ref.orderByChild('activityId').equalTo('').on("value", function(snapshot) {
-      snapshot.forEach((function(child) { console.log(child.key) })); 
+    ref.orderByChild('activityId').equalTo(id).on("value", function(snapshot) {
+      snapshot.forEach((function(child) {
+        console.log("child.key: "+ child.key) })); 
     });
+    
     try {
 
         // await firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'
@@ -331,7 +342,7 @@ class VPActivityCard extends Component {
   }
 
   render() {
-    console.log("this.props = " + this.props)
+    //console.log("this.props = " + this.props)
     let voteNums = [];
     activityGroup1.map((activity) => {
       voteNums.push(activity.numVotes);
@@ -381,7 +392,7 @@ class VPActivityCard extends Component {
                       <TouchableOpacity
                         key={index}
                         onPress={this.props.onInfoPress}
-                        onLongPress={this.onLongDelPress.bind(this, activity)}
+                        onLongPress={this.onLongDelPress.bind(this, activity, index)}
                       >
                         {this.renderInfo(activity)}
                       </TouchableOpacity>
