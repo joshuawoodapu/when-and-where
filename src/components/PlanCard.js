@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
+import firebase from 'firebase';
 
 export default class PlanCard extends Component {
     state = {
@@ -28,12 +29,18 @@ export default class PlanCard extends Component {
 
     }
 
+
     getActivityName = async (place_id) => {
         let actName = "";
         if ( place_id.charAt(0) == '-' ){
-            // pull from database
+            // custom activity, so we pull from database
+            await firebase.database().ref('activities/' + place_id).once('value')
+                .then(snapshot => {
+                    actName = snapshot.val().activityName;
+                })
+                .catch((error) => { console.log(error) })
         } else {
-            // pull from API
+            // pull from google places API
             const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&fields=name&key=${global.apiKey}`;
             try {
                 let result = await fetch(api_url);
