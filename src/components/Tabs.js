@@ -163,6 +163,7 @@ class Tabs extends Component {
                                     onCardPress={this.onPlansCardPress.bind(this,item.planId)}
                                     favorites={item.favorites}
                                     planName={item.planName}
+                                    activitySlots={item.activitySlots}
                                 />
                         }
                     />
@@ -206,7 +207,7 @@ class Tabs extends Component {
     onActivitiesTabPress() {
         if (this.state.activeTab !== 'activities')
             this.setState({activeTab: 'activities'})
-    };
+    }; 
 
     onPlansCardPress = async (planId) => {
         await this.props.planSet(planId);

@@ -3,6 +3,49 @@ import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-nati
 import { Card, Icon } from 'react-native-elements';
 
 export default class PlanCard extends Component {
+    state = {
+        firstAct: "",
+        secondAct: ""
+    };
+
+    componentWillMount = async() => {
+        console.log("-----------this.props.activitySlots--------------")
+        console.log(this.props.activitySlots);
+
+        if (this.props.activitySlots != undefined) {
+            if ( "slot0" in this.props.activitySlots && "activities" in this.props.activitySlots.slot0) {
+                const firstActName = await this.getActivityName(this.props.activitySlots.slot0.activities.activity0.activityId)
+                this.setState({ firstAct: firstActName });
+
+                // if ( "slot1" in this.props.activitySlots && "activities" in this.props.activitySlots.slot1 ) {
+                //     this.setState({ secondAct: this.props.activitySlots.slot1.activities.activity0.activityId });
+                // }
+                
+            } else {
+                console.log("slot0 is empty")
+            }
+        }
+
+    }
+
+    getActivityName = async (place_id) => {
+        let actName = "";
+        if ( place_id.charAt(0) == '-' ){
+            // pull from database
+        } else {
+            // pull from API
+            const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&fields=name&key=${global.apiKey}`;
+            try {
+                let result = await fetch(api_url);
+                let activity_details = await result.json();
+                actName = activity_details.result.name;
+            } catch (err) {
+                console.log(err)
+            }
+        }
+        return await actName;
+    }
+
     render() {
         return (
             <Card containerStyle={styles.cardStyle}>
@@ -23,7 +66,7 @@ export default class PlanCard extends Component {
                                 size={16}
                             />
                             <Text style={styles.addressText}>
-                                Paint & Wine Night @ Mantra
+                                {this.state.firstAct}
                             </Text>
                         </View>
                         <View style={styles.betweenActivityRow}>
@@ -42,7 +85,7 @@ export default class PlanCard extends Component {
                                 size={16}
                             />
                             <Text style={styles.addressText}>
-                                Sunset @ Echo Park
+                                {this.state.secondAct}
                             </Text>
                         </View>
                         <View style={styles.betweenActivityRow}>
