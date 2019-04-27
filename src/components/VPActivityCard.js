@@ -331,9 +331,13 @@ class VPActivityCard extends Component {
     this.setState({ visibleVotingModal: !this.state.visibleVotingModal });
 
   /* should take in an activitySlot as a param */
-  renderPieChart = (voteNums) => (
-    <View style={votingModalStyles.modalContent}>
+  renderPieChart = (voteNums) => {
 
+
+    
+
+    return(
+    <View style={votingModalStyles.modalContent}>
       <View style={votingModalStyles.closeButton}>
         <Icon
           name='clear'
@@ -363,6 +367,7 @@ class VPActivityCard extends Component {
       </View>
     </View>
   );
+}
 
 
   activityDelete = async (activity, activityId) =>{
