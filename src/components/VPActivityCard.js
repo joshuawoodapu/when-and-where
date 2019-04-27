@@ -69,7 +69,7 @@ class VPActivityCard extends Component {
     }
   }
 
-  activityDataSuccess = (data, id) => {
+  activityDataSuccess = (data, id, votes) => {
     var newActivityData = {...data, 'activityId': id};
 
     //console.log("CHECK IT OR RECK IT: " + Object.values(newActivityData));
@@ -81,31 +81,107 @@ class VPActivityCard extends Component {
     }
   }
 
-  onYesPress() {
-    if (this.state.yesVote == false && this.state.noVote == false) {
-      this.setState({ yesVote: true });
-    }
-    else if (this.state.yesVote == false && this.state.noVote == true) {
-      this.setState({ yesVote: true, noVote: false });
-    }
-    else if (this.state.yesVote == true) {
-      this.setState({ yesVote: false });
-    }
+  onYesPress = async (activity) => {
+      console.log("We INSIDE THE YES!");
+      console.log(activity.activityId);
 
-    this.renderYes(this.yesVote);
-    this.renderNo(this.noVote);
+
+      slotname = '';
+      let uid = await firebase.auth().currentUser.uid;
+      console.log("here's a uid: "+uid);
+
+      var id = activity.activityId;
+
+      var slotRef = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+'slot'+this.props.index);
+      slotname = slotRef.getKey();
+
+      // getting 'activity#' reference for firebase #########
+      var activityRef = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+slotname+'/activities/');
+      activityName = '';
+
+      await activityRef.orderByChild('activityId').equalTo(id).once("value", function(snapshot){
+        snapshot.forEach((function(child){
+          console.log("child.key: "+child.key);
+          activityName = child.key;
+        }));
+      });
+
+      vote = {
+        [uid]: true
+      }
+
+    try{
+      await firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+slotname+'/activities/'+activityName+'/voters/')
+      .update(vote);
+    }catch{(error)=>{
+        console.log(error);
+    }}
+
+
+    // if (this.state.yesVote == false && this.state.noVote == false) {
+    //   this.setState({ yesVote: true });
+    // }
+    // else if (this.state.yesVote == false && this.state.noVote == true) {
+    //   this.setState({ yesVote: true, noVote: false });
+    // }
+    // else if (this.state.yesVote == true) {
+    //   this.setState({ yesVote: false });
+    // }
+
+    // this.renderYes(this.yesVote);
+    // this.renderNo(this.noVote);
+
+
   }
 
-  onNoPress() {
-    if (this.state.noVote == false && this.state.yesVote == false) {
-      this.setState({ noVote: true });
+  onNoPress = async (activity) => {
+    console.log("We INSIDE THE NO!");
+    console.log(activity.activityId);
+
+
+    slotname = '';
+    let uid = await firebase.auth().currentUser.uid;
+    console.log("here's a uid: "+uid);
+
+    var id = activity.activityId;
+
+    var slotRef = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+'slot'+this.props.index);
+    slotname = slotRef.getKey();
+
+    // getting 'activity#' reference for firebase #########
+    var activityRef = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+slotname+'/activities/');
+    activityName = '';
+
+    await activityRef.orderByChild('activityId').equalTo(id).once("value", function(snapshot){
+      snapshot.forEach((function(child){
+        console.log("child.key: "+child.key);
+        activityName = child.key;
+      }));
+    });
+
+    vote = {
+      [uid]: false
     }
-    else if (this.state.noVote == false && this.state.yesVote == true) {
-      this.setState({ noVote: true, yesVote: false });
-    }
-    else if (this.state.noVote == true) {
-      this.setState({ noVote: false });
-    }
+
+  try{
+    await firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+slotname+'/activities/'+activityName+'/voters/')
+    .update(vote);
+  }catch{(error)=>{
+      console.log(error);
+  }}
+
+    // if (this.state.noVote == false && this.state.yesVote == false) {
+    //   this.setState({ noVote: true });
+    // }
+    // else if (this.state.noVote == false && this.state.yesVote == true) {
+    //   this.setState({ noVote: true, yesVote: false });
+    // }
+    // else if (this.state.noVote == true) {
+    //   this.setState({ noVote: false });
+    // }
+
+
+
   }
 
   onAddPress() {
@@ -117,7 +193,10 @@ class VPActivityCard extends Component {
       // this.props.navigation.navigate('Activity');
   };
 
-  renderInfo(activity) {
+  renderInfo(activity, index) {
+    console.log("Inside render info. Index: "+index);
+
+
     var actAddr = activity.activityAddress;
 
     if (actAddr.includes(",")) {
@@ -345,6 +424,33 @@ class VPActivityCard extends Component {
     );
   }
 
+  renderVoting(activity){
+      console.log("Render voting?");
+
+      return(
+        <View flex={0.5} justifyContent="center">
+            <TouchableOpacity flex={1} onPress={ () => { this.swiper.swipeRight(), this.onYesPress(activity) }}>
+              <Icon
+                key={this.props.keyExtractor + "_yes"}
+                name='check'
+                color='#0E91D6'
+                size={20}
+              />
+            </TouchableOpacity>
+            <View flex={.3}></View>
+            <TouchableOpacity flex={1} onPress={ () => { this.swiper.swipeLeft(), this.onNoPress(activity) }}>
+              <Icon
+                key={this.props.keyExtractor + "_no"}
+                name='close'
+                color='#0E91D6'
+                size={20}
+              />
+            </TouchableOpacity>
+        </View>
+      );
+
+  }
+
   render() {
     //console.log("this.props = " + this.props)
     let voteNums = [];
@@ -384,46 +490,32 @@ class VPActivityCard extends Component {
             <CardStack
               style={styles.content}
               loop={true}
+              renderNoMoreCards={()=> <Text></Text>}
               ref={swiper => {
                 this.swiper = swiper
               }}
               horizontalThreshold={5}
               secondCardZoom={1}
+              disableTopSwipe={true}
+              disableBottomSwipe={true}
             >
               {this.state.activities.map((activity, index) =>
                 <Card style={styles.cardStyle} key={index}>
-                    <View flex={1}>
+                    <View flex={1} flexDirection="row">
                       <TouchableOpacity
                         key={index}
                         onPress={this.props.onInfoPress}
                         onLongPress={this.onLongDelPress.bind(this, activity, index)}
                       >
-                        {this.renderInfo(activity)}
+                        {this.renderInfo(activity, index)}
                       </TouchableOpacity>
+                      <View flex = {1} alignItems="flex-end" paddingRight={13} justifyContent="center">
+                        {this.renderVoting(activity)}
+                      </View>
                     </View>
                 </Card>
               )}
             </CardStack>
-          </View>
-
-          <View flex={0.5} justifyContent="center">
-              <TouchableOpacity flex={1} onPress={ () => { this.swiper.swipeRight() }}>
-                <Icon
-                  key={this.props.keyExtractor + "_yes"}
-                  name='check'
-                  color='#0E91D6'
-                  size={20}
-                />
-              </TouchableOpacity>
-              <View flex={.3}></View>
-              <TouchableOpacity flex={1} onPress={ () => { this.swiper.swipeLeft() }}>
-                <Icon
-                  key={this.props.keyExtractor + "_no"}
-                  name='close'
-                  color='#0E91D6'
-                  size={20}
-                />
-              </TouchableOpacity>
           </View>
 
           <Modal isVisible={this.state.visibleVotingModal} backdropOpacity={0.5}>
@@ -576,7 +668,7 @@ let activityGroup1 = [
 ];
 
 const mapStateToProps = state => {
-  return { plan: state.plan };
+  return { plan: state.plan, user: state.user };
 }
 
 export default connect(mapStateToProps, actions)(VPActivityCard);
