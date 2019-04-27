@@ -39,7 +39,16 @@ class ViewPlanScreen extends Component {
     this.state = { result: '' };
   };
 
-  componentDidMount = async () => {
+  componentWillUnmount = async () => {
+    /*
+    let planRef = firebase.database().ref("plans/" + this.props.plan.planId); 
+    await planRef.on("value", (snapshot) => {
+      console.log("change detected in plan!!!!!!!!!!");
+      this.props.planRefresh(snapshot.val());
+      this.setState(this.state);
+    });
+    /*
+    /*
     firebase.database().ref("plans/" + this.props.plan.planId + "/activitySlots/").on("child_added", () => {
       console.log("Change detected in plan!!! Live updating!");
       this.setState(this.state);
@@ -55,6 +64,7 @@ class ViewPlanScreen extends Component {
       this.setState(this.state);
       this.props.planSet(this.props.plan.planId);
     })
+    */
   }
 
     showResult(result) {
@@ -167,7 +177,6 @@ class ViewPlanScreen extends Component {
           {title: 'Cold Stone Creamery', address: '3730 S Figueroa St, Los Angeles, CA 90007', nVote: true},
         ]];
             return (
-
               <ScrollView flex={1} showsVerticalScrollIndicator={false}>
                 <View flexDirection="row" padding={15} alignItems="center">
                   <RHeader>{this.props.plan.planName}</RHeader>
@@ -198,6 +207,7 @@ class ViewPlanScreen extends Component {
                 </Modal>
                 <View flex={1} paddingRight={20}>
                     <View flex={1}>
+                      
                       {this.iterate(this.props.plan.activitySlots)}
                     </View>
                     <View flex={1}>

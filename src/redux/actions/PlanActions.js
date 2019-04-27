@@ -1,6 +1,7 @@
 import firebase from 'firebase';
 import {
     PLAN_SET,
+    PLAN_REFRESH,
     NEW_ACTIVITY_SLOT,
     NEW_ACTIVITY_TO_EXISTING_SLOT
 } from './types';
@@ -47,15 +48,19 @@ export const addActivityToExistingSlot = (planId, activityId, custom, slotIndex)
 };
 
 export const planSet = (planId) => {
-    console.log(planId)
     return (dispatch) => {
-        firebase.database().ref('plans/' + planId).once('value')
-          .then(snapshot => planDataSuccess(dispatch, snapshot, planId))
-          .catch((error) => {
-              console.log(error)
-          })
+        firebase.database().ref('plans/' + planId).on('value', (snapshot) => {
+            planDataSuccess(dispatch, snapshot, planId)
+        });
     };
 };
+
+export const planRefresh = (data) => {
+    return {
+        type: PLAN_REFRESH,
+        payload: data
+    }
+}
 
 // This action will push a new activity slot to the given plan, transaction allows us to conditionally
 // push data and will wait if the database ref is currently being edited

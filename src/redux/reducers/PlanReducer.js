@@ -1,5 +1,6 @@
 import {
     PLAN_SET,
+    PLAN_REFRESH,
     LOG_OUT
 } from '../actions/types'
 
@@ -17,6 +18,13 @@ export default (state = INITIAL_STATE, action) => {
         case PLAN_SET:
             return {...state,
                 planId: action.payload.planId,
+                owner: action.payload.owner,
+                planName: action.payload.planName,
+                privacy: action.payload.privacy,
+                startDate: action.payload.startDate,
+                activitySlots: action.payload.activitySlots}
+        case PLAN_REFRESH: 
+            return {...state,
                 owner: action.payload.owner,
                 planName: action.payload.planName,
                 privacy: action.payload.privacy,

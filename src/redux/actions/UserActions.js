@@ -8,11 +8,9 @@ import {
 
 export const userLoad = (user) => {
     return (dispatch) => {
-        firebase.database().ref('users/' + user.uid).once('value')
-          .then(snapshot => userDataSuccess(dispatch, snapshot))
-          .catch((error) => {
-              console.log(error)
-          })
+        firebase.database().ref('users/' + user.uid).on('value', (snapshot) => {
+            userDataSuccess(dispatch, snapshot)
+        });
     };
 };
 
@@ -46,11 +44,9 @@ export const plansLoad = (ownedPlans, collabForPlans) => {
 
 export const customActivitiesLoad = (user) => {
     return (dispatch) => {
-        firebase.database().ref('activities/').once('value')
-        .then(snapshot => customActivitiesDataSuccess(dispatch, snapshot))
-        .catch((error) => {
-            console.log(error)
-        })
+        firebase.database().ref('activities/').on('value', (snapshot) => {
+            customActivitiesDataSuccess(dispatch, snapshot);
+        });
     };
 };
 
