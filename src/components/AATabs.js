@@ -379,7 +379,7 @@ class AATabs extends Component {
     };
 
     onCantFind() {
-        this.props.navigation.navigate('CreateActivity');
+        this.props.navigation.navigate('CreateActivity', {addToPlan: true});
     }
 
     getCustomActivityData() {
@@ -403,7 +403,7 @@ class AATabs extends Component {
                   {this.renderContentFooter()}
                   <View style={styles.createActivityContainer}>
                     <TouchableHighlight
-                        onPress={() => this.props.navigation.navigate('CreateActivity')}
+                        onPress={() => this.props.navigation.navigate('CreateActivity', {addToPlan: true, addAction: this.props.addAction, newActivityIndex: this.props.newActInd})}
                         key={"createactivitylink"}
                         underlayColor="#F0F3F7"
                         activeOpacity={1}
@@ -520,7 +520,6 @@ styles = StyleSheet.create({
       paddingHorizontal: 20
     },
 })
-
 
 const mapStateToProps = state => {
   return { plan: state.plan };

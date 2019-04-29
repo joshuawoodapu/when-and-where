@@ -48,7 +48,7 @@ class CreateActivityScreen extends Component {
       }
     }
 
-    handleNameChange = (typedText) => {
+  handleNameChange = (typedText) => {
       this.setState({name:typedText});
   }
 
@@ -73,7 +73,7 @@ class CreateActivityScreen extends Component {
 
   onCreateFail() {
     this.setState({ error: 'Activity creation failed.', loading: false });
-}
+  }
 
   validateName(){
       if(this.state.name.trim() == ""){
@@ -89,17 +89,23 @@ class CreateActivityScreen extends Component {
         return true; // Otherwise, return true
       }
   }
+
+  // #TODO
+  /*
   validateAddress(address){
 
   }
   validatePhone(phone){
 
   }
+  */
 
 
-    onSaveActivityPress = async () => {
+  onSaveActivityPress = async () => {
         let user = await firebase.auth().currentUser;
-        console.log("Inside the func");
+        const { navigation } = this.props;
+        const addToPlan = navigation.getParam('addToPlan') || false;
+        let newActivityId;
 
         if(this.validateName()){ // If name is not empty, push to DB
           try{newActivityId = await firebase.database().ref('/activities').push({
@@ -116,8 +122,31 @@ class CreateActivityScreen extends Component {
             this.onCreateFail.bind(this);
         }}
         await this.props.customActivitiesLoad(user);
-        this.props.navigation.navigate('Discovery');
-       } // End if, name validation
+
+        if (addToPlan) {
+          const addAction = navigation.getParam('addAction');
+          const newActivityIndex = navigation.getParam('newActivityIndex');
+          switch(addAction) {
+            case 'addActivity':
+              // console.log("ADDING TO EXISTING ACTIVITY SLOT");
+              await this.props.addActivityToExistingSlot(this.props.plan.planId, newActivityId, true, newActivityIndex);
+              // await this.props.planSet(this.props.plan.planId);
+              this.props.navigation.navigate('PlanView');
+              break;
+            case 'createSlot':
+              // console.log("ADDING AS NEW ACTIVITY SLOT");
+              await this.props.addActivitySlot(this.props.plan.planId, newActivityId, true);
+              // await this.props.planSet(this.props.plan.planId);
+              this.props.navigation.navigate('PlanView');
+              break;
+            default:
+              console.log("Talk to Campbell lol");
+          }
+        }
+
+        else 
+          this.props.navigation.navigate('Profile');
+       }
     }
 
     render() {

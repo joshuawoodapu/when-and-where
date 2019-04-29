@@ -85,7 +85,6 @@ class ViewPlanScreen extends Component {
 
     planLoaded = () => {
       this.setState({planLoaded: true})
-      //console.log(this.state.planLoaded);
     }
 
     onAddPress() {

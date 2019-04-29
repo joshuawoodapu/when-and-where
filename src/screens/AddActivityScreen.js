@@ -23,9 +23,7 @@ class AddActivityScreen extends Component {
       const { navigation } = this.props;
       const addAction = navigation.getParam('addAction');
       const newActivityIndex = navigation.getParam('newActivityIndex');
-      console.log("newActivityIndex = " + newActivityIndex);
 
-      console.log("addAction " + addAction);
         return (
             <View flex={1}>
                 <AATabs
