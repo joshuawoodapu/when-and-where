@@ -1,8 +1,188 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Dimensions, TouchableOpacity } from 'react-native';
 import { Card, Icon } from 'react-native-elements';
+import firebase from 'firebase';
 
 export default class PlanCard extends Component {
+    state = {
+        first_activity_name: "",
+        second_activity_name: "",
+        first_act_exists: false,
+        second_act_exists: false,
+        additional_act_num: 0
+    };
+
+    componentWillMount = async() => {
+        if (this.props.activitySlots != undefined) {
+            // see if we have something in the first activity slot
+            if ( "slot0" in this.props.activitySlots && "activities" in this.props.activitySlots.slot0) {
+                // set boolean for conditional rendering later on
+                this.setState({ first_act_exists: true });
+
+                const firstActName = await this.getActivityName(this.props.activitySlots.slot0.activities.activity0.activityId);
+                this.setState({ first_activity_name: firstActName });
+                
+                // see if we have something in the first activity slot
+                if ( "slot1" in this.props.activitySlots && "activities" in this.props.activitySlots.slot1 ) {
+                    this.setState({ second_act_exists: true });
+                
+                    const secondActName = await this.getActivityName(this.props.activitySlots.slot1.activities.activity0.activityId)
+                    this.setState({ second_activity_name: secondActName });
+
+                    if ( "slot2" in this.props.activitySlots ){
+                        // count the total number of activity slots
+                        let activity_num = Object.keys(this.props.activitySlots);
+                        activity_num = activity_num.length;
+ 
+                        additional_acts = activity_num - 2;
+                        this.setState({ additional_act_num: additional_acts});
+                    }
+                }
+            } else {
+                console.log("slot0 is empty")
+            }
+        }
+
+    }
+
+    renderActivities() {
+        if (this.state.first_act_exists == true && this.state.second_act_exists == false){
+            return (
+                <View style={styles.activityRow}>
+                    <Icon
+                        containerStyle={styles.activitySlotIcon}
+                        name='radio-button-unchecked'
+                        color='#B0CAED'
+                        size={16}
+                    />
+                    <Text style={styles.addressText}>
+                        {this.state.first_activity_name}
+                    </Text>
+                </View>
+            );
+        } else if (this.state.first_act_exists && this.state.second_act_exists) {
+            if (this.state.additional_act_num > 0) {
+                return (
+                    <View>
+                        <View style={styles.activityRow}>
+                            <Icon
+                                containerStyle={styles.activitySlotIcon}
+                                name='radio-button-unchecked'
+                                color='#B0CAED'
+                                size={16}
+                            />
+                            <Text style={styles.addressText}>
+                                {this.state.first_activity_name}
+                            </Text>
+                        </View>
+                        <View style={styles.betweenActivityRow}>
+                            <Icon
+                                containerStyle={styles.activitySlotIcon}
+                                name='arrow-drop-down'
+                                color='#B0CAED'
+                                size={18}
+                            />
+                        </View>
+                        <View style={styles.activityRow}>
+                            <Icon
+                                containerStyle={styles.activitySlotIcon}
+                                name='radio-button-unchecked'
+                                color='#B0CAED'
+                                size={16}
+                            />
+                            <Text style={styles.addressText}>
+                                {this.state.second_activity_name}
+                            </Text>
+                        </View>
+                        <View style={styles.betweenActivityRow}>
+                            <Icon
+                                containerStyle={styles.activitySlotIcon}
+                                name='more-vert'
+                                color='#B0CAED'
+                                size={20}
+                            />
+                            <Text style={styles.moreActivitiesText}>
+                                {this.state.additional_act_num} additional activities
+                            </Text>
+                        </View>
+                    </View>
+                );
+            }
+            return (
+                <View>
+                    <View style={styles.activityRow}>
+                        <Icon
+                            containerStyle={styles.activitySlotIcon}
+                            name='radio-button-unchecked'
+                            color='#B0CAED'
+                            size={16}
+                        />
+                        <Text style={styles.addressText}>
+                            {this.state.first_activity_name}
+                        </Text>
+                    </View>
+                    <View style={styles.betweenActivityRow}>
+                        <Icon
+                            containerStyle={styles.activitySlotIcon}
+                            name='arrow-drop-down'
+                            color='#B0CAED'
+                            size={18}
+                        />
+                    </View>
+                    <View style={styles.activityRow}>
+                        <Icon
+                            containerStyle={styles.activitySlotIcon}
+                            name='radio-button-unchecked'
+                            color='#B0CAED'
+                            size={16}
+                        />
+                        <Text style={styles.addressText}>
+                            {this.state.second_activity_name}
+                        </Text>
+                    </View>
+                </View>
+            );
+        } else {
+            // if there's no activites in the plan yet
+            return(
+                <View style={styles.betweenActivityRow}>
+                    <Icon
+                        containerStyle={styles.activitySlotIcon}
+                        name='more-vert'
+                        color='#B0CAED'
+                        size={20}
+                    />
+                    <Text style={styles.noActivitiesText}>
+                        No activities yet. Click to start planning!
+                    </Text>
+                </View>
+            )
+        }
+    }
+
+    getActivityName = async (place_id) => {
+        let actName = "";
+        if ( place_id.charAt(0) == '-' ){
+            // custom activity, so we pull from database
+            await firebase.database().ref('activities/' + place_id).once('value')
+                .then(snapshot => {
+                    actName = snapshot.val().activityName;
+                })
+                .catch((error) => { console.log(error) })
+        } else {
+            // pull from google places API
+            const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&fields=name&key=${global.apiKey}`;
+            try {
+                let result = await fetch(api_url);
+                let activity_details = await result.json();
+                actName = activity_details.result.name;
+            } catch (err) {
+                console.log(err)
+            }
+        }
+        return await actName;
+    }
+
     render() {
         return (
             <Card containerStyle={styles.cardStyle}>
@@ -15,57 +195,22 @@ export default class PlanCard extends Component {
                                 </Text>
                             </View>
                         </View>
-                        <View style={styles.activityRow}>
-                            <Icon
-                                containerStyle={styles.activitySlotIcon}
-                                name='radio-button-unchecked'
-                                color='#B0CAED'
-                                size={16}
-                            />
-                            <Text style={styles.addressText}>
-                                Paint & Wine Night @ Mantra
-                            </Text>
-                        </View>
-                        <View style={styles.betweenActivityRow}>
-                            <Icon
-                                containerStyle={styles.activitySlotIcon}
-                                name='arrow-drop-down'
-                                color='#B0CAED'
-                                size={20}
-                            />
-                        </View>
-                        <View style={styles.activityRow}>
-                            <Icon
-                                containerStyle={styles.activitySlotIcon}
-                                name='radio-button-unchecked'
-                                color='#B0CAED'
-                                size={16}
-                            />
-                            <Text style={styles.addressText}>
-                                Sunset @ Echo Park
-                            </Text>
-                        </View>
-                        <View style={styles.betweenActivityRow}>
-                            <Icon
-                                containerStyle={styles.activitySlotIcon}
-                                name='more-vert'
-                                color='#B0CAED'
-                                size={20}
-                            />
-                            <Text style={styles.moreActivitiesText}>
-                                2 additional activities
-                            </Text>
-                        </View>
+                        
+                        {this.renderActivities()}
+                        
+                       
+                        
+
                         <View style={styles.bottomRow}>
                             <View style={styles.bottomLeft}>
                                 <Icon
                                     containerStyle={styles.timeIconStyle}
-                                    name='schedule'
+                                    name='place'
                                     color='#2661B2'
                                     size={20}
                                 />
                                 <Text style={styles.titleText}>
-                                    4-5 hours
+                                    Location!
                                 </Text>
                             </View>
                             <View style={styles.bottomRight}>
@@ -184,6 +329,12 @@ export default class PlanCard extends Component {
     moreActivitiesText: {
         fontFamily: 'circular-std-book',
         fontSize: 10,
+        color: '#B0CAED',
+        top: 5
+    },
+    noActivitiesText: {
+        fontFamily: 'circular-std-book',
+        fontSize: 11,
         color: '#B0CAED',
         top: 5
     }

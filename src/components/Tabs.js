@@ -82,9 +82,14 @@ class Tabs extends Component {
             // skiping if prototype
             if (!this.props.planData.hasOwnProperty(key)) continue;
 
+            console.log("~~~~~~~~~~~~~~~~~~~~~~props.planData~~~~~~~~~~~~~~~~~~~~~~")
+            console.log(this.props.planData)
+
             var obj = this.props.planData[key];
             result.push({planId:key, ...obj})
         }
+        // console.log("~~~~~~~~~~~~~~~~~~~~~~getPlanData result~~~~~~~~~~~~~~~~~~~~~~")
+        // console.log(result)
         return result;
     }
 
@@ -145,13 +150,6 @@ class Tabs extends Component {
             return (
                 <View style={styles.contentContainer}>
                     <FlatList
-                        /*
-                        data={[
-                            {key: 'Janet\'s Birthday'},
-                            {key: 'Halloween Party'},
-                            {key: 'Galentine\'s Day'}
-                        ]}
-                        */
                         data={this.getPlanData()}
                         keyExtractor= {(item) => {
                             return item.planId
@@ -163,6 +161,7 @@ class Tabs extends Component {
                                     onCardPress={this.onPlansCardPress.bind(this,item.planId)}
                                     favorites={item.favorites}
                                     planName={item.planName}
+                                    activitySlots={item.activitySlots}
                                 />
                         }
                     />
@@ -206,7 +205,7 @@ class Tabs extends Component {
     onActivitiesTabPress() {
         if (this.state.activeTab !== 'activities')
             this.setState({activeTab: 'activities'})
-    };
+    }; 
 
     onPlansCardPress = async (planId) => {
         await this.props.planSet(planId);

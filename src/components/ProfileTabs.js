@@ -146,6 +146,7 @@ class Tabs extends Component {
                                     onCardPress={this.onPlansCardPress.bind(this,item.planId)}
                                     favorites={item.favorites}
                                     planName={item.planName}
+                                    activitySlots={item.activitySlots}
                                 />
                         }
                     />
