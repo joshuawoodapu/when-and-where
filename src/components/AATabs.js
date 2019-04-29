@@ -491,12 +491,12 @@ styles = StyleSheet.create({
     activeTabText: {
         color: '#413C77',
         fontSize: 18,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     inactiveTabText: {
         color: '#6A6789',
         fontSize: 18,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     },
     contentContainer: {
         backgroundColor: '#F0F3F7',
