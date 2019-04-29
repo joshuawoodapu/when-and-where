@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import {View, Text, TextInput, StyleSheet, ScrollView, ActivityIndicator, Button} from 'react-native';
+import {View, Text, TextInput, StyleSheet, ScrollView, ActivityIndicator, Platform} from 'react-native';
+import { Permissions, Notifications } from 'expo';
+import firebase from 'firebase';
 import {connect} from 'react-redux';
 import * as actions from '../redux/actions';
 import { GoogleAutoComplete } from 'react-native-google-autocomplete';
@@ -29,6 +31,7 @@ class DiscoveryScreen extends Component {
     }
 
     componentWillMount = async () => {
+        // this.registerForPushNotifications();
         // gets current location and set initial region to this
         navigator.geolocation.getCurrentPosition(
             position => {                
@@ -41,6 +44,25 @@ class DiscoveryScreen extends Component {
             { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
         );
         this.browseActivityList();
+    }
+
+    registerForPushNotifications = async () => {
+        const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+        let finalStatus = status;
+
+        if (status !== 'granted') {
+            const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+            finalStatus = status;
+        }
+
+        if (finalStatus !== 'granted') { return; }
+        
+        let token = await Notifications.getExpoPushTokenAsync();
+        let uuid = await firebase.auth().currentUser.uid;
+        const platform = Platform.OS;
+        await firebase.database().ref('users/' + uuid + '/expoPushTokens').push({token, platform })
+
+        //  this.subscription = Notifications.addListener(this.handleNotification);      
     }
 
     browseActivityList = async () => {

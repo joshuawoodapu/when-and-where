@@ -22,6 +22,10 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package" : "com.oliver.whenandwhere",
+      "googleServicesFile": "./google-services.json"
     }
   }
 }

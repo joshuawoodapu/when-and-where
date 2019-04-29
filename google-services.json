@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "521022677241",
+    "firebase_url": "https://when-and-where-c8a71.firebaseio.com",
+    "project_id": "when-and-where-c8a71",
+    "storage_bucket": "when-and-where-c8a71.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521022677241:android:3f31ae3cb72b375e",
+        "android_client_info": {
+          "package_name": "when.and.where"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "521022677241-oh6fuvpdk48mfunc9ovu8349u55dm941.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCi2ETN3tM8J38x_ME_jKrvyCz30jdec5k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "521022677241-oh6fuvpdk48mfunc9ovu8349u55dm941.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

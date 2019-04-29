@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, AsyncStorage, Image } from 'react-native';
-import { Font } from 'expo';
+import { Font, Permissions, Notifications } from 'expo';
 import { connect } from 'react-redux';
 import firebase from 'firebase';
 import * as actions from '../redux/actions';
