@@ -46,9 +46,11 @@ class RegistrationScreen extends Component {
                 firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then(this.onRegisterSuccess.bind(this))
                 .catch(error => {
-                    console.log(error.code)
-
-                    this.setState({error: "This email is already in use.",loading: false});
+                    if(error.code =="auth/email-already-in-use"){
+                      this.setState({error: "Email is already in use.", loading: false});
+                    } else{
+                      this.setState({error: "Registration failed.", loading: false});
+                    }
                   });
                 });
               } else {

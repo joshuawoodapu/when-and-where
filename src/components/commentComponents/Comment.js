@@ -11,6 +11,7 @@ class Comment extends Component {
             created,
             content
         } = this.props;
+
         return (
             <View>
                 <View style={styles.container}>
@@ -18,7 +19,7 @@ class Comment extends Component {
                         rounded
                         size="medium"
                         containerStyle={{ marginRight: 7 }}
-                        source={{ uri: avatar }} 
+                        title={username.charAt(0)} 
                     />
 
                     <View style={styles.contentContainer}>
@@ -26,7 +27,9 @@ class Comment extends Component {
                         <Text style={styles.content}>{content}</Text>
                     </View>
 
-                    <Text style={styles.timestamp}>{created}</Text>
+                    <Text numberOfLines={2} style={styles.timestamp}>
+                        {created}
+                    </Text>
                 </View>
                 <Divider style={{ backgroundColor: '#B0CAED' }} />
             </View>
@@ -56,7 +59,8 @@ const styles = StyleSheet.create({
         color: '#2661B2'
     },
     timestamp: {
-        fontSize: 15,
+        width: '20%',
+        fontSize: 12,
         fontWeight: '400',
         color: '#2661B2',
         paddingTop: 2
