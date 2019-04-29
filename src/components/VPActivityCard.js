@@ -18,7 +18,7 @@ class VPActivityCard extends Component {
       yesVote: false,
       noVote: false,
       activities: [],
-      activitiesLoaded: false
+      activitiesLoaded: false,
     }
   }
 
@@ -46,8 +46,10 @@ class VPActivityCard extends Component {
   }
 
   getFirebaseData = async (activitiesArray) => {
+    // console.log("YOYO: "+activitiesArray[i].activityId);
+    let id = activitiesArray[i].activityId;
     await firebase.database().ref('activities/' + activitiesArray[i].activityId).once('value')
-    .then(snapshot => this.activityDataSuccess(snapshot.val()))
+    .then(snapshot => this.activityDataSuccess(snapshot.val(), id))
     .catch((error) => {
         console.log(error)
     })
@@ -67,39 +69,119 @@ class VPActivityCard extends Component {
     }
   }
 
-  activityDataSuccess = (data) => {
+  activityDataSuccess = (data, id, votes) => {
+    var newActivityData = {...data, 'activityId': id};
+
+    //console.log("CHECK IT OR RECK IT: " + Object.values(newActivityData));
+
     if (this.mounted) {
       this.setState(prevState => ({
-        activities: [...prevState.activities, data]
+        activities: [...prevState.activities, newActivityData]
       }))
     }
   }
 
-  onYesPress() {
-    if (this.state.yesVote == false && this.state.noVote == false) {
-      this.setState({ yesVote: true });
-    }
-    else if (this.state.yesVote == false && this.state.noVote == true) {
-      this.setState({ yesVote: true, noVote: false });
-    }
-    else if (this.state.yesVote == true) {
-      this.setState({ yesVote: false });
-    }
+  onYesPress = async (activity) => {
+      console.log("We INSIDE THE YES!");
+      console.log(activity.activityId);
 
-    this.renderYes(this.yesVote);
-    this.renderNo(this.noVote);
+
+      slotname = '';
+      let uid = await firebase.auth().currentUser.uid;
+      console.log("here's a uid: "+uid);
+
+      var id = activity.activityId;
+
+      var slotRef = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+'slot'+this.props.index);
+      slotname = slotRef.getKey();
+
+      // getting 'activity#' reference for firebase #########
+      var activityRef = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+slotname+'/activities/');
+      activityName = '';
+
+      await activityRef.orderByChild('activityId').equalTo(id).once("value", function(snapshot){
+        snapshot.forEach((function(child){
+          console.log("child.key: "+child.key);
+          activityName = child.key;
+        }));
+      });
+
+      vote = {
+        [uid]: true
+      }
+
+    try{
+      await firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+slotname+'/activities/'+activityName+'/voters/')
+      .update(vote);
+    }catch{(error)=>{
+        console.log(error);
+    }}
+
+
+    // if (this.state.yesVote == false && this.state.noVote == false) {
+    //   this.setState({ yesVote: true });
+    // }
+    // else if (this.state.yesVote == false && this.state.noVote == true) {
+    //   this.setState({ yesVote: true, noVote: false });
+    // }
+    // else if (this.state.yesVote == true) {
+    //   this.setState({ yesVote: false });
+    // }
+
+    // this.renderYes(this.yesVote);
+    // this.renderNo(this.noVote);
+
+
   }
 
-  onNoPress() {
-    if (this.state.noVote == false && this.state.yesVote == false) {
-      this.setState({ noVote: true });
+  onNoPress = async (activity) => {
+    console.log("We INSIDE THE NO!");
+    console.log(activity.activityId);
+
+
+    slotname = '';
+    let uid = await firebase.auth().currentUser.uid;
+    console.log("here's a uid: "+uid);
+
+    var id = activity.activityId;
+
+    var slotRef = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+'slot'+this.props.index);
+    slotname = slotRef.getKey();
+
+    // getting 'activity#' reference for firebase #########
+    var activityRef = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+slotname+'/activities/');
+    activityName = '';
+
+    await activityRef.orderByChild('activityId').equalTo(id).once("value", function(snapshot){
+      snapshot.forEach((function(child){
+        console.log("child.key: "+child.key);
+        activityName = child.key;
+      }));
+    });
+
+    vote = {
+      [uid]: false
     }
-    else if (this.state.noVote == false && this.state.yesVote == true) {
-      this.setState({ noVote: true, yesVote: false });
-    }
-    else if (this.state.noVote == true) {
-      this.setState({ noVote: false });
-    }
+
+  try{
+    await firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+slotname+'/activities/'+activityName+'/voters/')
+    .update(vote);
+  }catch{(error)=>{
+      console.log(error);
+  }}
+
+    // if (this.state.noVote == false && this.state.yesVote == false) {
+    //   this.setState({ noVote: true });
+    // }
+    // else if (this.state.noVote == false && this.state.yesVote == true) {
+    //   this.setState({ noVote: true, yesVote: false });
+    // }
+    // else if (this.state.noVote == true) {
+    //   this.setState({ noVote: false });
+    // }
+
+
+
   }
 
   onAddPress() {
@@ -107,11 +189,14 @@ class VPActivityCard extends Component {
   }
 
   onRActivityCardPress() {
-      console.log("this.props.navigation.navigate('Activity');");
+      //console.log("this.props.navigation.navigate('Activity');");
       // this.props.navigation.navigate('Activity');
   };
 
-  renderInfo(activity) {
+  renderInfo(activity, index) {
+    console.log("Inside render info. Index: "+index);
+
+
     var actAddr = activity.activityAddress;
 
     if (actAddr.includes(",")) {
@@ -246,9 +331,13 @@ class VPActivityCard extends Component {
     this.setState({ visibleVotingModal: !this.state.visibleVotingModal });
 
   /* should take in an activitySlot as a param */
-  renderPieChart = (voteNums) => (
-    <View style={votingModalStyles.modalContent}>
+  renderPieChart = (voteNums) => {
 
+
+    
+
+    return(
+    <View style={votingModalStyles.modalContent}>
       <View style={votingModalStyles.closeButton}>
         <Icon
           name='clear'
@@ -278,23 +367,97 @@ class VPActivityCard extends Component {
       </View>
     </View>
   );
+}
 
-  onSwipeUp(actName) {
+
+  activityDelete = async (activity, activityId) =>{
+    // ActivitySlot is this.props.activityData
+    // ActivitySlot INDEX is this.props.index
+    // PlanID is this.props.plan.planId
+
+    console.log("Delete activity called");
+    let user = await firebase.auth().currentUser.uid;
+    let planID = this.props.plan.planId;
+    // Get activity ID
+    //try{
+    // call firebase.database().ref(WHEREVER THE ACTIVITY IS).remove();
+    //} catch {(error)=>{
+    //}}
+
+    var activitiesArray = Object.values(this.props.activityData.activities);
+    // console.log("ACTIVITIES ARRAY: "+ activitiesArray[index]);
+
+    slotname = '';
+
+    var id = activity.activityId;
+
+    var slotRef = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+'slot'+this.props.index);
+    slotname = slotRef.getKey();
+
+    // getting 'activity#' reference for firebase #########
+    var activityRef = firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+slotname+'/activities/');
+    activityName = '';
+
+    await activityRef.orderByChild('activityId').equalTo(id).once("value", function(snapshot){
+      snapshot.forEach((function(child){
+        console.log("child.key: "+child.key);
+        activityName = child.key;
+      }));
+    });
+    console.log("We out here: " + activityName);
+
+    try {
+        await firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'
+          +'slot'+this.props.index+'/activities/'+activityName).remove();
+        console.log(activity.activityName + ' removed from slot.');
+    } catch {(error)=>{
+      console.log(error);
+    }}
+  }
+
+  onLongDelPress = (activity, slotname) => {
     return(
       Alert.alert(
         'Delete',
-        'Do you want to delete ' + actName + ' from the activity slot?',
+        'Do you want to delete ' + activity.activityName + ' from the activity slot?',
         [
           {text: 'Cancel', onPress: () => console.log('Activity not deleted.')},
-          {text: 'OK', onPress: () => console.log(actName + ' removed from slot.')},
+          {text: 'OK', onPress: () => this.activityDelete(activity)},
         ],
         { cancelable: false }
       )
     );
   }
 
+  renderVoting(activity){
+      console.log("Render voting?");
+
+      return(
+        <View flex={0.5} justifyContent="center">
+            <TouchableOpacity flex={1} onPress={ () => { this.swiper.swipeRight(), this.onYesPress(activity) }}>
+              <Icon
+                key={this.props.keyExtractor + "_yes"}
+                name='check'
+                color='#0E91D6'
+                size={20}
+              />
+            </TouchableOpacity>
+            <View flex={.3}></View>
+            <TouchableOpacity flex={1} onPress={ () => { this.swiper.swipeLeft(), this.onNoPress(activity) }}>
+              <Icon
+                key={this.props.keyExtractor + "_no"}
+                name='close'
+                color='#0E91D6'
+                size={20}
+              />
+            </TouchableOpacity>
+        </View>
+      );
+
+  }
+
   render() {
-    console.log("this.props = " + this.props)
+    //console.log("this.props = " + this.props)
     let voteNums = [];
     activityGroup1.map((activity) => {
       voteNums.push(activity.numVotes);
@@ -332,43 +495,32 @@ class VPActivityCard extends Component {
             <CardStack
               style={styles.content}
               loop={true}
+              renderNoMoreCards={()=> <Text></Text>}
               ref={swiper => {
                 this.swiper = swiper
               }}
-              verticalThreshold={50}
-              horizontalThreshold={8}
+              horizontalThreshold={5}
               secondCardZoom={1}
+              disableTopSwipe={true}
+              disableBottomSwipe={true}
             >
               {this.state.activities.map((activity, index) =>
-                <Card style={styles.cardStyle} key={index} onSwipedTop={this.onSwipeUp.bind(this, activity.activityName)}>
-                    <View flex={1}>
-                      <TouchableOpacity key={index} onPress={this.props.onInfoPress}>
-                        {this.renderInfo(activity)}
+                <Card style={styles.cardStyle} key={index}>
+                    <View flex={1} flexDirection="row">
+                      <TouchableOpacity
+                        key={index}
+                        onPress={this.props.onInfoPress}
+                        onLongPress={this.onLongDelPress.bind(this, activity, index)}
+                      >
+                        {this.renderInfo(activity, index)}
                       </TouchableOpacity>
+                      <View flex = {1} alignItems="flex-end" paddingRight={13} justifyContent="center">
+                        {this.renderVoting(activity)}
+                      </View>
                     </View>
                 </Card>
               )}
             </CardStack>
-          </View>
-
-          <View flex={0.5} justifyContent="center">
-              <TouchableOpacity flex={1} onPress={ () => { this.swiper.swipeRight() }}>
-                <Icon
-                  key={this.props.keyExtractor + "_yes"}
-                  name='check'
-                  color='#0E91D6'
-                  size={20}
-                />
-              </TouchableOpacity>
-              <View flex={.3}></View>
-              <TouchableOpacity flex={1} onPress={ () => { this.swiper.swipeLeft() }}>
-                <Icon
-                  key={this.props.keyExtractor + "_no"}
-                  name='close'
-                  color='#0E91D6'
-                  size={20}
-                />
-              </TouchableOpacity>
           </View>
 
           <Modal isVisible={this.state.visibleVotingModal} backdropOpacity={0.5}>
@@ -521,7 +673,7 @@ let activityGroup1 = [
 ];
 
 const mapStateToProps = state => {
-  return { plan: state.plan };
+  return { plan: state.plan, user: state.user };
 }
 
 export default connect(mapStateToProps, actions)(VPActivityCard);

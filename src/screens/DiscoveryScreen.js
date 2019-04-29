@@ -7,7 +7,7 @@ import * as actions from '../redux/actions';
 import { GoogleAutoComplete } from 'react-native-google-autocomplete';
 import LocationItem from '../components/locationSearch/LocationItem';
 import Tabs from '../components/Tabs';
-import DynamicInput from '../components/common/DynamicInput'; 
+import DynamicInput from '../components/common/DynamicInput';
 
 class DiscoveryScreen extends Component {
     static navigationOptions = {
@@ -34,12 +34,12 @@ class DiscoveryScreen extends Component {
         // this.registerForPushNotifications();
         // gets current location and set initial region to this
         navigator.geolocation.getCurrentPosition(
-            position => {                
+            position => {
                 this.setState({
                     searchLat: position.coords.latitude,
                     searchLng: position.coords.longitude
                 });
-            }, 
+            },
             error => this.setState({ error: error.message }),
             { enableHighAccuracy: true, maximumAge: 2000, timeout: 20000 }
         );
@@ -66,12 +66,12 @@ class DiscoveryScreen extends Component {
     }
 
     browseActivityList = async () => {
-        // a sort of "browse" since search bar is empty 
+        // a sort of "browse" since search bar is empty
         const apiURL = `https://maps.googleapis.com/maps/api/place/search/json?types=${this.state.filter_by_type}&location=${this.state.searchLat},${this.state.searchLng}&radius=40000&sensor=true&key=${global.apiKey}`;
         try {
             let result = await fetch(apiURL);
             let results_json = await result.json();
-            
+
             this.setState({ locationPredictions: results_json.results });
         } catch (err){
             console.error(err)
@@ -85,7 +85,7 @@ class DiscoveryScreen extends Component {
         try {
             let result = await fetch(apiURL);
             let results_json = await result.json();
-            
+
             this.setState({ locationPredictions: results_json.results });
 
         } catch (err){
@@ -106,7 +106,7 @@ class DiscoveryScreen extends Component {
             let location_details = await result.json();
             location_lat =  location_details.result.geometry.location.lat;
             location_lng =  location_details.result.geometry.location.lng;
-            
+
             this.setState({
                 searchLat: location_lat,
                 searchLng: location_lng
@@ -127,6 +127,7 @@ class DiscoveryScreen extends Component {
                         inputStyle: 'tabsText',
                         autoCapitalize: "words",
                         stateLabel: "search",
+                        returnKeyType: 'done',
                         iconStyle: "Icon",
                         iconName: "search",
                         iconColor: "#605985",
@@ -138,20 +139,20 @@ class DiscoveryScreen extends Component {
                         {({ handleTextChange, locationResults, fetchDetails, isSearching }) => (
                             <React.Fragment>
                                 <View>
-                                    <TextInput 
+                                    <TextInput
                                         style={styles.locationInput}
-                                        placeholder="Location" 
+                                        placeholder="Location"
                                         onChangeText={handleTextChange}
                                         onFocus={ () => ( this.setState({ locationInFocus: true }) ) }
                                     />
                                 </View>
 
                                 {isSearching && <ActivityIndicator size="large" />}
-                                {this.state.locationInFocus && 
+                                {this.state.locationInFocus &&
                                     <View>
                                         <ScrollView style={styles.autocomplete}>
                                             {locationResults.map(el => (
-                                                <LocationItem 
+                                                <LocationItem
                                                     {...el}
                                                     key={el.id}
                                                     fetchDetails={fetchDetails}
@@ -164,13 +165,13 @@ class DiscoveryScreen extends Component {
                                         </ScrollView>
                                     </View>
                                 }
-                                
+
                             </React.Fragment>
                         )}
                     </GoogleAutoComplete>
                 </View>
 
-                <Tabs 
+                <Tabs
                     navigation={this.props.navigation}
                     planData={this.props.user.plans}
                     activityList={this.state.locationPredictions}
@@ -178,7 +179,7 @@ class DiscoveryScreen extends Component {
                 />
             </View>
         )
-    } 
+    }
 
 }
 
