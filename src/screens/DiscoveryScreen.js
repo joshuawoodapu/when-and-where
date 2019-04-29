@@ -131,7 +131,8 @@ class DiscoveryScreen extends Component {
                         iconName: "search",
                         iconColor: "#605985",
                         iconSize: 22,
-                        onChange: this.handleSearchChange }]}
+                        onChange: this.handleSearchChange,
+                        returnKeyType: 'done' }]}
                     />
                     <GoogleAutoComplete apiKey={global.apiKey} debounce={500} minLength={3} >
                         {({ handleTextChange, locationResults, fetchDetails, isSearching }) => (
@@ -182,17 +183,15 @@ class DiscoveryScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-    locationInput: {
+    /*locationInput: {
         height: 33,
         borderWidth: 1,
         borderColor: '#B8BeC1',
         borderRadius: 10,
         paddingVertical: 11,
         backgroundColor: "#fff"
-    },
-    autocomplete: {
-        height: 120
-    },
+    },*/
+    
     discoveryInputs: {
         // height: 120,
         justifyContent: "space-around",
@@ -213,16 +212,17 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     locationInput: {
-        height: 40,
+        height: 37,
         backgroundColor: '#ffffff',
         marginBottom: 20,
-        marginLeft: 25,
-        marginRight: 25,
-        borderWidth: 2,
+        marginLeft: 10,
+        marginRight: 10,
+        borderWidth: 1,
         borderColor: '#B8BeC1',
-        borderRadius: 15,
+        borderRadius: 10,
         color: '#B8BeC1',
         paddingHorizontal: 10,
+        marginTop: 10
     }
 
 

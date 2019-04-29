@@ -18,14 +18,20 @@ class InviteCollabsScreen extends Component {
         }
     };
 
-    state = { nameToAdd: '' };
+    state = { nameToAdd: '', displayMessage: '', greenbool: true};
 
 
     onInvitePress = async () => {
         var addCollabEmail = firebase.functions().httpsCallable('addCollabEmail');
-        addCollabEmail({planId: this.props.plan.planId, collabEmail: this.state.nameToAdd})
+            addCollabEmail({planId: this.props.plan.planId, collabEmail: this.state.nameToAdd})
             .then(result => {
                 console.log("HAHAHA " + result.data.success);
+                this.textInput.clear();
+                this.setState({greenbool: true});
+                this.setState({displayMessage: "Success!"});
+            }).catch(() =>{
+                this.setState({greenbool: false});
+                this.setState({displayMessage: "Invite failed."});
             })
     };
 
@@ -55,14 +61,13 @@ class InviteCollabsScreen extends Component {
 
                 <DismissKeyboard>
                     <View style={styles.formStyle}>
-                    <DynamicInput placeholderList={[
-                      {placeholder: 'Name or username',
-                        inputContainerStyle: 'regScreenInput',
-                        autoCorrect: false,
-                        autoCapitalize: "words",
-                        stateLabel: "nameToAdd",
-                        onChange: this.handleAddUserChange,
-                        returnKeyType: 'done'} ]} />
+                    <TextInput style={styles.addUserStyle}
+                      placeholder='Name or username'
+                        autoCorrect={false}
+                        stateLabel= "nameToAdd"
+                        onChangeText= {this.handleAddUserChange}
+                        returnKeyType = 'done'
+                        ref = {input => { this.textInput = input}} />
                     </View>
                 </DismissKeyboard>
 
@@ -99,13 +104,22 @@ class InviteCollabsScreen extends Component {
                         <Text style={styles.inviteButtonText}>INVITE</Text>
                     </TouchableOpacity>
                 </View>
-                
+                <View style={styles.responseView}>
+                    <Text style={[styles.responseMessage, this.state.greenbool ? {color:'#38c45e'} : {color: '#e23737' }]}>{this.state.displayMessage}</Text>
+                </View>
             </View> 
         );
     }
 }
 
 const styles = StyleSheet.create({
+    responseMessage:{
+        textAlign: 'center',
+    },
+    responseView: {
+        marginTop: 10,
+        justifyContent: 'center',
+    },
     headerStyle: {
         backgroundColor: '#ffffff',
         alignItems: 'center',
@@ -166,6 +180,14 @@ const styles = StyleSheet.create({
         paddingTop: 16,
         paddingBottom: 14,
         paddingHorizontal: 20,
+    },
+    addUserStyle: {
+        height: 40,
+        borderWidth: 1,
+        borderColor: '#B8BeC1',
+        borderRadius: 15,
+        paddingLeft: 17,
+        paddingVertical: 11,
     },
 /////////////Invite Button//////////////////////////
     inviteContainer: {

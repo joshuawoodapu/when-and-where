@@ -200,7 +200,8 @@ class NewPlanScreen extends Component {
                       inputContainerStyle: 'createNewPlanInput',
                       autoCapitalize: "words",
                       stateLabel: "planName",
-                      onChange: this.handlePlanNameChange},
+                      onChange: this.handlePlanNameChange,
+                      returnKeyType: 'done'},
                     ]}
                 />
               </View>
