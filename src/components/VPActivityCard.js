@@ -24,6 +24,20 @@ class VPActivityCard extends Component {
 
   componentDidMount = async () => {
     this.mounted = true;
+    await this.getActivityData();
+  }
+
+  componentDidUpdate = async (prevProps) => {
+    if (this.props.plan !== prevProps.plan && this.state.activitiesLoaded) {
+      await this.getActivityData();
+    }
+  }
+
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
+  getActivityData = async () => {
     var activitiesArray = Object.values(this.props.activityData.activities);
     for (i = 0; i < activitiesArray.length; i++) {
       //console.log("activitiesArray length " + activitiesArray.length);
@@ -39,10 +53,6 @@ class VPActivityCard extends Component {
     if (this.mounted) {
       this.setState({activitiesLoaded:true})
     }
-  }
-
-  componentWillUnmount() {
-    this.mounted = false;
   }
 
   getFirebaseData = async (activitiesArray) => {
