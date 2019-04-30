@@ -46,7 +46,6 @@ class VPActivityCard extends Component {
   }
 
   getFirebaseData = async (activitiesArray) => {
-    // console.log("YOYO: "+activitiesArray[i].activityId);
     let id = activitiesArray[i].activityId;
     await firebase.database().ref('activities/' + activitiesArray[i].activityId).once('value')
     .then(snapshot => this.activityDataSuccess(snapshot.val(), id))
@@ -58,12 +57,16 @@ class VPActivityCard extends Component {
   getAPIData = async (activitiesArray) => {
     const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${activitiesArray[i].activityId}&fields=name,rating,formatted_phone_number,formatted_address,type,opening_hours,geometry&key=${global.apiKey}`
     try {
+        activityId = activitiesArray[i].activityId;
         let result = await fetch(api_url);
         let activity_details = await result.json();
         activity_details =  activity_details.result;
+        console.log("********************");
+        console.log(activity_details);
         //console.log(activity_details);
-        var formattedDetails = {activityName: activity_details.name, activityAddress: activity_details.formatted_address};
-        this.activityDataSuccess(formattedDetails);
+        var formattedDetails = {activityName: activity_details.name, activityAddress: activity_details.formatted_address, id: activityId};
+        this.activityDataSuccess(formattedDetails, formattedDetails.id);
+
     } catch (err){
         console.log(err)
     }
@@ -415,7 +418,7 @@ class VPActivityCard extends Component {
     }}
   }
 
-  onLongDelPress = (activity, slotname) => {
+  onLongDelPress = (activity) => {
     return(
       Alert.alert(
         'Delete',
