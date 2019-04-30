@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableHighlight, TextInput, 
+import { StyleSheet, Text, View, TouchableHighlight, TextInput,
     ScrollView, Dimensions, FlatList, ActivityIndicator } from 'react-native';
 import {connect} from 'react-redux';
 import * as actions from '../redux/actions';
-import { Icon } from 'react-native-elements';
+import { Input, Icon } from 'react-native-elements';
 import AAActivityCard from './AAActivityCard';
 import DynamicInput from '../components/common/DynamicInput';
 import { GoogleAutoComplete } from 'react-native-google-autocomplete';
@@ -113,7 +113,7 @@ class AATabs extends Component {
             let location_details = await result.json();
             location_lat =  location_details.result.geometry.location.lat;
             location_lng =  location_details.result.geometry.location.lng;
-            
+
             this.setState({
                 searchLat: location_lat,
                 searchLng: location_lng
@@ -133,6 +133,7 @@ class AATabs extends Component {
                 inputStyle: 'tabsText',
                 autoCapitalize: "words",
                 stateLabel: "search",
+                returnKeyType: 'done',
                 iconStyle: "Icon",
                 iconName: "search",
                 iconColor: "#605985",
@@ -142,21 +143,30 @@ class AATabs extends Component {
           <GoogleAutoComplete apiKey={global.apiKey} debounce={500} minLength={3} >
                 {({ handleTextChange, locationResults, fetchDetails, isSearching }) => (
                     <React.Fragment>
-                        <View>
-                            <TextInput 
-                                style={styles.locationInput}
-                                placeholder="Location" 
+                        <View paddingTop={5}>
+                            <Input
+                                placeholder="Location"
                                 onChangeText={handleTextChange}
-                                onFocus={ () => ( this.setState({ locationInFocus: true }) ) }
+                                onFocus={ () => ( this.setState({ locationInFocus: true }) )}
+                                inputContainerStyle={styles.locationInput}
+                                inputStyle={styles.locationText}
+                                returnKeyType='done'
+                                leftIcon={
+                                  <Icon
+                                    name='location-on'
+                                    size={22}
+                                    color='#605985'
+                                  />
+                                }
                             />
                         </View>
 
                         {isSearching && <ActivityIndicator size="large" />}
-                        {this.state.locationInFocus && 
+                        {this.state.locationInFocus &&
                             <View>
                                 <ScrollView>
                                     {locationResults.map(el => (
-                                        <LocationItem 
+                                        <LocationItem
                                             {...el}
                                             key={el.id}
                                             fetchDetails={fetchDetails}
@@ -169,7 +179,7 @@ class AATabs extends Component {
                                 </ScrollView>
                             </View>
                         }
-                        
+
                     </React.Fragment>
                 )}
             </GoogleAutoComplete>
@@ -514,10 +524,23 @@ styles = StyleSheet.create({
         shadowRadius: 10
     },
     tabsInputs:{
-      flex: 1.5,
-      justifyContent: "space-around",
-      paddingVertical: 10,
-      paddingHorizontal: 20
+        flex: 1.5,
+        justifyContent: "space-around",
+        paddingVertical: 10,
+        paddingHorizontal: 20
+    },
+    locationInput: {
+      height: 33,
+      borderWidth: 1,
+      borderColor: '#B8BeC1',
+      borderRadius: 10,
+      paddingVertical: 11,
+      backgroundColor: "#fff"
+    },
+    locationText: {
+      fontSize: 14,
+      color: "#2661B2",
+      paddingLeft: 5,
     },
 })
 

@@ -41,7 +41,7 @@ class ViewPlanScreen extends Component {
 
   componentWillUnmount = async () => {
     /*
-    let planRef = firebase.database().ref("plans/" + this.props.plan.planId); 
+    let planRef = firebase.database().ref("plans/" + this.props.plan.planId);
     await planRef.on("value", (snapshot) => {
       console.log("change detected in plan!!!!!!!!!!");
       this.props.planRefresh(snapshot.val());
@@ -206,7 +206,7 @@ class ViewPlanScreen extends Component {
                 </Modal>
                 <View flex={1} paddingRight={20}>
                     <View flex={1}>
-                      
+
                       {this.iterate(this.props.plan.activitySlots)}
                     </View>
                     <View flex={1}>

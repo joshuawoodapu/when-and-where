@@ -334,7 +334,7 @@ class VPActivityCard extends Component {
   renderPieChart = (voteNums) => {
 
 
-    
+
 
     return(
     <View style={votingModalStyles.modalContent}>
