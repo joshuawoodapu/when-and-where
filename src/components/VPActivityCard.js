@@ -23,6 +23,9 @@ class VPActivityCard extends Component {
     }
   }
 
+  componentWillMount = async () => {
+    await this.tallyVotes();
+  }
 
   componentDidMount = async () => {
     this.mounted = true;
@@ -55,6 +58,8 @@ class VPActivityCard extends Component {
     if (this.mounted) {
       this.setState({activitiesLoaded:true})
     }
+
+    
   }
 
 
@@ -62,7 +67,7 @@ class VPActivityCard extends Component {
   tallyVotes = async() => {
     //pip pip, tallyho!
     var votesArray;
-    console.log("TALLY VOTES!");
+    // console.log("TALLY VOTES!");
     var activitiesArray = Object.values(this.props.activityData.activities);
     var formattedVotes = [];
     for (i = 0; i < activitiesArray.length; i++) {
@@ -114,7 +119,7 @@ class VPActivityCard extends Component {
 
       // Format is that formattedVotes is an array of object.
       for (i = 0; i < formattedVotes.length; i++){
-        console.log(this.state.votes[i].activityName + ": "+ Object.values(this.state.votes[i].votes));
+        // console.log(this.state.votes[i].activityName + ": "+ Object.values(this.state.votes[i].votes));
       }
       
   }
@@ -183,9 +188,6 @@ class VPActivityCard extends Component {
   }
 
   onYesPress = async (activity) => {
-      this.tallyVotes();
-
-
       slotname = '';
       let uid = await firebase.auth().currentUser.uid;
 
@@ -214,21 +216,6 @@ class VPActivityCard extends Component {
     }catch{(error)=>{
         console.log(error);
     }}
-
-
-    // if (this.state.yesVote == false && this.state.noVote == false) {
-    //   this.setState({ yesVote: true });
-    // }
-    // else if (this.state.yesVote == false && this.state.noVote == true) {
-    //   this.setState({ yesVote: true, noVote: false });
-    // }
-    // else if (this.state.yesVote == true) {
-    //   this.setState({ yesVote: false });
-    // }
-
-    // this.renderYes(this.yesVote);
-    // this.renderNo(this.noVote);
-
 
   }
 
@@ -429,9 +416,35 @@ class VPActivityCard extends Component {
     this.setState({ visibleVotingModal: !this.state.visibleVotingModal });
 
   /* should take in an activitySlot as a param */
-  renderPieChart = (voteNums) => {
+  renderPieChart = async (voteNums) => {
+    console.log(this.state.votes);
+    let allThemVotes = this.state.votes;
 
+    var voteNum = 0;
+    var nameVotePairs = [];
+    for (i = 0; i < allThemVotes.length; i++){
+      voteNum = 0;
 
+      for (thing in this.state.votes[i].votes){
+        if (thing == true){
+          voteNum++;
+        }
+        if (thing == false){
+          voteNum--;
+        }
+      }
+
+      if (voteNum < 0){
+        voteNum = 0;
+      }
+
+      var obj = {
+        activityName: this.state.votes[i].activityName,
+        numVotes: voteNum
+    }
+
+    nameVotePairs.push(obj);
+  }
 
 
     return(
@@ -450,13 +463,13 @@ class VPActivityCard extends Component {
         <PieChart
           style={{ marginBottom: 25 }}
           chart_wh={225}
-          series={voteNums}
+          series={nameVotePairs}
           sliceColor={sliceColors}
         />
       </View>
 
       <View style={votingModalStyles.votingLegendContainer}>
-        {activityGroup1.map((activity, index) =>
+        {this.state.votes.map((activity, index) =>
           <View style={votingModalStyles.keyContainer} key={activity.activityName}>
             <View style={{ width: 20, height: 20, borderRadius: 100 / 2, backgroundColor: sliceColors[index], marginRight: 7 }} />
             <Text style={votingModalStyles.actName}>{activity.activityName}</Text>
@@ -498,16 +511,16 @@ class VPActivityCard extends Component {
 
     await activityRef.orderByChild('activityId').equalTo(id).once("value", function(snapshot){
       snapshot.forEach((function(child){
-        console.log("child.key: "+child.key);
+        // console.log("child.key: "+child.key);
         activityName = child.key;
       }));
     });
-    console.log("We out here: " + activityName);
+    // console.log("We out here: " + activityName);
 
     try {
         await firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'
           +'slot'+this.props.index+'/activities/'+activityName).remove();
-        console.log(activity.activityName + ' removed from slot.');
+        // console.log(activity.activityName + ' removed from slot.');
     } catch {(error)=>{
       console.log(error);
     }}
