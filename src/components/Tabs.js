@@ -82,8 +82,8 @@ class Tabs extends Component {
             // skiping if prototype
             if (!this.props.planData.hasOwnProperty(key)) continue;
 
-            console.log("~~~~~~~~~~~~~~~~~~~~~~props.planData~~~~~~~~~~~~~~~~~~~~~~")
-            console.log(this.props.planData)
+            //console.log("~~~~~~~~~~~~~~~~~~~~~~props.planData~~~~~~~~~~~~~~~~~~~~~~")
+            //console.log(this.props.planData)
 
             var obj = this.props.planData[key];
             result.push({planId:key, ...obj})

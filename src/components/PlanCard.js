@@ -39,7 +39,7 @@ export default class PlanCard extends Component {
                     }
                 }
             } else {
-                console.log("slot0 is empty")
+                // console.log("slot0 is empty")
             }
         }
 

@@ -71,14 +71,56 @@ class ViewPlanScreen extends Component {
       this.setState({result})
     }
 
-    shareMessage() {
-      msg = "You have been invited to collaborate on '";
-      msg += this.props.plan.planName;
-      msg += "'! Join your friends on When&Where! https://tinyurl.com/yxeozq2t";
+    shareMessage = async () => {
+      const activitySlotsArray = Object.values(this.props.plan.activitySlots);
+      var finalActivities = [];
+      for (var i = 0; i < activitySlotsArray.length; i++) {
+        finalActivities.push({ 'id': activitySlotsArray[i].activities.activity0.activityId, 'custom':activitySlotsArray[i].activities.activity0.custom });
+      }
+      // console.log(Object.values(activitySlots));
 
+      let msg = "*You have been invited to:* _'";
+      msg += this.props.plan.planName;
+      msg += "'_ on ";
+      msg += this.props.plan.startDate;
+      for (var i = 0; i < finalActivities.length; i++) {
+        if (finalActivities[i].custom)
+        {
+          msg += "\n " + await this.getFirebaseData(finalActivities[i].id);
+        }
+        else
+        {
+          msg += "\n " +  await this.getAPIData(finalActivities[i].id);
+        }
+      }
+      msg += "\n\n _Join your friends on When&Where!_";
       Share.share({
         message: msg
       }).then(this.showResult);
+    }
+
+    getFirebaseData = async (activityId) => {
+      return await firebase.database().ref('activities/' + activityId).once('value')
+      .then(snapshot => {
+        const data = snapshot.val();
+        var stringToReturn = "*" + data.activityName + "*\n\t" + data.activityAddress; 
+        return stringToReturn;
+      })
+    }
+  
+    getAPIData = async (activityId) => {
+      const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${activityId}&fields=name,rating,formatted_phone_number,formatted_address,type,opening_hours,geometry&key=${global.apiKey}`
+      try {
+          let result = await fetch(api_url);
+          let activity_details = await result.json();
+          activity_details =  activity_details.result;
+          //console.log(activity_details);
+          var formattedDetails = {activityName: activity_details.name, activityAddress: activity_details.formatted_address};
+          var stringToReturn = "*" + formattedDetails.activityName + "*\n\t" + formattedDetails.activityAddress; 
+          return stringToReturn;
+      } catch (err){
+          console.log(err)
+      }
     }
 
     toggleSharePlanModal = () => this.setState({ visibleSharePlanModal: !this.state.visibleSharePlanModal });
