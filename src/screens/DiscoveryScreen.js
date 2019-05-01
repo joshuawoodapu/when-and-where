@@ -8,6 +8,7 @@ import { GoogleAutoComplete } from 'react-native-google-autocomplete';
 import LocationItem from '../components/locationSearch/LocationItem';
 import Tabs from '../components/Tabs';
 import DynamicInput from '../components/common/DynamicInput';
+import { Input, Icon } from 'react-native-elements';
 
 class DiscoveryScreen extends Component {
     static navigationOptions = {
@@ -56,13 +57,13 @@ class DiscoveryScreen extends Component {
         }
 
         if (finalStatus !== 'granted') { return; }
-        
+
         let token = await Notifications.getExpoPushTokenAsync();
         let uuid = await firebase.auth().currentUser.uid;
         const platform = Platform.OS;
         await firebase.database().ref('users/' + uuid + '/expoPushTokens').push({token, platform })
 
-        //  this.subscription = Notifications.addListener(this.handleNotification);      
+        //  this.subscription = Notifications.addListener(this.handleNotification);
     }
 
     browseActivityList = async () => {
@@ -138,12 +139,21 @@ class DiscoveryScreen extends Component {
                     <GoogleAutoComplete apiKey={global.apiKey} debounce={500} minLength={3} >
                         {({ handleTextChange, locationResults, fetchDetails, isSearching }) => (
                             <React.Fragment>
-                                <View>
-                                    <TextInput
-                                        style={styles.locationInput}
+                                <View paddingTop={5}>
+                                    <Input
                                         placeholder="Location"
                                         onChangeText={handleTextChange}
-                                        onFocus={ () => ( this.setState({ locationInFocus: true }) ) }
+                                        onFocus={ () => ( this.setState({ locationInFocus: true }) )}
+                                        inputContainerStyle={styles.locationInput}
+                                        inputStyle={styles.locationText}
+                                        returnKeyType='done'
+                                        leftIcon={
+                                          <Icon
+                                            name='location-on'
+                                            size={22}
+                                            color='#605985'
+                                          />
+                                        }
                                     />
                                 </View>
 
@@ -192,7 +202,7 @@ const styles = StyleSheet.create({
         paddingVertical: 11,
         backgroundColor: "#fff"
     },*/
-    
+
     discoveryInputs: {
         // height: 120,
         justifyContent: "space-around",
@@ -213,20 +223,18 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     locationInput: {
-        height: 37,
-        backgroundColor: '#ffffff',
-        marginBottom: 20,
-        marginLeft: 10,
-        marginRight: 10,
-        borderWidth: 1,
-        borderColor: '#B8BeC1',
-        borderRadius: 10,
-        color: '#B8BeC1',
-        paddingHorizontal: 10,
-        marginTop: 10
-    }
-
-
+      height: 33,
+      borderWidth: 1,
+      borderColor: '#B8BeC1',
+      borderRadius: 10,
+      paddingVertical: 11,
+      backgroundColor: "#fff"
+    },
+    locationText: {
+      fontSize: 14,
+      color: "#2661B2",
+      paddingLeft: 5,
+    },
 });
 
 const mapStateToProps = state => {
