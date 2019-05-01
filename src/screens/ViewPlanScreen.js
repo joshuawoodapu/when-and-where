@@ -75,7 +75,83 @@ class ViewPlanScreen extends Component {
       const activitySlotsArray = Object.values(this.props.plan.activitySlots);
       var finalActivities = [];
       for (var i = 0; i < activitySlotsArray.length; i++) {
-        finalActivities.push({ 'id': activitySlotsArray[i].activities.activity0.activityId, 'custom':activitySlotsArray[i].activities.activity0.custom });
+        const current = activitySlotsArray[i];
+        var existed = false;
+        if (current.activities.activity0) {
+          existed = true;
+          finalActivities.push({ 'id': current.activities.activity0.activityId,
+          'custom':current.activities.activity0.custom,
+          'yesVotes':this.calculateYesVotes(current.activities.activity0.voters) });
+        }
+
+        if (current.activities.activity1) {
+          if (existed) {
+            if (this.calculateYesVotes(current.activities.activity1.voters) > finalActivities[finalActivities.length-1].yesVotes) 
+            {
+              finalActivities.pop();
+              finalActivities.push({ 'id': current.activities.activity1.activityId,
+              'custom':current.activities.activity1.custom,
+              'yesVotes':this.calculateYesVotes(current.activities.activity1.voters) });
+            }
+          }
+          else {
+            existed = true;
+            finalActivities.push({ 'id': current.activities.activity1.activityId,
+            'custom':current.activities.activity1.custom,
+            'yesVotes':this.calculateYesVotes(current.activities.activity1.voters) });
+          }
+        }
+        if (current.activities.activity2) {
+          if (existed) {
+            if (this.calculateYesVotes(current.activities.activity2.voters) > finalActivities[finalActivities.length-1].yesVotes) 
+            {
+              finalActivities.pop();
+              finalActivities.push({ 'id': current.activities.activity2.activityId,
+              'custom':current.activities.activity2.custom,
+              'yesVotes':this.calculateYesVotes(current.activities.activity2.voters) });
+            }
+          }
+          else {
+            existed = true;
+            finalActivities.push({ 'id': current.activities.activity2.activityId,
+            'custom':current.activities.activity2.custom,
+            'yesVotes':this.calculateYesVotes(current.activities.activity2.voters) });
+          }
+        }
+        if (current.activities.activity3) {
+          if (existed) {
+            if (this.calculateYesVotes(current.activities.activity3.voters) > finalActivities[finalActivities.length-1].yesVotes) 
+            {
+              finalActivities.pop();
+              finalActivities.push({ 'id': current.activities.activity3.activityId,
+              'custom':current.activities.activity3.custom,
+              'yesVotes':this.calculateYesVotes(current.activities.activity3.voters) });
+            }
+          }
+          else {
+            existed = true;
+            finalActivities.push({ 'id': current.activities.activity3.activityId,
+            'custom':current.activities.activity3.custom,
+            'yesVotes':this.calculateYesVotes(current.activities.activity3.voters) });
+          }
+        }
+        if (current.activities.activity4) {
+          if (existed) {
+            if (this.calculateYesVotes(current.activities.activity4.voters) > finalActivities[finalActivities.length-1].yesVotes) 
+            {
+              finalActivities.pop();
+              finalActivities.push({ 'id': current.activities.activity4.activityId,
+              'custom':current.activities.activity4.custom,
+              'yesVotes':this.calculateYesVotes(current.activities.activity4.voters) });
+            }
+          }
+          else {
+            existed = true;
+            finalActivities.push({ 'id': current.activities.activity4.activityId,
+            'custom':current.activities.activity4.custom,
+            'yesVotes':this.calculateYesVotes(current.activities.activity4.voters) });
+          }
+        }
       }
       // console.log(Object.values(activitySlots));
 
@@ -97,6 +173,19 @@ class ViewPlanScreen extends Component {
       Share.share({
         message: msg
       }).then(this.showResult);
+    }
+
+    calculateYesVotes(voters) {
+      if (voters) {
+        const votersArray = Object.values(voters);
+        var numYes = 0;
+        for (var i = 0; i < votersArray.length; i++)
+          if (votersArray[i])
+            numYes++
+        return numYes;
+      }
+      else 
+        return 0;
     }
 
     getFirebaseData = async (activityId) => {
