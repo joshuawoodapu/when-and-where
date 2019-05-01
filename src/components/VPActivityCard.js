@@ -19,10 +19,10 @@ class VPActivityCard extends Component {
       noVote: false,
       activities: [],
       activitiesLoaded: false,
+      votes: []
     }
   }
 
-  state = {currActivity: ''}
 
   componentDidMount = async () => {
     this.mounted = true;
@@ -70,8 +70,6 @@ class VPActivityCard extends Component {
         let name = await this.getActivityName(id);
 
 
-
-
       //  ************* GET PATH **********
       slotname = '';
       var slotRef = await firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+'slot'+this.props.index);
@@ -109,13 +107,14 @@ class VPActivityCard extends Component {
 
       formattedVotes.push(obj);
 
+
       } // END MAIN FOR LOOP
 
-
+      this.setState({votes: formattedVotes});
 
       // Format is that formattedVotes is an array of object.
       for (i = 0; i < formattedVotes.length; i++){
-        console.log(formattedVotes[i].activityName + ": "+ Object.values(formattedVotes[i].votes));
+        console.log(this.state.votes[i].activityName + ": "+ Object.values(this.state.votes[i].votes));
       }
       
   }
