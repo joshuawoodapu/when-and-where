@@ -22,6 +22,8 @@ class VPActivityCard extends Component {
     }
   }
 
+  state = {currActivity: ''}
+
   componentDidMount = async () => {
     this.mounted = true;
     await this.getActivityData();
@@ -55,6 +57,93 @@ class VPActivityCard extends Component {
     }
   }
 
+
+
+  tallyVotes = async() => {
+    //pip pip, tallyho!
+    var votesArray;
+    console.log("TALLY VOTES!");
+    var activitiesArray = Object.values(this.props.activityData.activities);
+    var formattedVotes = [];
+    for (i = 0; i < activitiesArray.length; i++) {
+        let id = activitiesArray[i].activityId;
+        let name = await this.getActivityName(id);
+
+
+
+
+      //  ************* GET PATH **********
+      slotname = '';
+      var slotRef = await firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+'slot'+this.props.index);
+      slotname = slotRef.getKey();
+
+      // getting 'activity#' reference for firebase #########
+      var activityRef = await firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+slotname+'/activities/');
+      activitySlotName = '';
+
+      await activityRef.orderByChild('activityId').equalTo(id).once("value", function(snapshot){
+        snapshot.forEach((function(child){
+          activitySlotName = child.key;
+        }));
+      });
+
+
+      var obj = {
+        activityId: id,
+        activityName: name,
+        votes: []
+      }
+
+      try {
+        var voteRef = await firebase.database().ref('/plans/'+this.props.plan.planId+'/activitySlots/'+slotname+'/activities/'+activitySlotName+'/voters/');
+
+        await voteRef.once("value").then(function(snapshot){
+            snapshot.forEach(function(childSnapshot){
+                var childData = childSnapshot.val();            
+                obj.votes.push(childData);
+            });
+        });
+        } catch(err){
+            console.log(err);
+      }
+
+      formattedVotes.push(obj);
+
+      } // END MAIN FOR LOOP
+
+
+
+      // Format is that formattedVotes is an array of object.
+      for (i = 0; i < formattedVotes.length; i++){
+        console.log(formattedVotes[i].activityName + ": "+ Object.values(formattedVotes[i].votes));
+      }
+      
+  }
+
+
+  getActivityName = async (place_id) => {
+    let actName = "";
+    if ( place_id.charAt(0) == '-' ){
+        // custom activity, so we pull from database
+        await firebase.database().ref('activities/' + place_id).once('value')
+            .then(snapshot => {
+                actName = snapshot.val().activityName;
+            })
+            .catch((error) => { console.log(error) })
+    } else {
+        // pull from google places API
+        const api_url = `https://maps.googleapis.com/maps/api/place/details/json?placeid=${place_id}&fields=name,address_component&key=${global.apiKey}`;
+        try {
+            let result = await fetch(api_url);
+            let activity_details = await result.json();
+            actName = activity_details.result.name;
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    return await actName;
+}
+
   getFirebaseData = async (activitiesArray) => {
     let id = activitiesArray[i].activityId;
     await firebase.database().ref('activities/' + activitiesArray[i].activityId).once('value')
@@ -71,8 +160,8 @@ class VPActivityCard extends Component {
         let result = await fetch(api_url);
         let activity_details = await result.json();
         activity_details =  activity_details.result;
-        console.log("********************");
-        console.log(activity_details);
+        // console.log("********************");
+        // console.log(activity_details);
         //console.log(activity_details);
         var formattedDetails = {activityName: activity_details.name, activityAddress: activity_details.formatted_address, id: activityId};
         this.activityDataSuccess(formattedDetails, formattedDetails.id);
@@ -95,13 +184,11 @@ class VPActivityCard extends Component {
   }
 
   onYesPress = async (activity) => {
-      console.log("We INSIDE THE YES!");
-      console.log(activity.activityId);
+      this.tallyVotes();
 
 
       slotname = '';
       let uid = await firebase.auth().currentUser.uid;
-      console.log("here's a uid: "+uid);
 
       var id = activity.activityId;
 
@@ -114,7 +201,6 @@ class VPActivityCard extends Component {
 
       await activityRef.orderByChild('activityId').equalTo(id).once("value", function(snapshot){
         snapshot.forEach((function(child){
-          console.log("child.key: "+child.key);
           activityName = child.key;
         }));
       });
@@ -148,13 +234,13 @@ class VPActivityCard extends Component {
   }
 
   onNoPress = async (activity) => {
-    console.log("We INSIDE THE NO!");
-    console.log(activity.activityId);
+    // console.log("We INSIDE THE NO!");
+    // console.log(activity.activityId);
 
 
     slotname = '';
     let uid = await firebase.auth().currentUser.uid;
-    console.log("here's a uid: "+uid);
+    // console.log("here's a uid: "+uid);
 
     var id = activity.activityId;
 
@@ -167,7 +253,7 @@ class VPActivityCard extends Component {
 
     await activityRef.orderByChild('activityId').equalTo(id).once("value", function(snapshot){
       snapshot.forEach((function(child){
-        console.log("child.key: "+child.key);
+        // console.log("child.key: "+child.key);
         activityName = child.key;
       }));
     });
@@ -207,7 +293,7 @@ class VPActivityCard extends Component {
   };
 
   renderInfo(activity, index) {
-    console.log("Inside render info. Index: "+index);
+    // console.log("Inside render info. Index: "+index);
 
 
     var actAddr = activity.activityAddress;
@@ -218,7 +304,7 @@ class VPActivityCard extends Component {
       var cityStateAddress = actAddr.substr(index + 2);
 
       return (
-          <View flex={3} margin={13}>
+          <View flex={3} margin={13} maxWidth={140}>
             <View style={styles.nameRow}>
               <Text style={styles.titleText}>
                 {activity.activityName}
@@ -239,7 +325,7 @@ class VPActivityCard extends Component {
 
     else {
       return (
-          <View flex={3} margin={13}>
+          <View flex={3} margin={13} maxWidth={140}>
             <View style={styles.nameRow}>
               <Text style={styles.titleText}>
                 {activity.activityName}
@@ -443,7 +529,6 @@ class VPActivityCard extends Component {
   }
 
   renderVoting(activity){
-      console.log("Render voting?");
 
       return(
         <View flex={0.5} justifyContent="center">
