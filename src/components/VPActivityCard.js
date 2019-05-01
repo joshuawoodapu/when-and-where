@@ -19,8 +19,10 @@ class VPActivityCard extends Component {
       noVote: false,
       activities: [],
       activitiesLoaded: false,
-      votes: []
     }
+  }
+
+  state = {votes: [], nameVotePairs: []
   }
 
   componentWillMount = async () => {
@@ -58,8 +60,6 @@ class VPActivityCard extends Component {
     if (this.mounted) {
       this.setState({activitiesLoaded:true})
     }
-
-    
   }
 
 
@@ -417,21 +417,21 @@ class VPActivityCard extends Component {
 
   /* should take in an activitySlot as a param */
   renderPieChart = async (voteNums) => {
-    console.log(this.state.votes);
     let allThemVotes = this.state.votes;
 
     var voteNum = 0;
     var nameVotePairs = [];
-    for (i = 0; i < allThemVotes.length; i++){
+    for (i = 0; i < this.state.votes.length; i++){
       voteNum = 0;
 
-      for (thing in this.state.votes[i].votes){
-        if (thing == true){
+      for (j = 0; j < Object.values(this.state.votes[i].votes).length; j++){
+        if (this.state.votes[i].votes[j] == true){
           voteNum++;
         }
-        if (thing == false){
+        if (this.state.votes[i].votes[j] == false){
           voteNum--;
         }
+
       }
 
       if (voteNum < 0){
@@ -446,6 +446,11 @@ class VPActivityCard extends Component {
     nameVotePairs.push(obj);
   }
 
+  console.log("ACTIVITY GROUP 1");
+  console.log(activityGroup1);
+
+  console.log("NAME VOTE PAIRS");
+  console.log(nameVotePairs);
 
     return(
     <View style={votingModalStyles.modalContent}>
